@@ -21,7 +21,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-
+#include "stdio.h"
 
 #define ID_TIMER		10000
 #define ID_SENDCAL_MENU		10001
@@ -83,6 +83,8 @@ private:
 	wxMenu *m_port_menu;
 	wxComboBox *m_port_list;
 	wxMenu *m_sendcal_menu;
+	wxStaticText *_statusMessage;
+	
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
 	void OnShowMenu(wxMenuEvent &event);
@@ -92,6 +94,11 @@ private:
 	void OnTimer(wxTimerEvent &event);
 	void OnAbout(wxCommandEvent &event);
 	void OnQuit(wxCommandEvent &event);
+	
+	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
+	void showOpenPortError(const char *name);
+	void showOpenPortOK(const char *name);
+	wxStaticText *_portLabel;
 	DECLARE_EVENT_TABLE()
 };
 

@@ -109,20 +109,21 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Magnetometer");
 	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
 
-	topsizer->Add(leftsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
+	topsizer->Add(leftsizer, 1, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 	topsizer->Add(middlesizer, 1, wxALL | wxEXPAND, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 
 	vsizer = new wxBoxSizer(wxVERTICAL);
-	leftsizer->Add(vsizer, 0, wxALL, 8);
-	text = new wxStaticText(panel, wxID_ANY, "Port");
-	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
+	leftsizer->Add(vsizer, 0, wxALL| wxEXPAND , 8);
+	_portLabel = new wxStaticText(panel, wxID_ANY, "Port");
+	//_portLabel = text;
+	vsizer->Add(_portLabel, 0, wxTOP|wxBOTTOM, 4);
 	m_port_list = new wxComboBox(panel, ID_PORTLIST, "",
 		wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	m_port_list->Append("(none)");
+	m_port_list->Append("(none )");
 	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
 	m_port_list->SetSelection(0);
-	vsizer->Add(m_port_list, 1, wxEXPAND, 0);
+	vsizer->Add(m_port_list, 1, wxALL |wxEXPAND, 0);
 
 	vsizer->AddSpacer(8);
 	text = new wxStaticText(panel, wxID_ANY, "Actions");
@@ -136,6 +137,13 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	vsizer->AddSpacer(16);
 	text = new wxStaticText(panel, wxID_ANY, "Status");
 	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
+	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages");
+	vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);
+		
+	
+	
+	
+	
 	wxImage::AddHandler(new wxPNGHandler);
 	//m_confirm_icon = new wxStaticBitmap(panel, ID_CONFIRM_ICON, MyBitmap("checkgreen.png"));
 	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"));
@@ -243,16 +251,46 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	m_timer->Start(14, wxTIMER_CONTINUOUS);
 }
 
+void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
+{
+	unsigned int i;
+	int maxWidth(0), width;
+	for (i = 0; i < control->GetCount(); i++)
+	{
+		control->GetTextExtent(control->GetString(i), &width, NULL);
+		if (width > maxWidth)
+			maxWidth = width;
+	}
+	
+	control->SetMinSize(wxSize(300, -1));
+}
+
+
 void MyFrame::OnTimer(wxTimerEvent &event)
 {
 	static int firstrun=1;
 	float gaps, variance, wobble, fiterror;
 	char buf[32];
 	int i, j;
-
-	//printf("OnTimer\n");
+	char messageBuffer[128];
+	unsigned char *serialBufferMessage;	//printf("OnTimer\n");
 	if (port_is_open()) {
-		read_serial_data();
+		_statusMessage->SetLabelText("port open");
+		int bytesRead = read_serial_data();
+
+		//snprintf(messageBuffer,sizeof(messageBuffer), "%d bytes from serial", bytesRead);
+		//_statusMessage->SetLabelText(messageBuffer);
+		
+		if (bytesRead == 0)
+		{
+			_statusMessage->SetLabelText("0 bytes read from serial");
+		}
+		else
+		{
+			serialBufferMessage	 = getSerialBuffer();
+			snprintf(messageBuffer, sizeof(bytesRead),"%s",serialBufferMessage);
+			_statusMessage->SetLabelText(serialBufferMessage);
+		}	
 		if (firstrun && m_canvas->IsShown()) {
 			//int h, w;
 			//m_canvas->GetSize(&w, &h);
@@ -264,6 +302,10 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		variance = quality_magnitude_variance_error();
 		wobble = quality_wobble_error();
 		fiterror = quality_spherical_fit_error();
+		//snprintf(messageBuffer, sizeof(messageBuffer),"gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
+		//_statusMessage->SetLabelText(messageBuffer);
+		m_canvas->Refresh();
+			
 		if (gaps < 15.0f && variance < 4.5f && wobble < 4.0f && fiterror < 5.0f) {
 			if (!m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || !m_button_sendcal->IsEnabled()) {
 				m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
@@ -307,7 +349,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		}
 	} else {
 		if (!port_name.IsEmpty()) {
-			//printf("port has closed, updating stuff\n");
+			_statusMessage->SetLabelText("port has closed, updating stuff");
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_clear->Enable(false);
 			m_button_sendcal->Enable(false);
@@ -332,7 +374,7 @@ void MyFrame::OnClear(wxCommandEvent &event)
 
 void MyFrame::OnSendCal(wxCommandEvent &event)
 {
-	/*printf("OnSendCal\n");
+	printf("OnSendCal\n");
 	printf("Magnetic Calibration:   (%.1f%% fit error)\n", magcal.FitError);
 	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
 		magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2]);
@@ -340,9 +382,18 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 		magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2]);
 	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
 		magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2]);
-	*/
+
 	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
-	send_calibration();
+  int bytesWritten = send_calibration();
+	printf("no. bytes written: %d\n", bytesWritten);
+  /*char buffer[25];
+	//sprintf(buffer,"%d bytes written", bytesWritten);
+
+
+	/*wxMessageDialog dialog(this,
+					"hello world","world",wxOK|wxICON_INFORMATION|wxCENTER);
+
+					dialog.ShowModal();*/
 }
 
 void calibration_confirmed(void)
@@ -383,6 +434,7 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	for (int i=0; i < num; i++) {
 		m_port_list->Append(list[i]);
 	}
+	SetMinimumWidthFromContents(m_port_list, 50);
 }
 
 
@@ -396,10 +448,19 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
 	port_name = name;
 	m_port_list->Clear();
 	m_port_list->Append(port_name);
+	SetMinimumWidthFromContents(m_port_list, 50);
 	m_port_list->SetSelection(0);
         if (id == 9000) return;
 	raw_data_reset();
-	open_port((const char *)name);
+	int openPortResult = open_port((const char *)name);
+	if (openPortResult == 0)
+	{
+		showOpenPortError((const char *)name);
+	}
+	else
+	{
+		showOpenPortOK((const char *)name);
+	}
 	m_button_clear->Enable(true);
 }
 
@@ -413,10 +474,37 @@ void MyFrame::OnPortList(wxCommandEvent& event)
 	port_name = name;
 	if (name == "(none)") return;
 	raw_data_reset();
-	open_port((const char *)name);
+	int openPortResult = open_port((const char *)name);
+	if (openPortResult == 0)
+	{
+		showOpenPortError((const char *)name);
+	}
+	else
+	{
+		showOpenPortOK((const char *)name);
+	}
 	m_button_clear->Enable(true);
 }
 
+void MyFrame::showOpenPortError(const char *name)
+{
+	char buffer[64];
+	sprintf(buffer,"port %s failed to open", name);
+	
+	wxMessageDialog dialog(this,buffer,
+        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+    dialog.ShowModal();
+}
+
+void MyFrame::showOpenPortOK(const char *name)
+{
+	char buffer[64];
+	sprintf(buffer,"port %s opened OK", name);
+	
+	wxMessageDialog dialog(this,buffer,
+        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+    dialog.ShowModal();
+}
 
 
 
@@ -472,7 +560,3 @@ int MyApp::OnExit()
 {
 	return 0;
 }
-
-
-
-

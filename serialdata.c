@@ -391,17 +391,27 @@ int open_port(const char *name)
 	return 1;
 }
 
+unsigned char serialBuffer[256];
+
+unsigned char *getSerialBuffer()
+{
+	return &serialBuffer;
+}
+
+
+
 int read_serial_data(void)
 {
-	unsigned char buf[256];
 	static int nodata_count=0;
 	int n;
 
 	if (portfd < 0) return -1;
 	while (1) {
-		n = read(portfd, buf, sizeof(buf));
-		if (n > 0 && n <= sizeof(buf)) {
-			newdata(buf, n);
+		n = read(portfd, serialBuffer, sizeof(serialBuffer));
+		
+		printf("%d bytes read\n",n);
+		if (n > 0 && n <= sizeof(serialBuffer)) {
+			newdata(serialBuffer, n);
 			nodata_count = 0;
 			return n;
 		} else if (n == 0) {
