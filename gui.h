@@ -6,20 +6,23 @@
 #include "wx/glcanvas.h"
 #include "wx/math.h"
 #include "wx/log.h"
+#include "wx/grid.h"
 #include "wx/wfstream.h"
 #include "wx/zstream.h"
 #include "wx/txtstrm.h"
+
+
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
-#ifdef __DARWIN__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+	#ifdef __DARWIN__
+		#include <OpenGL/gl.h>
+		#include <OpenGL/glu.h>
+	#else
+		#include <gl.h>
+		#include <glu.h>
+	#endif
 #else
-#include <gl.h>
-#include <glu.h>
-#endif
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
+	#include <GL/gl.h>
+	#include <GL/glu.h>
 #endif
 #include "stdio.h"
 
@@ -28,6 +31,14 @@
 #define ID_CLEAR_BUTTON		10002
 #define ID_SENDCAL_BUTTON	10003
 #define ID_PORTLIST		10004
+
+#define X_ROW 0
+#define Y_ROW 1
+#define Z_ROW 2
+
+#define ACCEL_COL 0
+#define MAG_COL 1
+#define GYRO_COL 2
 
 class MyCanvas : public wxGLCanvas
 {
@@ -85,6 +96,9 @@ private:
 	wxMenu *m_sendcal_menu;
 	wxStaticText *_statusMessage;
 	
+	wxStaticText *_portLabel;	
+	wxGrid *_rawDataGrid;
+	
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
 	void OnShowMenu(wxMenuEvent &event);
@@ -98,7 +112,8 @@ private:
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
 	void showOpenPortError(const char *name);
 	void showOpenPortOK(const char *name);
-	wxStaticText *_portLabel;
+	void showMessage(const char *message);
+	void buildLeftPanel(wxSizer *parentPanel, wxPanel *panel);
 	DECLARE_EVENT_TABLE()
 };
 
