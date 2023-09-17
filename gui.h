@@ -114,6 +114,7 @@ private:
 	void showOpenPortOK(const char *name);
 	void showMessage(const char *message);
 	void buildLeftPanel(wxSizer *parentPanel, wxPanel *panel);
+	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
 	DECLARE_EVENT_TABLE()
 };
 

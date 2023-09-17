@@ -235,7 +235,9 @@ void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	const wxSize rawDataGridSize = wxSize(450,95);
 	const wxPoint messagesLocation = wxPoint(100,450);
 	const wxPoint bitmapLocation = wxPoint(10,300);
-
+	const wxSize messagesSize = wxSize(450,100);
+	int colWidth = 100;
+	
 	vsizer = new wxBoxSizer(wxVERTICAL);
 	parentPanel->Add(vsizer, 0, wxALL| wxEXPAND , 8);
 	_portLabel = new wxStaticText(panel, wxID_ANY, "Port");
@@ -264,20 +266,42 @@ void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 
 	_rawDataGrid = new wxGrid(panel, wxID_ANY, rawDataGridLocation, rawDataGridSize, wxWANTS_CHARS);
 	_rawDataGrid->CreateGrid(3,3);
+	wxFont gridLabelFont = _rawDataGrid->GetLabelFont();
+	gridLabelFont.MakeBold();
+	_rawDataGrid->SetLabelFont(gridLabelFont);
 	_rawDataGrid->SetColLabelValue(ACCEL_COL,"Accel");
 	_rawDataGrid->SetColLabelValue(MAG_COL,"Mag");
 	_rawDataGrid->SetColLabelValue(GYRO_COL,"Gyro");
 	
+	_rawDataGrid->SetColSize(ACCEL_COL, colWidth);
+	_rawDataGrid->SetColSize(MAG_COL, colWidth);
+	_rawDataGrid->SetColSize(GYRO_COL, colWidth);
+		
+	
+	
 	_rawDataGrid->SetRowLabelValue(X_ROW,"X");
 	_rawDataGrid->SetRowLabelValue(Y_ROW,"Y");
 	_rawDataGrid->SetRowLabelValue(Z_ROW,"Z");
+	
+	_rawDataGrid->SetCellAlignment(X_ROW, ACCEL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Y_ROW, ACCEL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Z_ROW, ACCEL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 
+	_rawDataGrid->SetCellAlignment(X_ROW, MAG_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Y_ROW, MAG_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Z_ROW, MAG_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 
-	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation);
+	_rawDataGrid->SetCellAlignment(X_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Y_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Z_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+
+	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.471386,1.830509,9.700503,0.000000,0.000000,0.000000,18.600000,-21.700001,-143.699997";
+	UpdateGrid(serialBufferMessage, 92);
+
+	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
 	vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
 
 	wxImage::AddHandler(new wxPNGHandler);
-	//m_confirm_icon = new wxStaticBitmap(panel, ID_CONFIRM_ICON, MyBitmap("checkgreen.png"));
 	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
 	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
 }
@@ -297,6 +321,41 @@ void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int addi
 	
 	control->SetMinSize(wxSize(300, -1));
 }
+
+
+
+void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
+{
+	char messageBuffer[256];	
+	
+	snprintf(messageBuffer, bytesRead,"%s",serialBufferMessage);
+
+	char *token = "0.00";
+	
+	token = strtok(messageBuffer,":");
+	token = strtok(NULL, ",");
+	
+	_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
+	
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
+	
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token); 
+}
+
 
 
 void MyFrame::OnTimer(wxTimerEvent &event)
@@ -320,44 +379,8 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		}
 		else
 		{
-			for (int i =0; i < 256; i++)
-			{
-				serialBufferMessage[i] = '\0';
-			}
-			serialBufferMessage	 = getSerialBuffer();
-
-			snprintf(messageBuffer, sizeof(bytesRead),"%s",serialBufferMessage);
-			//serialBufferMessage[bytesRead] = '\0';
-			_statusMessage->SetLabelText(messageBuffer);
-
-			
-			// refresh grid data
-			/*
-			char *token = "0.00";
-			
-			token = strtok(messageBuffer,":");
-			token = strtok(messageBuffer,",");	
-
-			_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
-			
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
-			
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
-			token = strtok(NULL,",");			
-			_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);*/
-			
+			serialBufferMessage	 = getSerialBuffer();	
+			UpdateGrid(serialBufferMessage, bytesRead);	
 		}	
 		if (firstrun && m_canvas->IsShown()) {
 			//int h, w;
@@ -365,11 +388,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 			//printf("Canvas initial size = %d, %d\n", w, h);
 			firstrun = 0;
 		}
-		
 
-
-				
-		
 		
 		m_canvas->Refresh();
 		gaps = quality_surface_gap_error();
