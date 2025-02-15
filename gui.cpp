@@ -277,8 +277,6 @@ void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	_rawDataGrid->SetColSize(MAG_COL, colWidth);
 	_rawDataGrid->SetColSize(GYRO_COL, colWidth);
 		
-	
-	
 	_rawDataGrid->SetRowLabelValue(X_ROW,"X");
 	_rawDataGrid->SetRowLabelValue(Y_ROW,"Y");
 	_rawDataGrid->SetRowLabelValue(Z_ROW,"Z");
@@ -295,18 +293,19 @@ void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	_rawDataGrid->SetCellAlignment(Y_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 	_rawDataGrid->SetCellAlignment(Z_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 
-	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.471386,1.830509,9.700503,0.000000,0.000000,0.000000,18.600000,-21.700001,-143.699997";
-	UpdateGrid(serialBufferMessage, 92);
-
 	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
+	_statusMessage->Wrap(300);
 	vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
 
 	wxImage::AddHandler(new wxPNGHandler);
 	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
 	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
+
+	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.624527,2.325824,9.525827,0.000000,0.000000,0.000000,20.000000,-36.300001,-144.699997";
+	UpdateGrid(serialBufferMessage, 92);
+
+
 }
-
-
 
 void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
 {
@@ -322,41 +321,71 @@ void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int addi
 	control->SetMinSize(wxSize(300, -1));
 }
 
-
-
 void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 {
 	char messageBuffer[256];	
 	
-	snprintf(messageBuffer, bytesRead,"%s",serialBufferMessage);
+	//snprintf(messageBuffer,256,"%d bytes read", bytesRead);
+	//showMessage(messageBuffer);	
 
-	char *token = "0.00";
+	if (bytesRead < 40)
+	{
+		return;
+	}
 	
-	token = strtok(messageBuffer,":");
-	token = strtok(NULL, ",");
+	snprintf(messageBuffer, 256,"%s",serialBufferMessage);
+	//showMessage(messageBuffer);	
 	
-	_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
+	//return;
 	
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
-	
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
-	token = strtok(NULL,",");			
-	_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token); 
+	if (strcmp(messageBuffer,"reset check") == 0)
+	{
+		printf("reset check received\n");
+		return;
+	}
+
+	char *token = strtok(messageBuffer,":");
+	if (token == NULL) return;
+	if (strcmp(token,"Raw") == 0)
+	{
+		token = strtok(NULL, ",");
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
+			
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
+		
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
+		token = strtok(NULL,",");			
+		if (token == NULL) return;
+		_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);
+	}
+	else
+	{
+		char errorMessage[128];
+		snprintf(errorMessage, 128, "unknown start token '%s'", token);
+		_statusMessage->SetLabelText(errorMessage);
+	}
+
 }
-
-
 
 void MyFrame::OnTimer(wxTimerEvent &event)
 {
@@ -364,24 +393,26 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 	float gaps, variance, wobble, fiterror;
 	char buf[32];
 	int i, j;
+	unsigned char *serialBufferMessage;	
 	char messageBuffer[256];
-	unsigned char *serialBufferMessage;	//printf("OnTimer\n");
-	if (port_is_open()) {
-		_statusMessage->SetLabelText("port open");
-		int bytesRead = read_serial_data();
-
-		//snprintf(messageBuffer,sizeof(messageBuffer), "%d bytes from serial", bytesRead);
-		//_statusMessage->SetLabelText(messageBuffer);
 		
-		if (bytesRead == 0)
-		{
-			_statusMessage->SetLabelText("0 bytes read from serial");
-		}
-		else
+	if (port_is_open()) {
+		int bytesRead = read_serial_data();
+		
+		if (bytesRead > 0)
 		{
 			serialBufferMessage	 = getSerialBuffer();	
-			UpdateGrid(serialBufferMessage, bytesRead);	
+			if (serialBufferMessage != NULL)
+			{
+				UpdateGrid(serialBufferMessage, bytesRead);	
+				//_statusMessage->SetLabelText(serialBufferMessage);
+			}
+			else
+			{
+				_statusMessage->SetLabel("null buffer");
+			}
 		}	
+		
 		if (firstrun && m_canvas->IsShown()) {
 			//int h, w;
 			//m_canvas->GetSize(&w, &h);
@@ -395,6 +426,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		variance = quality_magnitude_variance_error();
 		wobble = quality_wobble_error();
 		fiterror = quality_spherical_fit_error();
+		
 		//snprintf(messageBuffer, sizeof(messageBuffer),"gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
 		//_statusMessage->SetLabelText(messageBuffer);
 		m_canvas->Refresh();
@@ -575,7 +607,7 @@ void MyFrame::OnPortList(wxCommandEvent& event)
 void MyFrame::showOpenPortError(const char *name)
 {
 	char buffer[64];
-	sprintf(buffer,"port %s failed to open", name);
+	snprintf(buffer, 64, "port %s failed to open", name);
 	
 	wxMessageDialog dialog(this,buffer,
         " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
@@ -584,12 +616,14 @@ void MyFrame::showOpenPortError(const char *name)
 
 void MyFrame::showOpenPortOK(const char *name)
 {
-	char buffer[64];
+	/*char buffer[64];
 	sprintf(buffer,"port %s opened OK", name);
 	
 	wxMessageDialog dialog(this,buffer,
         " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
-    dialog.ShowModal();
+    dialog.ShowModal();*/
+    
+    _statusMessage->SetLabelText("port open");
 }
 
 
