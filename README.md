@@ -3,20 +3,25 @@ I asked ChatGPT how to build MotionCal on a Mac
 
 Building MotionCal on macOS requires setting up the necessary dependencies and compiling the project. Follow these steps:
 
-## 1. Install Dependencies
+## 1. Install Dependencies
 You'll need:
 
-```wxWidgets (GUI framework)
+```
+wxWidgets (GUI framework)
 CMake (build system)
-Xcode or g++ (compiler)```
+Xcode or g++ (compiler)
+
+```
 
 Install via Homebrew:
 `brew install wxwidgets cmake`
 
 ## 2. Clone the Repository
-`git clone https://github.com/PaulStoffregen/MotionCal.git`
+```
+git clone https://github.com/PaulStoffregen/MotionCal.git`
+cd MotionCal
 
-`cd MotionCal`
+```
 
 ## 3. Configure wxWidgets
 Ensure that wx-config is accessible:
@@ -26,6 +31,7 @@ export PATH="/usr/local/opt/wxwidgets/bin:$PATH"
 export LDFLAGS="-L/usr/local/opt/wxwidgets/lib"
 export CPPFLAGS="-I/usr/local/opt/wxwidgets/include"
 export PKG_CONFIG_PATH="/usr/local/opt/wxwidgets/lib/pkgconfig"
+
 ```
 
 ## 4. Build MotionCal
@@ -33,11 +39,13 @@ export PKG_CONFIG_PATH="/usr/local/opt/wxwidgets/lib/pkgconfig"
 Using Make:
 `make`
 Using CMake:
+
 ```
 mkdir build
 cd build
 cmake ..
-make```
+make
+```
 
 ## 5. Run MotionCal
 `./MotionCal`
