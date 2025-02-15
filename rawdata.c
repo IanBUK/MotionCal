@@ -136,7 +136,7 @@ static int is_float_ok(float actual, float expected)
 void cal1_data(const float *data)
 {
 	int i, ok;
-	printf("int cal1_data, cal_confirm_needed is %d on entry\n", cal_confirm_needed);
+
 	if (cal_confirm_needed) {
 		#if 0
 		printf("expected cal1: ");
