@@ -332,7 +332,7 @@ void MyFrame::OnClear(wxCommandEvent &event)
 
 void MyFrame::OnSendCal(wxCommandEvent &event)
 {
-	/*printf("OnSendCal\n");
+	printf("OnSendCal\n");
 	printf("Magnetic Calibration:   (%.1f%% fit error)\n", magcal.FitError);
 	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
 		magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2]);
@@ -340,9 +340,18 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 		magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2]);
 	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
 		magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2]);
-	*/
+
 	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
-	send_calibration();
+  int bytesWritten = send_calibration();
+	printf("no. bytes written: %d\n", bytesWritten);
+  /*char buffer[25];
+	//sprintf(buffer,"%d bytes written", bytesWritten);
+
+
+	/*wxMessageDialog dialog(this,
+					"hello world","world",wxOK|wxICON_INFORMATION|wxCENTER);
+
+					dialog.ShowModal();*/
 }
 
 void calibration_confirmed(void)
@@ -472,7 +481,3 @@ int MyApp::OnExit()
 {
 	return 0;
 }
-
-
-
-

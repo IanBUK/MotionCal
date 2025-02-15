@@ -21,7 +21,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-
+#include "stdio.h"
 
 #define ID_TIMER		10000
 #define ID_SENDCAL_MENU		10001
