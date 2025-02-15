@@ -34,7 +34,7 @@ export PKG_CONFIG_PATH="/usr/local/opt/wxwidgets/lib/pkgconfig"
 
 ```
 
-## 4. Build MotionCal
+## 4. Build MotionCal
 
 Using Make:
 `make`
