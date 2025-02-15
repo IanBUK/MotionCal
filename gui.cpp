@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "imuread.h"
+#include <string.h>
 
 
 wxString port_name;
@@ -71,7 +72,6 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 
-
 MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
     const wxPoint &position, const wxSize& size, long style) :
     wxFrame( parent, id, title, position, size, style )
@@ -109,37 +109,11 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Magnetometer");
 	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
 
-	topsizer->Add(leftsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
+	topsizer->Add(leftsizer, 1, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 	topsizer->Add(middlesizer, 1, wxALL | wxEXPAND, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	leftsizer->Add(vsizer, 0, wxALL, 8);
-	text = new wxStaticText(panel, wxID_ANY, "Port");
-	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
-	m_port_list = new wxComboBox(panel, ID_PORTLIST, "",
-		wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	m_port_list->Append("(none)");
-	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
-	m_port_list->SetSelection(0);
-	vsizer->Add(m_port_list, 1, wxEXPAND, 0);
-
-	vsizer->AddSpacer(8);
-	text = new wxStaticText(panel, wxID_ANY, "Actions");
-	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
-	m_button_clear = new wxButton(panel, ID_CLEAR_BUTTON, "Clear");
-	m_button_clear->Enable(false);
-	vsizer->Add(m_button_clear, 1, wxEXPAND, 0);
-	m_button_sendcal = new wxButton(panel, ID_SENDCAL_BUTTON, "Send Cal");
-	vsizer->Add(m_button_sendcal, 1, wxEXPAND, 0);
-	m_button_sendcal->Enable(false);
-	vsizer->AddSpacer(16);
-	text = new wxStaticText(panel, wxID_ANY, "Status");
-	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
-	wxImage::AddHandler(new wxPNGHandler);
-	//m_confirm_icon = new wxStaticBitmap(panel, ID_CONFIRM_ICON, MyBitmap("checkgreen.png"));
-	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"));
-	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
+	buildLeftPanel(leftsizer, panel);
 
 	vsizer = new wxBoxSizer(wxVERTICAL);
 	middlesizer->Add(vsizer, 1, wxEXPAND | wxALL, 8);
@@ -243,27 +217,188 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	m_timer->Start(14, wxTIMER_CONTINUOUS);
 }
 
+
+void MyFrame::showMessage(const char *message)
+{
+	wxMessageDialog dialog(this,message,
+        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+    dialog.ShowModal();
+}
+
+void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
+{
+	wxSizer  *vsizer;
+	wxStaticText *text;
+	
+	
+	const wxPoint rawDataGridLocation = wxPoint(30,480);
+	const wxSize rawDataGridSize = wxSize(450,95);
+	const wxPoint messagesLocation = wxPoint(100,450);
+	const wxPoint bitmapLocation = wxPoint(10,300);
+	const wxSize messagesSize = wxSize(450,100);
+	int colWidth = 100;
+	
+	vsizer = new wxBoxSizer(wxVERTICAL);
+	parentPanel->Add(vsizer, 0, wxALL| wxEXPAND , 8);
+	_portLabel = new wxStaticText(panel, wxID_ANY, "Port");
+	
+	vsizer->Add(_portLabel, 0, wxTOP|wxBOTTOM, 4);
+	m_port_list = new wxComboBox(panel, ID_PORTLIST, "",
+		wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	m_port_list->Append("(none )");
+	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
+	m_port_list->SetSelection(0);
+	vsizer->Add(m_port_list, 1, wxALL |wxEXPAND, 0);
+
+	vsizer->AddSpacer(8);
+	text = new wxStaticText(panel, wxID_ANY, "Actions");
+	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
+	m_button_clear = new wxButton(panel, ID_CLEAR_BUTTON, "Clear");
+	m_button_clear->Enable(false);
+	vsizer->Add(m_button_clear, 1, wxEXPAND, 0);
+	m_button_sendcal = new wxButton(panel, ID_SENDCAL_BUTTON, "Send Cal");
+	vsizer->Add(m_button_sendcal, 1, wxEXPAND, 0);
+	m_button_sendcal->Enable(false);
+	vsizer->AddSpacer(16);
+	text = new wxStaticText(panel, wxID_ANY, "Status");
+	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
+
+
+	_rawDataGrid = new wxGrid(panel, wxID_ANY, rawDataGridLocation, rawDataGridSize, wxWANTS_CHARS);
+	_rawDataGrid->CreateGrid(3,3);
+	wxFont gridLabelFont = _rawDataGrid->GetLabelFont();
+	gridLabelFont.MakeBold();
+	_rawDataGrid->SetLabelFont(gridLabelFont);
+	_rawDataGrid->SetColLabelValue(ACCEL_COL,"Accel");
+	_rawDataGrid->SetColLabelValue(MAG_COL,"Mag");
+	_rawDataGrid->SetColLabelValue(GYRO_COL,"Gyro");
+	
+	_rawDataGrid->SetColSize(ACCEL_COL, colWidth);
+	_rawDataGrid->SetColSize(MAG_COL, colWidth);
+	_rawDataGrid->SetColSize(GYRO_COL, colWidth);
+		
+	
+	
+	_rawDataGrid->SetRowLabelValue(X_ROW,"X");
+	_rawDataGrid->SetRowLabelValue(Y_ROW,"Y");
+	_rawDataGrid->SetRowLabelValue(Z_ROW,"Z");
+	
+	_rawDataGrid->SetCellAlignment(X_ROW, ACCEL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Y_ROW, ACCEL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Z_ROW, ACCEL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+
+	_rawDataGrid->SetCellAlignment(X_ROW, MAG_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Y_ROW, MAG_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Z_ROW, MAG_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+
+	_rawDataGrid->SetCellAlignment(X_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Y_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_rawDataGrid->SetCellAlignment(Z_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+
+	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.471386,1.830509,9.700503,0.000000,0.000000,0.000000,18.600000,-21.700001,-143.699997";
+	UpdateGrid(serialBufferMessage, 92);
+
+	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
+	vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
+
+	wxImage::AddHandler(new wxPNGHandler);
+	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
+	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
+}
+
+
+
+void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
+{
+	unsigned int i;
+	int maxWidth(0), width;
+	for (i = 0; i < control->GetCount(); i++)
+	{
+		control->GetTextExtent(control->GetString(i), &width, NULL);
+		if (width > maxWidth)
+			maxWidth = width;
+	}
+	
+	control->SetMinSize(wxSize(300, -1));
+}
+
+
+
+void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
+{
+	char messageBuffer[256];	
+	
+	snprintf(messageBuffer, bytesRead,"%s",serialBufferMessage);
+
+	char *token = "0.00";
+	
+	token = strtok(messageBuffer,":");
+	token = strtok(NULL, ",");
+	
+	_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
+	
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
+	
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
+	token = strtok(NULL,",");			
+	_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token); 
+}
+
+
+
 void MyFrame::OnTimer(wxTimerEvent &event)
 {
 	static int firstrun=1;
 	float gaps, variance, wobble, fiterror;
 	char buf[32];
 	int i, j;
-
-	//printf("OnTimer\n");
+	char messageBuffer[256];
+	unsigned char *serialBufferMessage;	//printf("OnTimer\n");
 	if (port_is_open()) {
-		read_serial_data();
+		_statusMessage->SetLabelText("port open");
+		int bytesRead = read_serial_data();
+
+		//snprintf(messageBuffer,sizeof(messageBuffer), "%d bytes from serial", bytesRead);
+		//_statusMessage->SetLabelText(messageBuffer);
+		
+		if (bytesRead == 0)
+		{
+			_statusMessage->SetLabelText("0 bytes read from serial");
+		}
+		else
+		{
+			serialBufferMessage	 = getSerialBuffer();	
+			UpdateGrid(serialBufferMessage, bytesRead);	
+		}	
 		if (firstrun && m_canvas->IsShown()) {
 			//int h, w;
 			//m_canvas->GetSize(&w, &h);
 			//printf("Canvas initial size = %d, %d\n", w, h);
 			firstrun = 0;
 		}
+
+		
 		m_canvas->Refresh();
 		gaps = quality_surface_gap_error();
 		variance = quality_magnitude_variance_error();
 		wobble = quality_wobble_error();
 		fiterror = quality_spherical_fit_error();
+		//snprintf(messageBuffer, sizeof(messageBuffer),"gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
+		//_statusMessage->SetLabelText(messageBuffer);
+		m_canvas->Refresh();
+			
 		if (gaps < 15.0f && variance < 4.5f && wobble < 4.0f && fiterror < 5.0f) {
 			if (!m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || !m_button_sendcal->IsEnabled()) {
 				m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
@@ -307,7 +442,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		}
 	} else {
 		if (!port_name.IsEmpty()) {
-			//printf("port has closed, updating stuff\n");
+			_statusMessage->SetLabelText("port has closed, updating stuff");
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_clear->Enable(false);
 			m_button_sendcal->Enable(false);
@@ -344,14 +479,6 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
   int bytesWritten = send_calibration();
 	printf("no. bytes written: %d\n", bytesWritten);
-  /*char buffer[25];
-	//sprintf(buffer,"%d bytes written", bytesWritten);
-
-
-	/*wxMessageDialog dialog(this,
-					"hello world","world",wxOK|wxICON_INFORMATION|wxCENTER);
-
-					dialog.ShowModal();*/
 }
 
 void calibration_confirmed(void)
@@ -392,6 +519,7 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	for (int i=0; i < num; i++) {
 		m_port_list->Append(list[i]);
 	}
+	SetMinimumWidthFromContents(m_port_list, 50);
 }
 
 
@@ -405,10 +533,19 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
 	port_name = name;
 	m_port_list->Clear();
 	m_port_list->Append(port_name);
+	SetMinimumWidthFromContents(m_port_list, 50);
 	m_port_list->SetSelection(0);
         if (id == 9000) return;
 	raw_data_reset();
-	open_port((const char *)name);
+	int openPortResult = open_port((const char *)name);
+	if (openPortResult == 0)
+	{
+		showOpenPortError((const char *)name);
+	}
+	else
+	{
+		showOpenPortOK((const char *)name);
+	}
 	m_button_clear->Enable(true);
 }
 
@@ -422,10 +559,37 @@ void MyFrame::OnPortList(wxCommandEvent& event)
 	port_name = name;
 	if (name == "(none)") return;
 	raw_data_reset();
-	open_port((const char *)name);
+	int openPortResult = open_port((const char *)name);
+	if (openPortResult == 0)
+	{
+		showOpenPortError((const char *)name);
+	}
+	else
+	{
+		showOpenPortOK((const char *)name);
+	}
 	m_button_clear->Enable(true);
 }
 
+void MyFrame::showOpenPortError(const char *name)
+{
+	char buffer[64];
+	sprintf(buffer,"port %s failed to open", name);
+	
+	wxMessageDialog dialog(this,buffer,
+        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+    dialog.ShowModal();
+}
+
+void MyFrame::showOpenPortOK(const char *name)
+{
+	char buffer[64];
+	sprintf(buffer,"port %s opened OK", name);
+	
+	wxMessageDialog dialog(this,buffer,
+        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+    dialog.ShowModal();
+}
 
 
 
