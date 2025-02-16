@@ -108,7 +108,7 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Magnetometer");
 	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
 
-	topsizer->Add(leftsizer, 1, wxALL | wxEXPAND | wxALIGN_TOP, 5);
+	topsizer->Add(leftsizer, 0,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
 	topsizer->Add(middlesizer, 1, wxALL | wxEXPAND, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 
@@ -231,16 +231,13 @@ void MyFrame::BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	
 	const wxPoint rawDataGridLocation = wxPoint(30,200);
 	const wxPoint orientationGridLocation = wxPoint(30,300);
-	const wxPoint messagesLocation = wxPoint(30,375);
-	
-	const wxPoint bitmapLocation = wxPoint(30,500);
-
-	const wxSize messagesSize = wxSize(450,100);
-
-
+	const wxPoint messagesLocation = wxPoint(30,375);	
+	const wxPoint bitmapLocation = wxPoint(30,900);
+	const wxSize messagesSize = wxSize(350,100);
 	
 	vsizer = new wxBoxSizer(wxVERTICAL);
 	parentPanel->Add(vsizer, 0, wxALL| wxEXPAND , 8);
+	parentPanel->SetMinSize(420,800);
 	_portLabel = new wxStaticText(panel, wxID_ANY, "Port");
 	
 	vsizer->Add(_portLabel, 0, wxTOP|wxBOTTOM, 4);
@@ -275,11 +272,6 @@ void MyFrame::BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	wxImage::AddHandler(new wxPNGHandler);
 	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
 	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
-
-	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.624527,2.325824,9.525827,0.000000,0.000000,0.000000,20.000000,-36.300001,-144.699997";
-	UpdateGrid(serialBufferMessage, 92);
-
-
 }
 
 void MyFrame::BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation)
@@ -638,13 +630,40 @@ void MyFrame::OnShowMenu(wxMenuEvent &event)
 
 void MyFrame::OnShowPortList(wxCommandEvent& event)
 {
-	//printf("OnShowPortList\n");
+	printf("OnShowPortList\n");
 	m_port_list->Clear();
 	m_port_list->Append("(none)");
 	wxArrayString list = serial_port_list();
+	printf("PortCount: %d\n", list.GetCount());
 	int num = list.GetCount();
+	
+	// Brute force de-duplication of ports list. This wouldn't
+	// scale much, but I doubt that being an issue as we're
+	// looking at a set of serial ports, so it's probably
+	// only going to have single digit number of items.
+	wxArrayString uniqueList;
+	int uniqueListIndex = 1;
+	uniqueList.Add(list[0]);
+	for (int originaListIndex=1; originaListIndex < num; originaListIndex++) {
+		bool isDuplicate = false;
+		for(int newListIndex = 0; newListIndex < uniqueList.GetCount(); newListIndex++)
+		{
+			if (uniqueList[newListIndex] == list[originaListIndex])
+			{ 
+				isDuplicate = true;
+				break;
+			}
+		}
+		if (!isDuplicate)
+		{
+			uniqueList.Add(list[originaListIndex]);
+		}		
+	}	
+	num = uniqueList.GetCount();
+	
 	for (int i=0; i < num; i++) {
-		m_port_list->Append(list[i]);
+		
+		m_port_list->Append(uniqueList[i]);
 	}
 	SetMinimumWidthFromContents(m_port_list, 50);
 }

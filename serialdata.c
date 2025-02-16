@@ -426,31 +426,48 @@ int open_port(const char *name)
 
 int read_serial_data(void)
 {
+	printf("into read_serial_data\n");
 	unsigned char buf[256];
 	static int nodata_count=0;
 	int n;
 
 	if (portfd < 0) return -1;
 	while (1) {
-		n = read(portfd, buf, sizeof(buf));
-		if (n > 0 && n <= sizeof(buf)) {
+		n = read(portfd, buf, sizeof(buf) -1);
+		if (n > 0 && n <= sizeof(buf)) 
+		{
+			printf("read buffer '%d' bytes\n", n);
+			buf[n] = '\0';
 			newdata(buf, n);
 			nodata_count = 0;
 			return n;
-		} else if (n == 0) {
-			if (++nodata_count > 6) {
+		} 
+		else if (n == 0) 
+		{
+			printf("no data read\n");
+			if (++nodata_count > 6) 
+			{
 				close_port();
 				nodata_count = 0;
 				close_port();
 				return -1;
 			}
 			return 0;
-		} else {
+		}
+		else 
+		{
+			printf("error: %d\n", errno);
 			n = errno;
-			if (n == EAGAIN) {
+			if (n == EAGAIN) 
+			{
 				return 0;
-			} else if (n == EINTR) {
-			} else {
+			} 
+			else if (n == EINTR) 
+			{
+				continue;
+			} 
+			else 
+			{
 				close_port();
 				return -1;
 			}
