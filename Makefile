@@ -86,7 +86,6 @@ MotionCal.app: MotionCal Info.plist icon.icns
 	/bin/echo -n 'APPL????' > $@/Contents/PkgInfo
 	cp $< $@/Contents/MacOS/
 	cp icon.icns $@/Contents/Resources/
-	-pjrcmacsigntool $@
 	touch $@
 
 MotionCal.dmg: MotionCal.app

@@ -2,7 +2,6 @@
 #include "imuread.h"
 #include <string.h>
 
-
 wxString port_name;
 static bool show_calibration_confirmed = false;
 
@@ -113,7 +112,7 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	topsizer->Add(middlesizer, 1, wxALL | wxEXPAND, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 
-	buildLeftPanel(leftsizer, panel);
+	BuildLeftPanel(leftsizer, panel);
 
 	vsizer = new wxBoxSizer(wxVERTICAL);
 	middlesizer->Add(vsizer, 1, wxEXPAND | wxALL, 8);
@@ -225,18 +224,20 @@ void MyFrame::showMessage(const char *message)
     dialog.ShowModal();
 }
 
-void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
+void MyFrame::BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 {
 	wxSizer  *vsizer;
 	wxStaticText *text;
 	
+	const wxPoint rawDataGridLocation = wxPoint(30,200);
+	const wxPoint orientationGridLocation = wxPoint(30,300);
+	const wxPoint messagesLocation = wxPoint(30,375);
 	
-	const wxPoint rawDataGridLocation = wxPoint(30,480);
-	const wxSize rawDataGridSize = wxSize(450,95);
-	const wxPoint messagesLocation = wxPoint(100,450);
-	const wxPoint bitmapLocation = wxPoint(10,300);
+	const wxPoint bitmapLocation = wxPoint(30,500);
+
 	const wxSize messagesSize = wxSize(450,100);
-	int colWidth = 100;
+
+
 	
 	vsizer = new wxBoxSizer(wxVERTICAL);
 	parentPanel->Add(vsizer, 0, wxALL| wxEXPAND , 8);
@@ -264,10 +265,34 @@ void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
 
 
+	BuildRawDataGrid(panel, rawDataGridLocation);
+	BuildOrientationGrid(panel, orientationGridLocation);
+		
+	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
+	_statusMessage->Wrap(300);
+	//vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
+
+	wxImage::AddHandler(new wxPNGHandler);
+	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
+	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
+
+	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.624527,2.325824,9.525827,0.000000,0.000000,0.000000,20.000000,-36.300001,-144.699997";
+	UpdateGrid(serialBufferMessage, 92);
+
+
+}
+
+void MyFrame::BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation)
+{
+	int colWidth = 100;
+	const wxSize rawDataGridSize = wxSize(383,90);
+
 	_rawDataGrid = new wxGrid(panel, wxID_ANY, rawDataGridLocation, rawDataGridSize, wxWANTS_CHARS);
 	_rawDataGrid->CreateGrid(3,3);
+	
 	wxFont gridLabelFont = _rawDataGrid->GetLabelFont();
 	gridLabelFont.MakeBold();
+	
 	_rawDataGrid->SetLabelFont(gridLabelFont);
 	_rawDataGrid->SetColLabelValue(ACCEL_COL,"Accel");
 	_rawDataGrid->SetColLabelValue(MAG_COL,"Mag");
@@ -292,19 +317,29 @@ void MyFrame::buildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
 	_rawDataGrid->SetCellAlignment(X_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 	_rawDataGrid->SetCellAlignment(Y_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 	_rawDataGrid->SetCellAlignment(Z_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+}
 
-	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
-	_statusMessage->Wrap(300);
-	vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
+void MyFrame::BuildOrientationGrid(wxPanel *panel, wxPoint orientationGridLocation)
+{
+	int colWidth = 100;
+	const wxSize orientationGridSize = wxSize(383,53);
 
-	wxImage::AddHandler(new wxPNGHandler);
-	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
-	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
-
-	unsigned char *serialBufferMessage = (unsigned char *)"Raw: 0.624527,2.325824,9.525827,0.000000,0.000000,0.000000,20.000000,-36.300001,-144.699997";
-	UpdateGrid(serialBufferMessage, 92);
-
-
+	_orientationGrid = new wxGrid(panel, wxID_ANY, orientationGridLocation, orientationGridSize, wxWANTS_CHARS);
+	_orientationGrid->CreateGrid(1,3);
+	wxFont gridLabelFont = _rawDataGrid->GetLabelFont();
+	gridLabelFont.MakeBold();
+		
+	_orientationGrid->SetLabelFont(gridLabelFont);
+	_orientationGrid->SetColLabelValue(YAW_COL,"Yaw");
+	_orientationGrid->SetColLabelValue(PITCH_COL,"Pitch");
+	_orientationGrid->SetColLabelValue(ROLL_COL,"Roll");	
+	_orientationGrid->SetColSize(YAW_COL, colWidth);
+	_orientationGrid->SetColSize(PITCH_COL, colWidth);
+	_orientationGrid->SetColSize(ROLL_COL, colWidth);	
+	_orientationGrid->SetRowLabelValue(READING_ROW,"Reading");
+	_orientationGrid->SetCellAlignment(READING_ROW, YAW_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_orientationGrid->SetCellAlignment(READING_ROW, PITCH_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
+	_orientationGrid->SetCellAlignment(READING_ROW, ROLL_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);	
 }
 
 void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
@@ -348,7 +383,7 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 	if (token == NULL) return;
 	if (strcmp(token,"Raw") == 0)
 	{
-		token = strtok(NULL, ",");
+		/*token = strtok(NULL, ",");
 		if (token == NULL) return;
 		_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
 		token = strtok(NULL,",");			
@@ -376,7 +411,12 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 		_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
 		token = strtok(NULL,",");			
 		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);
+		_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);*/
+		UpdateRawDataGrid(token);
+	}
+	else if (strcmp(token,"orientationOutput") == 0)
+	{
+		UpdateOrientationGrid(token);
 	}
 	else
 	{
@@ -387,6 +427,52 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 
 }
 
+void MyFrame::UpdateRawDataGrid(char *token)
+{
+	token = strtok(NULL, ",");
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
+		
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
+		
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);
+}
+
+void MyFrame::UpdateOrientationGrid(char *token)
+{
+	token = strtok(NULL, ",");
+	if (token == NULL) return;
+	_orientationGrid->SetCellValue(READING_ROW, YAW_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_orientationGrid->SetCellValue(READING_ROW, PITCH_COL,token);
+	token = strtok(NULL,",");			
+	if (token == NULL) return;
+	_orientationGrid->SetCellValue(READING_ROW, ROLL_COL,token);
+}
+
 void MyFrame::OnTimer(wxTimerEvent &event)
 {
 	static int firstrun=1;
@@ -394,7 +480,6 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 	char buf[32];
 	int i, j;
 	unsigned char *serialBufferMessage;	
-	char messageBuffer[256];
 		
 	if (port_is_open()) {
 		int bytesRead = read_serial_data();
@@ -499,18 +584,28 @@ void MyFrame::OnClear(wxCommandEvent &event)
 
 void MyFrame::OnSendCal(wxCommandEvent &event)
 {
-	printf("OnSendCal\n");
 	printf("Magnetic Calibration:   (%.1f%% fit error)\n", magcal.FitError);
-	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
-		magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2]);
-	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
-		magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2]);
-	printf("   %7.2f   %6.3f %6.3f %6.3f\n",
-		magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2]);
+	printf("   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2]);
+	printf("   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2]);
+	printf("   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2]);
+	
 
-	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
-  int bytesWritten = send_calibration();
-	printf("no. bytes written: %d\n", bytesWritten);
+	
+	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));	
+	int bytesWritten = send_calibration();
+	printf("No. bytes written: %d\n", bytesWritten);
+	
+	char messageBuffer[255];
+	sprintf(messageBuffer,
+		"Magnetic Calibration:   (%.1f%% fit error)\n   %7.2f   %6.3f %6.3f %6.3f\n   %7.2f   %6.3f %6.3f %6.3f\n   %7.2f   %6.3f %6.3f %6.3f\nNo. bytes written: %d\n",
+		magcal.FitError,
+		magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2],
+		magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2],
+		magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2],
+		bytesWritten);
+		
+	showMessage(messageBuffer);
+	
 }
 
 void calibration_confirmed(void)

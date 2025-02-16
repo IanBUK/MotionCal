@@ -53,6 +53,11 @@
 #define MAG_COL 1
 #define GYRO_COL 2
 
+#define YAW_COL 0
+#define PITCH_COL 1
+#define ROLL_COL 2
+#define READING_ROW 0
+
 class MyCanvas : public wxGLCanvas
 {
 public:
@@ -111,7 +116,8 @@ private:
 	
 	wxStaticText *_portLabel;	
 	wxGrid *_rawDataGrid;
-	
+	wxGrid *_orientationGrid;
+		
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
 	void OnShowMenu(wxMenuEvent &event);
@@ -126,8 +132,13 @@ private:
 	void showOpenPortError(const char *name);
 	void showOpenPortOK(const char *name);
 	void showMessage(const char *message);
-	void buildLeftPanel(wxSizer *parentPanel, wxPanel *panel);
+	
+	void BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel);
+	void BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation);
+	void BuildOrientationGrid(wxPanel *panel, wxPoint orientationGridLocation);
 	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
+	void UpdateRawDataGrid(char *token);
+	void UpdateOrientationGrid(char *token);
 	DECLARE_EVENT_TABLE()
 };
 
