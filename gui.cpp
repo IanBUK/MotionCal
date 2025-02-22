@@ -76,34 +76,19 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
     wxFrame( parent, id, title, position, size, style )
 {
 	wxPanel *panel;
-	wxMenuBar *menuBar;
-	wxMenu *menu;
+
 	wxSizer *topsizer;
 	wxSizer *leftsizer, *middlesizer, *rightsizer;
 	wxSizer *hsizer, *vsizer, *calsizer;
 	wxStaticText *text;
 	int i, j;
 
+	BuildMenu();		
+
+
 	topsizer = new wxBoxSizer(wxHORIZONTAL);
 	panel = new wxPanel(this);
-
-	menuBar = new wxMenuBar;
-	menu = new wxMenu;
-	menu->Append(ID_SENDCAL_MENU, wxT("Send Calibration"));
-	m_sendcal_menu = menu;
-	m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
-	menu->Append(wxID_EXIT, wxT("Quit"));
-	menuBar->Append(menu, wxT("&File"));
-
-	menu = new wxMenu;
-	menuBar->Append(menu, "Port");
-	m_port_menu = menu;
-
-	menu = new wxMenu;
-	menu->Append(wxID_ABOUT, wxT("About"));
-	menuBar->Append(menu, wxT("&Help"));
-	SetMenuBar(menuBar);
-
+	
 	leftsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Communication");
 	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Magnetometer");
 	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
@@ -348,6 +333,30 @@ void MyFrame::SetMinimumWidthFromContents(wxComboBox *control, unsigned int addi
 	control->SetMinSize(wxSize(300, -1));
 }
 
+void MyFrame::BuildMenu()
+{
+	wxMenuBar *menuBar;
+	wxMenu *menu;
+	
+	menuBar = new wxMenuBar;
+	menu = new wxMenu;
+	menu->Append(ID_SENDCAL_MENU, wxT("Send Calibration"));
+	m_sendcal_menu = menu;
+	m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
+	menu->Append(wxID_EXIT, wxT("Quit"));
+	menuBar->Append(menu, wxT("&File"));
+
+	menu = new wxMenu;
+	menuBar->Append(menu, "Port");
+	m_port_menu = menu;
+
+	menu = new wxMenu;
+	menu->Append(wxID_ABOUT, wxT("About"));
+	menuBar->Append(menu, wxT("&Help"));
+	SetMenuBar(menuBar);
+}
+
+
 void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 {
 	char messageBuffer[256];	
@@ -375,35 +384,6 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 	if (token == NULL) return;
 	if (strcmp(token,"Raw") == 0)
 	{
-		/*token = strtok(NULL, ",");
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,token);
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,token);
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,token);
-			
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(X_ROW,GYRO_COL,token);
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Y_ROW,GYRO_COL,token);
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Z_ROW,GYRO_COL,token);
-		
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(X_ROW,MAG_COL,token);
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Y_ROW,MAG_COL,token);
-		token = strtok(NULL,",");			
-		if (token == NULL) return;
-		_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);*/
 		UpdateRawDataGrid(token);
 	}
 	else if (strcmp(token,"orientationOutput") == 0)
@@ -605,19 +585,56 @@ void calibration_confirmed(void)
 	show_calibration_confirmed = true;
 }
 
+// Brute force de-duplication of ports list. This wouldn't
+// scale much, but I doubt that being an issue as we're
+// looking at a set of serial ports, so it's probably
+// only going to have single digit number of items.
+wxArrayString MyFrame::DeDuplicateList(wxArrayString originalList)
+{
+	wxArrayString uniqueList;
+
+	int num = originalList.GetCount();
+	int uniqueListIndex = 1;
+	uniqueList.Add(originalList[0]);
+	for (int originaListIndex=1; originaListIndex < num; originaListIndex++) {
+		bool isDuplicate = false;
+		for(int newListIndex = 0; newListIndex < uniqueList.GetCount(); newListIndex++)
+		{
+			if (uniqueList[newListIndex] == originalList[originaListIndex])
+			{ 
+				isDuplicate = true;
+				break;
+			}
+		}
+		if (!isDuplicate)
+		{
+			uniqueList.Add(originalList[originaListIndex]);
+		}		
+	}	
+	return uniqueList;
+}
+
+wxArrayString MyFrame::GetUniquePortList()
+{
+	wxArrayString list = serial_port_list();
+	wxArrayString uniqueList = DeDuplicateList(list);
+	return uniqueList;
+}
 
 void MyFrame::OnShowMenu(wxMenuEvent &event)
 {
-        wxMenu *menu = event.GetMenu();
-        if (menu != m_port_menu) return;
+    wxMenu *menu = event.GetMenu();
+    if (menu != m_port_menu) return;
         //printf("OnShow Port Menu, %s\n", (const char *)menu->GetTitle());
+	
 	while (menu->GetMenuItemCount() > 0) {
 		menu->Delete(menu->GetMenuItems()[0]);
 	}
-        menu->AppendRadioItem(9000, " (none)");
+    
+    menu->AppendRadioItem(9000, " (none)");
 	bool isopen = port_is_open();
 	if (!isopen) menu->Check(9000, true);
-        wxArrayString list = serial_port_list();
+        wxArrayString list =  GetUniquePortList();  
         int num = list.GetCount();
         for (int i=0; i < num; i++) {
                 menu->AppendRadioItem(9001 + i, list[i]);
@@ -633,33 +650,9 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	printf("OnShowPortList\n");
 	m_port_list->Clear();
 	m_port_list->Append("(none)");
-	wxArrayString list = serial_port_list();
-	printf("PortCount: %d\n", list.GetCount());
-	int num = list.GetCount();
-	
-	// Brute force de-duplication of ports list. This wouldn't
-	// scale much, but I doubt that being an issue as we're
-	// looking at a set of serial ports, so it's probably
-	// only going to have single digit number of items.
-	wxArrayString uniqueList;
-	int uniqueListIndex = 1;
-	uniqueList.Add(list[0]);
-	for (int originaListIndex=1; originaListIndex < num; originaListIndex++) {
-		bool isDuplicate = false;
-		for(int newListIndex = 0; newListIndex < uniqueList.GetCount(); newListIndex++)
-		{
-			if (uniqueList[newListIndex] == list[originaListIndex])
-			{ 
-				isDuplicate = true;
-				break;
-			}
-		}
-		if (!isDuplicate)
-		{
-			uniqueList.Add(list[originaListIndex]);
-		}		
-	}	
-	num = uniqueList.GetCount();
+	wxArrayString uniqueList = GetUniquePortList();
+	printf("PortCount: %d\n", uniqueList.GetCount());
+	int num = uniqueList.GetCount();
 	
 	for (int i=0; i < num; i++) {
 		
@@ -667,7 +660,6 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	}
 	SetMinimumWidthFromContents(m_port_list, 50);
 }
-
 
 void MyFrame::OnPortMenu(wxCommandEvent &event)
 {

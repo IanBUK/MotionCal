@@ -133,12 +133,19 @@ private:
 	void showOpenPortOK(const char *name);
 	void showMessage(const char *message);
 	
+	// Build UI components
+	void BuildMenu();
 	void BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel);
 	void BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation);
 	void BuildOrientationGrid(wxPanel *panel, wxPoint orientationGridLocation);
+
+	// Update UI	
 	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
 	void UpdateRawDataGrid(char *token);
 	void UpdateOrientationGrid(char *token);
+	wxArrayString DeDuplicateList(wxArrayString originalList);
+	wxArrayString GetUniquePortList();
+	
 	DECLARE_EVENT_TABLE()
 };
 
