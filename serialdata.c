@@ -1,6 +1,14 @@
 #include "imuread.h"
 
 
+unsigned char serialBuffer[256];
+unsigned char _serialBuffer[256];
+
+unsigned char *getSerialBuffer()
+{
+	return &serialBuffer;
+}
+
 void print_data(const char *name, const unsigned char *data, int len)
 {
 	int i;
@@ -182,6 +190,28 @@ static int packet_parse(const unsigned char *data, int len)
 #define ASCII_STATE_CAL1  2
 #define ASCII_STATE_CAL2  3
 
+
+int _bufferOffset = 0;
+static void buildBuffer(const unsigned char *data, int len)
+{
+	for(int i = 0; i< len; i++)
+	{
+		_serialBuffer[_bufferOffset] = data[i];
+		_bufferOffset++;
+		if (data[i] == '\n' || data[i] =='\r')
+		{
+			// hit a newline
+			_serialBuffer[_bufferOffset] ='\0';
+			strcpy((char *)serialBuffer, (char *)_serialBuffer);
+			_bufferOffset = 0;
+		}		
+	}
+}
+
+
+
+
+
 static int ascii_parse(const unsigned char *data, int len)
 {
 	static int ascii_state=ASCII_STATE_WORD;
@@ -192,11 +222,12 @@ static int ascii_parse(const unsigned char *data, int len)
 	const char *p, *end;
 	int ret=0;
 
-	//print_data("ascii_parse", data, len);
+	print_data("ascii_parse", data, len);
 	end = (const char *)(data + len);
 	for (p = (const char *)data ; p < end; p++) {
 		if (ascii_state == ASCII_STATE_WORD) {
 			if (ascii_count == 0) {
+
 				if (*p == 'R') {
 					ascii_num = ASCII_STATE_RAW;
 					ascii_count = 1;
@@ -221,6 +252,7 @@ static int ascii_parse(const unsigned char *data, int len)
 					ascii_count = 0;
 				}
 			} else if (ascii_count == 3) {
+
 				if (*p == ':' && ascii_num == ASCII_STATE_RAW) {
 					ascii_state = ASCII_STATE_RAW;
 					ascii_raw_data_count = 0;
@@ -236,6 +268,7 @@ static int ascii_parse(const unsigned char *data, int len)
 					ascii_count = 0;
 				}
 			} else if (ascii_count == 4) {
+
 				if (*p == ':' && ascii_num == ASCII_STATE_CAL1) {
 					ascii_state = ASCII_STATE_CAL1;
 					ascii_raw_data_count = 0;
@@ -284,6 +317,7 @@ static int ascii_parse(const unsigned char *data, int len)
 				ascii_neg = 0;
 				ascii_count = 0;
 				ascii_state = ASCII_STATE_WORD;
+								
 			} else if (*p == 10) {
 			} else {
 				goto fail;
@@ -326,6 +360,7 @@ static int ascii_parse(const unsigned char *data, int len)
 				} else if (ascii_state == ASCII_STATE_CAL2) {
 					cal2_data(ascii_cal_data);
 				}
+				
 				ret = 1;
 				ascii_raw_data_count = 0;
 				ascii_num = 0;
@@ -354,10 +389,8 @@ static void newdata(const unsigned char *data, int len)
 {
 	packet_parse(data, len);
 	ascii_parse(data, len);
-	// TODO: learn which one and skip the other
+	buildBuffer(data, len);
 }
-
-
 
 #if defined(LINUX) || defined(MACOSX)
 
@@ -393,31 +426,48 @@ int open_port(const char *name)
 
 int read_serial_data(void)
 {
+	printf("into read_serial_data\n");
 	unsigned char buf[256];
 	static int nodata_count=0;
 	int n;
 
 	if (portfd < 0) return -1;
 	while (1) {
-		n = read(portfd, buf, sizeof(buf));
-		if (n > 0 && n <= sizeof(buf)) {
+		n = read(portfd, buf, sizeof(buf) -1);
+		if (n > 0 && n <= sizeof(buf)) 
+		{
+			printf("read buffer '%d' bytes\n", n);
+			buf[n] = '\0';
 			newdata(buf, n);
 			nodata_count = 0;
 			return n;
-		} else if (n == 0) {
-			if (++nodata_count > 6) {
+		} 
+		else if (n == 0) 
+		{
+			printf("no data read\n");
+			if (++nodata_count > 6) 
+			{
 				close_port();
 				nodata_count = 0;
 				close_port();
 				return -1;
 			}
 			return 0;
-		} else {
+		}
+		else 
+		{
+			printf("error: %d\n", errno);
 			n = errno;
-			if (n == EAGAIN) {
+			if (n == EAGAIN) 
+			{
 				return 0;
-			} else if (n == EINTR) {
-			} else {
+			} 
+			else if (n == EINTR) 
+			{
+				continue;
+			} 
+			else 
+			{
 				close_port();
 				return -1;
 			}

@@ -1,0 +1,5 @@
+*.o
+MotionCal
+/MotionCal.app
+MotionCal
+*.o

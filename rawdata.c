@@ -154,17 +154,29 @@ void cal1_data(const float *data)
 			if (!is_float_ok(data[i], cal_data_sent[i])) ok = 0;
 		}
 		if (ok) {
+			printf("int cal1_data, cal_confirm_needed is %d before test\n", cal_confirm_needed);
 			cal_confirm_needed &= ~1; // got cal1 confirm
+			printf("int cal1_data, cal_confirm_needed is %d at test\n", cal_confirm_needed);
+
 			if (cal_confirm_needed == 0) {
 				calibration_confirmed();
 			}
+		}else
+		{
+			printf("was not ok at cal1_data end %d\n",ok);
 		}
+
+	}
+	else
+	{
+		printf("cal1_data - cal_confirm_needed was false - %d\n",cal_confirm_needed);
 	}
 }
 
 void cal2_data(const float *data)
 {
 	int i, ok;
+	printf("int cal2_data, cal_confirm_needed is %d on entry\n", cal_confirm_needed);
 
 	if (cal_confirm_needed) {
 		#if 0
@@ -183,11 +195,21 @@ void cal2_data(const float *data)
 			if (!is_float_ok(data[i], cal_data_sent[i+10])) ok = 0;
 		}
 		if (ok) {
+			printf("int cal2_data, cal_confirm_needed is %d before test\n", cal_confirm_needed);
 			cal_confirm_needed &= ~2; // got cal2 confirm
+			printf("int cal2_data, cal_confirm_needed is %d at test\n", cal_confirm_needed);
+
 			if (cal_confirm_needed == 0) {
 				calibration_confirmed();
 			}
+		}else
+		{
+			printf("was not ok at cal1_data end %d\n",ok);
 		}
+	}
+	else
+	{
+		printf("cal2_data - cal_confirm_needed was false %d\n",cal_confirm_needed);
 	}
 }
 
@@ -350,4 +372,3 @@ int send_calibration(void)
 	*p++ = crc >> 8;
 	return write_serial_data(buf, 68);
 }
-
