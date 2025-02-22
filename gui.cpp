@@ -78,7 +78,8 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	wxPanel *panel;
 
 	wxSizer *topsizer;
-	wxSizer *leftsizer, *middlesizer, *rightsizer;
+	wxBoxSizer *leftsizer;
+	wxSizer *middlesizer, *rightsizer;
 	wxSizer *hsizer, *vsizer, *calsizer;
 	wxStaticText *text;
 	int i, j;
@@ -209,63 +210,71 @@ void MyFrame::showMessage(const char *message)
     dialog.ShowModal();
 }
 
-void MyFrame::BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel)
+void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 {
-	wxSizer  *vsizer;
-	wxStaticText *text;
-	
 	const wxPoint rawDataGridLocation = wxPoint(30,200);
 	const wxPoint orientationGridLocation = wxPoint(30,300);
 	const wxPoint messagesLocation = wxPoint(30,375);	
-	const wxPoint bitmapLocation = wxPoint(30,900);
+	const wxPoint bitmapLocation = wxPoint(30,100);
 	const wxSize messagesSize = wxSize(350,100);
 	
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	parentPanel->Add(vsizer, 0, wxALL| wxEXPAND , 8);
-	parentPanel->SetMinSize(420,800);
-	_portLabel = new wxStaticText(panel, wxID_ANY, "Port");
+	wxSizer  *vsizer;
+	wxStaticText *text;
+	wxSizer *topmostPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Port");
+	topmostPanel->SetMinSize(wxSize(-1, 60)); 
+		
+	wxSizer *topPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Actions");
+	topPanel->SetMinSize(wxSize(-1, 60)); 
+
+	wxSizer *midPanel = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
+	midPanel->SetMinSize(wxSize(-1, 180)); 
 	
-	vsizer->Add(_portLabel, 0, wxTOP|wxBOTTOM, 4);
-	m_port_list = new wxComboBox(panel, ID_PORTLIST, "",
-		wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	wxSizer *lowerPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Status");
+	
+	parentPanel->Add(topmostPanel,1,wxEXPAND | wxALL,5);	
+	parentPanel->Add(topPanel,1,wxEXPAND | wxALL,5);	
+	parentPanel->Add(midPanel,2,wxEXPAND | wxALL,5);
+	parentPanel->Add(lowerPanel,2,wxEXPAND | wxALL,5);
+
+	m_port_list = new wxComboBox(panel, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
 	m_port_list->Append("(none )");
 	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
 	m_port_list->SetSelection(0);
-	vsizer->Add(m_port_list, 1, wxALL |wxEXPAND, 0);
+	topmostPanel->Add(m_port_list, 1, wxALL |wxEXPAND, 0);
 
-	vsizer->AddSpacer(8);
-	text = new wxStaticText(panel, wxID_ANY, "Actions");
-	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
+	
 	m_button_clear = new wxButton(panel, ID_CLEAR_BUTTON, "Clear");
 	m_button_clear->Enable(false);
-	vsizer->Add(m_button_clear, 1, wxEXPAND, 0);
+	topPanel->Add(m_button_clear, 1, wxEXPAND, 0);
+		
 	m_button_sendcal = new wxButton(panel, ID_SENDCAL_BUTTON, "Send Cal");
-	vsizer->Add(m_button_sendcal, 1, wxEXPAND, 0);
 	m_button_sendcal->Enable(false);
-	vsizer->AddSpacer(16);
-	text = new wxStaticText(panel, wxID_ANY, "Status");
-	vsizer->Add(text, 0, wxTOP|wxBOTTOM, 4);
+	topPanel->Add(m_button_sendcal, 1, wxEXPAND, 0);
 
 
-	BuildRawDataGrid(panel, rawDataGridLocation);
-	BuildOrientationGrid(panel, orientationGridLocation);
+	BuildRawDataGrid(panel, midPanel, rawDataGridLocation);
+	midPanel->AddSpacer(8);
+	BuildOrientationGrid(panel, midPanel, orientationGridLocation);
 		
 	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
 	_statusMessage->Wrap(300);
-	//vsizer->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
+	lowerPanel->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
 
 	wxImage::AddHandler(new wxPNGHandler);
 	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
-	vsizer->Add(m_confirm_icon, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 0);
+	lowerPanel->Add(m_confirm_icon, 0, wxALL , 0);
+	
+	
 }
 
-void MyFrame::BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation)
+void MyFrame::BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation)
 {
 	int colWidth = 100;
 	const wxSize rawDataGridSize = wxSize(383,90);
 
 	_rawDataGrid = new wxGrid(panel, wxID_ANY, rawDataGridLocation, rawDataGridSize, wxWANTS_CHARS);
 	_rawDataGrid->CreateGrid(3,3);
+	parent->Add(_rawDataGrid, 2, wxEXPAND, 0);
 	
 	wxFont gridLabelFont = _rawDataGrid->GetLabelFont();
 	gridLabelFont.MakeBold();
@@ -296,13 +305,14 @@ void MyFrame::BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation)
 	_rawDataGrid->SetCellAlignment(Z_ROW, GYRO_COL, wxALIGN_RIGHT, wxALIGN_CENTRE);
 }
 
-void MyFrame::BuildOrientationGrid(wxPanel *panel, wxPoint orientationGridLocation)
+void MyFrame::BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation)
 {
 	int colWidth = 100;
 	const wxSize orientationGridSize = wxSize(383,53);
 
 	_orientationGrid = new wxGrid(panel, wxID_ANY, orientationGridLocation, orientationGridSize, wxWANTS_CHARS);
 	_orientationGrid->CreateGrid(1,3);
+	parent->Add(_orientationGrid, 1, wxEXPAND , 0);
 	wxFont gridLabelFont = _rawDataGrid->GetLabelFont();
 	gridLabelFont.MakeBold();
 		
@@ -594,7 +604,6 @@ wxArrayString MyFrame::DeDuplicateList(wxArrayString originalList)
 	wxArrayString uniqueList;
 
 	int num = originalList.GetCount();
-	int uniqueListIndex = 1;
 	uniqueList.Add(originalList[0]);
 	for (int originaListIndex=1; originaListIndex < num; originaListIndex++) {
 		bool isDuplicate = false;

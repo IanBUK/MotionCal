@@ -135,9 +135,9 @@ private:
 	
 	// Build UI components
 	void BuildMenu();
-	void BuildLeftPanel(wxSizer *parentPanel, wxPanel *panel);
-	void BuildRawDataGrid(wxPanel *panel, wxPoint rawDataGridLocation);
-	void BuildOrientationGrid(wxPanel *panel, wxPoint orientationGridLocation);
+	void BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
+	void BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation);
+	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
 
 	// Update UI	
 	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
