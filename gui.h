@@ -117,6 +117,8 @@ private:
 	wxStaticText *_portLabel;	
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
+	
+	bool _drawingData;
 		
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
@@ -138,9 +140,17 @@ private:
 	void BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
 	void BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation);
 	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
-
+	void BuildBufferDisplayCallBack();
+	
+	
 	// Update UI	
 	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
+	static void StaticUpdateGrid(unsigned char* buffer, int size);
+    static MyFrame* instance; // Pointer to the current instance
+	//MyFrame* MyFrame::instance = nullptr; // Initialize it
+	
+	
+	
 	void UpdateRawDataGrid(char *token);
 	void UpdateOrientationGrid(char *token);
 	wxArrayString DeDuplicateList(wxArrayString originalList);

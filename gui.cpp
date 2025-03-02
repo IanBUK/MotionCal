@@ -1,10 +1,10 @@
 #include "gui.h"
 #include "imuread.h"
 #include <string.h>
-
+#define BUFFER_SIZE 512
 wxString port_name;
 static bool show_calibration_confirmed = false;
-
+MyFrame* MyFrame::instance = nullptr;
 
 wxBEGIN_EVENT_TABLE(MyCanvas, wxGLCanvas)
 	EVT_SIZE(MyCanvas::OnSize)
@@ -75,7 +75,12 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
     const wxPoint &position, const wxSize& size, long style) :
     wxFrame( parent, id, title, position, size, style )
 {
+	logMessage("******************************************");
+	logMessage("MotionCal.app - start instance");
+	
+	logMessage("******************************************");
 	wxPanel *panel;
+	
 
 	wxSizer *topsizer;
 	wxBoxSizer *leftsizer;
@@ -84,7 +89,8 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	wxStaticText *text;
 	int i, j;
 
-	BuildMenu();		
+	BuildMenu();
+	BuildBufferDisplayCallBack();		
 
 
 	topsizer = new wxBoxSizer(wxHORIZONTAL);
@@ -203,10 +209,33 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 }
 
 
+void MyFrame::StaticUpdateGrid(unsigned char* buffer, int size) {
+    if (instance) {
+        instance->UpdateGrid(buffer, size);
+    }
+    else
+    {
+    	logMessage("no instance set");
+    }
+}
+
+// Set a callback function for when there's grid data to display.
+// Doing this enables us to decouple events. It also allows us to 
+// reduce the chance of race conditions.
+void MyFrame::BuildBufferDisplayCallBack()
+{
+	_drawingData = false;
+	MyFrame::instance = this;//&frameInstance;
+	setDisplayBufferCallback(MyFrame::StaticUpdateGrid);
+}
+
 void MyFrame::showMessage(const char *message)
 {
-	wxMessageDialog dialog(this,message,
-        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+	
+	char log[512];
+	snprintf(log, 512, "showMessage: '%s'\n", message);\
+	logMessage(log);
+	wxMessageDialog dialog(this,message, " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
     dialog.ShowModal();
 }
 
@@ -217,9 +246,7 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	const wxPoint messagesLocation = wxPoint(30,375);	
 	const wxPoint bitmapLocation = wxPoint(30,100);
 	const wxSize messagesSize = wxSize(350,100);
-	
-	wxSizer  *vsizer;
-	wxStaticText *text;
+		
 	wxSizer *topmostPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Port");
 	topmostPanel->SetMinSize(wxSize(-1, 60)); 
 		
@@ -369,44 +396,67 @@ void MyFrame::BuildMenu()
 
 void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 {
-	char messageBuffer[256];	
-	
-	//snprintf(messageBuffer,256,"%d bytes read", bytesRead);
-	//showMessage(messageBuffer);	
+	char messageBuffer[BUFFER_SIZE];		
+	snprintf(messageBuffer,256,"UpdateGrid called: %d bytes read", bytesRead);
+	logMessage(messageBuffer);	
 
-	if (bytesRead < 40)
+	if (_drawingData)
 	{
+		logMessage("    already updating grid");
 		return;
 	}
-	
-	snprintf(messageBuffer, 256,"%s",serialBufferMessage);
-	//showMessage(messageBuffer);	
-	
-	//return;
+		
+	_drawingData = true;
+
+	logMessage((char*)serialBufferMessage);	
+	if (bytesRead < 40)
+	{
+		logMessage("    too few bytes read");
+		_drawingData = false;
+		return;
+	}
 	
 	if (strcmp(messageBuffer,"reset check") == 0)
 	{
-		printf("reset check received\n");
+		logMessage("    doing reset check");
+		_drawingData = false;
 		return;
 	}
 
-	char *token = strtok(messageBuffer,":");
-	if (token == NULL) return;
-	if (strcmp(token,"Raw") == 0)
+	char *token = strtok((char*)serialBufferMessage,":");
+	if (token == NULL)
 	{
-		UpdateRawDataGrid(token);
+	  char errorMessage[640];
+	  snprintf(errorMessage, 640, "    no colon in message '%s', %d", serialBufferMessage, bytesRead);
+	  logMessage(errorMessage);
 	}
-	else if (strcmp(token,"orientationOutput") == 0)
-	{
-		UpdateOrientationGrid(token);
+    else
+    {
+    	char commandMessage[640];
+	    snprintf(commandMessage, 640, "command: '%s'", token);
+    	logMessage((char*)commandMessage);
+    	
+    	if (strcmp(token,"Raw2") == 0)
+		{
+		    logMessage("read Raw2");
+		    _statusMessage->SetLabelText("read Raw2");
+			//UpdateRawDataGrid((char*)serialBufferMessage);
+		}
+		else if (strcmp(token,"orientationOutput") == 0)
+		{
+			logMessage("read orientation");
+			_statusMessage->SetLabelText(token);
+			//UpdateOrientationGrid(token);
+		}
+		else
+		{
+			char errorMessage[640];
+			snprintf(errorMessage, 640, "**Error '%s'", token);
+			logMessage(errorMessage);		
+			_statusMessage->SetLabelText(errorMessage);
+		}
 	}
-	else
-	{
-		char errorMessage[128];
-		snprintf(errorMessage, 128, "unknown start token '%s'", token);
-		_statusMessage->SetLabelText(errorMessage);
-	}
-
+	_drawingData = false;
 }
 
 void MyFrame::UpdateRawDataGrid(char *token)
@@ -461,10 +511,12 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 	float gaps, variance, wobble, fiterror;
 	char buf[32];
 	int i, j;
-	unsigned char *serialBufferMessage;	
 		
 	if (port_is_open()) {
-		int bytesRead = read_serial_data();
+		//int bytesRead = read_serial_data();
+		read_serial_data();
+		/*
+		
 		
 		if (bytesRead > 0)
 		{
@@ -478,7 +530,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 			{
 				_statusMessage->SetLabel("null buffer");
 			}
-		}	
+		}	*/
 		
 		if (firstrun && m_canvas->IsShown()) {
 			//int h, w;
@@ -560,7 +612,6 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 
 void MyFrame::OnClear(wxCommandEvent &event)
 {
-	//printf("OnClear\n");
 	raw_data_reset();
 }
 
@@ -571,7 +622,6 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 	printf("   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2]);
 	printf("   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2]);
 	
-
 	
 	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));	
 	int bytesWritten = send_calibration();
@@ -656,11 +706,14 @@ void MyFrame::OnShowMenu(wxMenuEvent &event)
 
 void MyFrame::OnShowPortList(wxCommandEvent& event)
 {
-	printf("OnShowPortList\n");
 	m_port_list->Clear();
 	m_port_list->Append("(none)");
 	wxArrayString uniqueList = GetUniquePortList();
-	printf("PortCount: %d\n", uniqueList.GetCount());
+		
+	char portMessage[50];
+	snprintf(portMessage, 50, "PortCount: %zu", uniqueList.GetCount());
+	logMessage(portMessage);
+	
 	int num = uniqueList.GetCount();
 	
 	for (int i=0; i < num; i++) {
@@ -672,17 +725,16 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 
 void MyFrame::OnPortMenu(wxCommandEvent &event)
 {
-        int id = event.GetId();
-        wxString name = m_port_menu->FindItem(id)->GetItemLabelText();
+    int id = event.GetId();
+    wxString name = m_port_menu->FindItem(id)->GetItemLabelText();
 
 	close_port();
-        //printf("OnPortMenu, id = %d, name = %s\n", id, (const char *)name);
 	port_name = name;
 	m_port_list->Clear();
 	m_port_list->Append(port_name);
 	SetMinimumWidthFromContents(m_port_list, 50);
 	m_port_list->SetSelection(0);
-        if (id == 9000) return;
+    if (id == 9000) return;
 	raw_data_reset();
 	int openPortResult = open_port((const char *)name);
 	if (openPortResult == 0)
@@ -701,7 +753,6 @@ void MyFrame::OnPortList(wxCommandEvent& event)
 	int selected = m_port_list->GetSelection();
 	if (selected == wxNOT_FOUND) return;
 	wxString name = m_port_list->GetString(selected);
-	//printf("OnPortList, %s\n", (const char *)name);
 	close_port();
 	port_name = name;
 	if (name == "(none)") return;
@@ -722,25 +773,20 @@ void MyFrame::showOpenPortError(const char *name)
 {
 	char buffer[64];
 	snprintf(buffer, 64, "port %s failed to open", name);
+	logMessage(buffer);
 	
-	wxMessageDialog dialog(this,buffer,
-        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
+	wxMessageDialog dialog(this,buffer, " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
     dialog.ShowModal();
 }
 
 void MyFrame::showOpenPortOK(const char *name)
 {
-	/*char buffer[64];
-	sprintf(buffer,"port %s opened OK", name);
-	
-	wxMessageDialog dialog(this,buffer,
-        " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
-    dialog.ShowModal();*/
-    
-    _statusMessage->SetLabelText("port open");
+   	char commandMessage[640];
+    snprintf(commandMessage, 640, "Port opened: '%s'", name);
+   	logMessage((char*)commandMessage);
+
+    _statusMessage->SetLabelText(commandMessage);   
 }
-
-
 
 void MyFrame::OnAbout(wxCommandEvent &event)
 {

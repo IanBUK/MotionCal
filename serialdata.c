@@ -1,23 +1,80 @@
 #include "imuread.h"
+#include <stdio.h>
+#include <unistd.h>
+//#include <stdbool.h>
+#define BUFFER_SIZE 512
 
-
-unsigned char serialBuffer[256];
-unsigned char _serialBuffer[256];
-
-unsigned char *getSerialBuffer()
+void logMessage(const char *message) 
 {
-	return &serialBuffer;
+    int fd = open("log.txt", O_WRONLY | O_APPEND | O_CREAT, 0644);  // Open file in append mode
+
+    if (fd < 0) {
+        perror("Error opening log file");
+        return;
+    }
+
+    write(fd, message, strlen(message));  // Write message
+    write(fd, "\n", 1);  // Newline for readability
+
+    close(fd);  // Close the file
+}
+
+
+typedef void (*displayBufferCallback)(unsigned char *serialBufferMessage, int bytesRead);
+displayBufferCallback _displayBufferCallback;
+void setDisplayBufferCallback(displayBufferCallback displayBufferCallback)
+{
+	_displayBufferCallback = displayBufferCallback;
+}
+
+int _bufferOffset = 0;
+
+unsigned char* buildBuffer(const unsigned char *data, int len)
+{
+    int firstLine = 1;
+	unsigned char serialBuffer[BUFFER_SIZE];
+	for(int i = 0; i< len; i++)
+	{
+		if (firstLine == 1)
+			serialBuffer[i] = data[i];
+		if (data[i] == '\n' || data[i] =='\r')
+		{
+			serialBuffer[i] = '\0';
+			firstLine = 0;
+			// hit a newline
+			//_serialBuffer[_bufferOffset] ='\0';
+			//strcpy((char *)serialBuffer, (char *)_serialBuffer);
+			//_bufferOffset = 0;
+		}		
+	}
+	return serialBuffer;
+}
+
+
+void fireBufferDisplayCallback(const unsigned char *data, int len)
+{
+	if(_displayBufferCallback != NULL)
+	{
+		unsigned char *serialBuffer = buildBuffer(data, len);
+		logMessage((const char*)serialBuffer);
+		_displayBufferCallback((unsigned char*)&serialBuffer, len);
+	}
 }
 
 void print_data(const char *name, const unsigned char *data, int len)
 {
 	int i;
+    char message[60];
+    
+	snprintf(message, 60, "log data : '%s', %d", name, len);
+	logMessage(message);
 
-	printf("%s (%2d bytes):", name, len);
 	for (i=0; i < len; i++) {
-		printf(" %02X", data[i]);
+		snprintf(message, 60, "    %02X [%c]", data[i], data[i]);
+	    logMessage(message);
 	}
-	printf("\n");
+	snprintf(message, 60, "done", len);
+	logMessage(message);
 }
 
 static int packet_primary_data(const unsigned char *data)
@@ -93,7 +150,7 @@ static int packet_magnetic_cal(const unsigned char *data)
 static int packet(const unsigned char *data, int len)
 {
 	if (len <= 0) return 0;
-	//print_data("packet", data, len);
+	print_data("packet", data, len);
 
 	if (data[0] == 1 && len == 34) {
 		return packet_primary_data(data);
@@ -106,7 +163,7 @@ static int packet(const unsigned char *data, int len)
 static int packet_encoded(const unsigned char *data, int len)
 {
 	const unsigned char *p;
-	unsigned char buf[256];
+	unsigned char buf[BUFFER_SIZE];
 	int buflen=0, copylen;
 
 	//printf("packet_encoded, len = %d\n", len);
@@ -145,13 +202,13 @@ static int packet_encoded(const unsigned char *data, int len)
 
 static int packet_parse(const unsigned char *data, int len)
 {
-	static unsigned char packetbuf[256];
+	static unsigned char packetbuf[BUFFER_SIZE];
 	static unsigned int packetlen=0;
 	const unsigned char *p;
 	int copylen;
 	int ret=0;
 
-	//print_data("packet_parse", data, len);
+	print_data("packet_parse", data, len);
 	while (len > 0) {
 		p = memchr(data, 0x7E, len);
 		if (p == NULL) {
@@ -189,27 +246,6 @@ static int packet_parse(const unsigned char *data, int len)
 #define ASCII_STATE_RAW   1
 #define ASCII_STATE_CAL1  2
 #define ASCII_STATE_CAL2  3
-
-
-int _bufferOffset = 0;
-static void buildBuffer(const unsigned char *data, int len)
-{
-	for(int i = 0; i< len; i++)
-	{
-		_serialBuffer[_bufferOffset] = data[i];
-		_bufferOffset++;
-		if (data[i] == '\n' || data[i] =='\r')
-		{
-			// hit a newline
-			_serialBuffer[_bufferOffset] ='\0';
-			strcpy((char *)serialBuffer, (char *)_serialBuffer);
-			_bufferOffset = 0;
-		}		
-	}
-}
-
-
-
 
 
 static int ascii_parse(const unsigned char *data, int len)
@@ -298,7 +334,7 @@ static int ascii_parse(const unsigned char *data, int len)
 			} else if (*p == ',') {
 				//printf("ascii_parse comma, %d\n", ascii_num);
 				if (ascii_neg) ascii_num = -ascii_num;
-				if (ascii_num < -32768 && ascii_num > 32767) goto fail;
+				if (ascii_num < -32768 || ascii_num > 32767) goto fail;
 				if (ascii_raw_data_count >= 8) goto fail;
 				ascii_raw_data[ascii_raw_data_count++] = ascii_num;
 				ascii_num = 0;
@@ -307,7 +343,7 @@ static int ascii_parse(const unsigned char *data, int len)
 			} else if (*p == 13) {
 				//printf("ascii_parse newline\n");
 				if (ascii_neg) ascii_num = -ascii_num;
-				if (ascii_num < -32768 && ascii_num > 32767) goto fail;
+				if (ascii_num < -32768 || ascii_num > 32767) goto fail;
 				if (ascii_raw_data_count != 8) goto fail;
 				ascii_raw_data[ascii_raw_data_count] = ascii_num;
 				raw_data(ascii_raw_data);
@@ -387,9 +423,11 @@ fail:
 
 static void newdata(const unsigned char *data, int len)
 {
+	logMessage("inside newdata");
 	packet_parse(data, len);
 	ascii_parse(data, len);
-	buildBuffer(data, len);
+	//buildBuffer(data, len);
+	fireBufferDisplayCallback(data, len);
 }
 
 #if defined(LINUX) || defined(MACOSX)
@@ -406,45 +444,92 @@ int open_port(const char *name)
 {
 	struct termios termsettings;
 	int r;
+    char message[60];
+    
 
+	logMessage("into open_port");
 	portfd = open(name, O_RDWR | O_NONBLOCK);
-	if (portfd < 0) return 0;
+	if (portfd < 0) 
+	{
+		logMessage("open_port failed");
+		return 0;
+	}
 	r = tcgetattr(portfd, &termsettings);
 	if (r < 0) {
+		logMessage("couldn't get terminal settings");
 		close_port();
 		return 0;
 	}
+	snprintf(message, 60, "    c_iflag: '%d' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%d' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%d' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%d' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	
 	cfmakeraw(&termsettings);
 	cfsetspeed(&termsettings, B115200);
+	
+	
+	
 	r = tcsetattr(portfd, TCSANOW, &termsettings);
 	if (r < 0) {
+	    logMessage("tcsetattr failed");
 		close_port();
 		return 0;
 	}
+	
+	r = tcgetattr(portfd, &termsettings);
+	if (r < 0) {
+		logMessage("couldn't get terminal settings");
+		close_port();
+		return 0;
+	}
+	snprintf(message, 60, "    c_iflag: '%d' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%d' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%d' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%d' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	
+	
 	return 1;
 }
 
 int read_serial_data(void)
 {
-	printf("into read_serial_data\n");
-	unsigned char buf[256];
+    char message[60];
+	unsigned char buf[BUFFER_SIZE];
 	static int nodata_count=0;
 	int n;
 
 	if (portfd < 0) return -1;
+	
 	while (1) {
-		n = read(portfd, buf, sizeof(buf) -1);
+		n = read(portfd, buf, sizeof(buf));
 		if (n > 0 && n <= sizeof(buf)) 
 		{
-			printf("read buffer '%d' bytes\n", n);
-			buf[n] = '\0';
+			snprintf(message, 60, "read_serial_data: '%d' bytes", n);
+			logMessage(message);
 			newdata(buf, n);
 			nodata_count = 0;
 			return n;
 		} 
 		else if (n == 0) 
 		{
-			printf("no data read\n");
+			logMessage("0 bytes read");
 			if (++nodata_count > 6) 
 			{
 				close_port();
@@ -456,7 +541,6 @@ int read_serial_data(void)
 		}
 		else 
 		{
-			printf("error: %d\n", errno);
 			n = errno;
 			if (n == EAGAIN) 
 			{
@@ -464,7 +548,7 @@ int read_serial_data(void)
 			} 
 			else if (n == EINTR) 
 			{
-				continue;
+				return 0;
 			} 
 			else 
 			{
@@ -594,7 +678,7 @@ int read_serial_data(void)
 	COMSTAT st;
 	DWORD errmask=0, num_read, num_request;
 	OVERLAPPED ov;
-	unsigned char buf[256];
+	unsigned char buf[BUFFER_SIZE];
 	int r;
 
 	if (port_handle == INVALID_HANDLE_VALUE) return -1;
