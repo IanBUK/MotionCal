@@ -3,6 +3,7 @@
 #include <string.h>
 #define BUFFER_SIZE 512
 wxString port_name;
+wxString _baudRate;
 static bool show_calibration_confirmed = false;
 MyFrame* MyFrame::instance = nullptr;
 
@@ -68,6 +69,8 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 	EVT_MENU_OPEN(MyFrame::OnShowMenu)
 	EVT_COMBOBOX(ID_PORTLIST, MyFrame::OnPortList)
 	EVT_COMBOBOX_DROPDOWN(ID_PORTLIST, MyFrame::OnShowPortList)
+	EVT_COMBOBOX(ID_BAUDLIST, MyFrame::OnBaudList)
+	EVT_COMBOBOX_DROPDOWN(ID_BAUDLIST, MyFrame::OnShowBaudList)
 END_EVENT_TABLE()
 
 
@@ -247,7 +250,7 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	const wxPoint bitmapLocation = wxPoint(30,100);
 	const wxSize messagesSize = wxSize(350,100);
 		
-	wxSizer *topmostPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Port");
+	wxSizer *topmostPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Connection");
 	topmostPanel->SetMinSize(wxSize(-1, 60)); 
 		
 	wxSizer *topPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Actions");
@@ -263,13 +266,25 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	parentPanel->Add(midPanel,2,wxEXPAND | wxALL,5);
 	parentPanel->Add(lowerPanel,2,wxEXPAND | wxALL,5);
 
+
+	wxStaticText* portLabel = new wxStaticText(panel, wxID_ANY, "Port");
+	topmostPanel->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	
 	m_port_list = new wxComboBox(panel, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
 	m_port_list->Append("(none )");
 	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
 	m_port_list->SetSelection(0);
-	topmostPanel->Add(m_port_list, 1, wxALL |wxEXPAND, 0);
-
+	topmostPanel->Add(m_port_list, 1, wxALL |wxEXPAND, 5);
 	
+	wxStaticText* baudLabel = new wxStaticText(panel, wxID_ANY, "Baud Rate");
+	topmostPanel->Add(baudLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	_baudList = new wxComboBox(panel, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	topmostPanel->Add(_baudList, 1, wxALL |wxEXPAND, 5);
+		
+
+		
+		
+		
 	m_button_clear = new wxButton(panel, ID_CLEAR_BUTTON, "Clear");
 	m_button_clear->Enable(false);
 	topPanel->Add(m_button_clear, 1, wxEXPAND, 0);
@@ -436,9 +451,9 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 	    snprintf(commandMessage, 640, "command: '%s'", token);
     	logMessage((char*)commandMessage);
     	
-    	if (strcmp(token,"Raw2") == 0)
+    	if (strcmp(token,"Raw") == 0)
 		{
-		    logMessage("read Raw2");
+		    logMessage("read Raw");
 		    _statusMessage->SetLabelText("read Raw2");
 			//UpdateRawDataGrid((char*)serialBufferMessage);
 		}
@@ -704,6 +719,44 @@ void MyFrame::OnShowMenu(wxMenuEvent &event)
 	menu->UpdateUI();
 }
 
+
+void MyFrame::OnShowBaudList(wxCommandEvent& event)
+{
+	_baudList->Clear();
+	_baudList->Append("300");	
+	_baudList->Append("1200");		
+	_baudList->Append("2400");	
+	_baudList->Append("4800");	
+	_baudList->Append("9600");	
+	_baudList->Append("19200");	
+	_baudList->Append("38400");	
+	_baudList->Append("57600");	
+	_baudList->Append("115200");	
+	_baudList->Append("230400");	
+}
+
+void MyFrame::OnBaudList(wxCommandEvent& event)
+{
+	int selected = _baudList->GetSelection();
+	if (selected == wxNOT_FOUND) return;
+	_baudRate = _baudList->GetString(selected);
+	int selectedPort = m_port_list->GetSelection();
+	wxString portName = m_port_list->GetString(selectedPort);
+	close_port();
+	port_name = portName;
+	raw_data_reset();
+	int openPortResult = open_port((const char *)portName, (const char *)_baudRate);
+	if (openPortResult == 0)
+	{
+		showOpenPortError((const char *)portName);
+	}
+	else
+	{
+		showOpenPortOK((const char *)portName);
+	}
+	m_button_clear->Enable(true);
+}
+
 void MyFrame::OnShowPortList(wxCommandEvent& event)
 {
 	m_port_list->Clear();
@@ -723,11 +776,14 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	SetMinimumWidthFromContents(m_port_list, 50);
 }
 
+
 void MyFrame::OnPortMenu(wxCommandEvent &event)
 {
     int id = event.GetId();
     wxString name = m_port_menu->FindItem(id)->GetItemLabelText();
-
+	int selectedBaudRate = _baudList->GetSelection();
+	if (selectedBaudRate == wxNOT_FOUND) return;
+	_baudRate = _baudList->GetString(selectedBaudRate);
 	close_port();
 	port_name = name;
 	m_port_list->Clear();
@@ -736,7 +792,7 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
 	m_port_list->SetSelection(0);
     if (id == 9000) return;
 	raw_data_reset();
-	int openPortResult = open_port((const char *)name);
+	int openPortResult = open_port((const char *)name, (const char *)_baudRate);
 	if (openPortResult == 0)
 	{
 		showOpenPortError((const char *)name);
@@ -753,11 +809,15 @@ void MyFrame::OnPortList(wxCommandEvent& event)
 	int selected = m_port_list->GetSelection();
 	if (selected == wxNOT_FOUND) return;
 	wxString name = m_port_list->GetString(selected);
+	
+	selected = _baudList->GetSelection();
+	if (selected == wxNOT_FOUND) return;
+	_baudRate = _baudList->GetString(selected);
 	close_port();
 	port_name = name;
 	if (name == "(none)") return;
 	raw_data_reset();
-	int openPortResult = open_port((const char *)name);
+	int openPortResult = open_port((const char *)name, (const char *)_baudRate);
 	if (openPortResult == 0)
 	{
 		showOpenPortError((const char *)name);

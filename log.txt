@@ -62661,3 +62661,104 @@ UpdateGrid called: 96 bytes read
 Po
 command: 'Po'
 **Error 'Po'
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 3
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 3
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 3
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 3
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 3
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 4
+into open_port
+open_port failed
+port /dev/cu.wchusbserial11110 failed to open
+into open_port
+open_port failed
+port (none) failed to open
+PortCount: 4
+into open_port
+open_port failed
+port /dev/cu.wchusbserial11110 failed to open
+******************************************
+MotionCal.app - start instance
+******************************************
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 4
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 4
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 4
+into open_port
+open_port failed
+port /dev/cu.wchusbserial11110 failed to open
+******************************************
+MotionCal.app - start instance
+******************************************
+PortCount: 4
+into open_port
+open_port failed
+port /dev/cu.wchusbserial11110 failed to open

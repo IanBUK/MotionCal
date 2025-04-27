@@ -44,6 +44,7 @@
 #define ID_CLEAR_BUTTON		10002
 #define ID_SENDCAL_BUTTON	10003
 #define ID_PORTLIST		10004
+#define ID_BAUDLIST		10005
 
 #define X_ROW 0
 #define Y_ROW 1
@@ -111,6 +112,7 @@ private:
 	wxStaticBitmap *m_confirm_icon;
 	wxMenu *m_port_menu;
 	wxComboBox *m_port_list;
+	wxComboBox *_baudList;
 	wxMenu *m_sendcal_menu;
 	wxStaticText *_statusMessage;
 	
@@ -129,6 +131,9 @@ private:
 	void OnTimer(wxTimerEvent &event);
 	void OnAbout(wxCommandEvent &event);
 	void OnQuit(wxCommandEvent &event);
+	
+	void OnShowBaudList(wxCommandEvent& event);
+	void OnBaudList(wxCommandEvent& event);
 	
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
 	void showOpenPortError(const char *name);

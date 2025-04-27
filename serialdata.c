@@ -440,7 +440,7 @@ int port_is_open(void)
 	return 0;
 }
 
-int open_port(const char *name)
+int open_port_by_name(const char *name)
 {
 	struct termios termsettings;
 	int r;
@@ -476,7 +476,88 @@ int open_port(const char *name)
 	cfmakeraw(&termsettings);
 	cfsetspeed(&termsettings, B115200);
 	
+	r = tcsetattr(portfd, TCSANOW, &termsettings);
+	if (r < 0) {
+	    logMessage("tcsetattr failed");
+		close_port();
+		return 0;
+	}
 	
+	r = tcgetattr(portfd, &termsettings);
+	if (r < 0) {
+		logMessage("couldn't get terminal settings");
+		close_port();
+		return 0;
+	}
+	snprintf(message, 60, "    c_iflag: '%d' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%d' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%d' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%d' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	return 1;
+}
+
+speed_t getBaudRateFromString(const char *baudrate_str) {
+    if (strcmp(baudrate_str, "0") == 0) return B0;
+    else if (strcmp(baudrate_str, "300") == 0) return B300;
+    else if (strcmp(baudrate_str, "1200") == 0) return B1200;
+    else if (strcmp(baudrate_str, "2400") == 0) return B2400;
+    else if (strcmp(baudrate_str, "4800") == 0) return B4800;
+    else if (strcmp(baudrate_str, "9600") == 0) return B9600;
+    else if (strcmp(baudrate_str, "19200") == 0) return B19200;
+    else if (strcmp(baudrate_str, "38400") == 0) return B38400;
+    else if (strcmp(baudrate_str, "57600") == 0) return B57600;
+    else if (strcmp(baudrate_str, "115200") == 0) return B115200;
+    else if (strcmp(baudrate_str, "230400") == 0) return B230400;
+    else {
+        return (speed_t)-1; // invalid or unsupported baud rate
+    }
+}
+
+
+int open_port(const char *name, const char *baud)
+{
+	struct termios termsettings;
+	int r;
+    char message[60];
+    
+
+	logMessage("into open_port");
+	portfd = open(name, O_RDWR | O_NONBLOCK);
+	if (portfd < 0) 
+	{
+		logMessage("open_port failed");
+		return 0;
+	}
+	r = tcgetattr(portfd, &termsettings);
+	if (r < 0) {
+		logMessage("couldn't get terminal settings");
+		close_port();
+		return 0;
+	}
+	snprintf(message, 60, "    c_iflag: '%d' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%d' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%d' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%d' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	
+	cfmakeraw(&termsettings);
+	speed_t realBaudRate = getBaudRateFromString(baud);
+	cfsetspeed(&termsettings, realBaudRate);
 	
 	r = tcsetattr(portfd, TCSANOW, &termsettings);
 	if (r < 0) {
@@ -503,8 +584,6 @@ int open_port(const char *name)
 	//logMessage(message);	
 	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
 	logMessage(message);	
-	
-	
 	return 1;
 }
 

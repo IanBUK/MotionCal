@@ -62,7 +62,8 @@ typedef struct {
 extern Quaternion_t current_orientation;
 
 extern int port_is_open(void);
-extern int open_port(const char *name);
+extern int open_port(const char *name, const char *baud);
+extern int open_port_by_name(const char *name);
 extern int read_serial_data(void);
 extern void logMessage(const char *message);
 typedef void (*displayBufferCallback)(unsigned char *serialBufferMessage, int bytesRead);
