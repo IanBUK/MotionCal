@@ -136,8 +136,8 @@ private:
 	void OnBaudList(wxCommandEvent& event);
 	
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
-	void showOpenPortError(const char *name);
-	void showOpenPortOK(const char *name);
+	void showOpenPortError(const char *name, const char *baudRate, int errorCode);
+	void showOpenPortOK(const char *name, const char *baudRate);
 	void showMessage(const char *message);
 	
 	// Build UI components

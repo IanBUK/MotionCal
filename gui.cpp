@@ -266,7 +266,6 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	parentPanel->Add(midPanel,2,wxEXPAND | wxALL,5);
 	parentPanel->Add(lowerPanel,2,wxEXPAND | wxALL,5);
 
-
 	wxStaticText* portLabel = new wxStaticText(panel, wxID_ANY, "Port");
 	topmostPanel->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
 	
@@ -281,10 +280,6 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	_baudList = new wxComboBox(panel, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
 	topmostPanel->Add(_baudList, 1, wxALL |wxEXPAND, 5);
 		
-
-		
-		
-		
 	m_button_clear = new wxButton(panel, ID_CLEAR_BUTTON, "Clear");
 	m_button_clear->Enable(false);
 	topPanel->Add(m_button_clear, 1, wxEXPAND, 0);
@@ -292,7 +287,6 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	m_button_sendcal = new wxButton(panel, ID_SENDCAL_BUTTON, "Send Cal");
 	m_button_sendcal->Enable(false);
 	topPanel->Add(m_button_sendcal, 1, wxEXPAND, 0);
-
 
 	BuildRawDataGrid(panel, midPanel, rawDataGridLocation);
 	midPanel->AddSpacer(8);
@@ -305,8 +299,6 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	wxImage::AddHandler(new wxPNGHandler);
 	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
 	lowerPanel->Add(m_confirm_icon, 0, wxALL , 0);
-	
-	
 }
 
 void MyFrame::BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation)
@@ -407,7 +399,6 @@ void MyFrame::BuildMenu()
 	menuBar->Append(menu, wxT("&Help"));
 	SetMenuBar(menuBar);
 }
-
 
 void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 {
@@ -613,9 +604,9 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 			m_button_clear->Enable(false);
 			m_button_sendcal->Enable(false);
 			m_confirm_icon->SetBitmap(MyBitmap("checkemptygray.png"));
-			m_port_list->Clear();
-			m_port_list->Append("(none)");
-			m_port_list->SetSelection(0);
+			//m_port_list->Clear();
+			//m_port_list->Append("(none)");
+			//m_port_list->SetSelection(0);
 			port_name = "";
 		}
 	}
@@ -746,13 +737,13 @@ void MyFrame::OnBaudList(wxCommandEvent& event)
 	port_name = portName;
 	raw_data_reset();
 	int openPortResult = open_port((const char *)portName, (const char *)_baudRate);
-	if (openPortResult == 0)
+	if (openPortResult <= 0)
 	{
-		showOpenPortError((const char *)portName);
+		showOpenPortError((const char *)portName, (const char *)_baudRate, openPortResult);
 	}
 	else
 	{
-		showOpenPortOK((const char *)portName);
+		showOpenPortOK((const char *)portName, (const char *)_baudRate);
 	}
 	m_button_clear->Enable(true);
 }
@@ -776,7 +767,6 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	SetMinimumWidthFromContents(m_port_list, 50);
 }
 
-
 void MyFrame::OnPortMenu(wxCommandEvent &event)
 {
     int id = event.GetId();
@@ -793,13 +783,13 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
     if (id == 9000) return;
 	raw_data_reset();
 	int openPortResult = open_port((const char *)name, (const char *)_baudRate);
-	if (openPortResult == 0)
+	if (openPortResult <= 0)
 	{
-		showOpenPortError((const char *)name);
+		showOpenPortError((const char *)name, (const char *)_baudRate, openPortResult);
 	}
 	else
 	{
-		showOpenPortOK((const char *)name);
+		showOpenPortOK((const char *)name, (const char *)_baudRate);
 	}
 	m_button_clear->Enable(true);
 }
@@ -818,31 +808,37 @@ void MyFrame::OnPortList(wxCommandEvent& event)
 	if (name == "(none)") return;
 	raw_data_reset();
 	int openPortResult = open_port((const char *)name, (const char *)_baudRate);
-	if (openPortResult == 0)
+	if (openPortResult <= 0)
 	{
-		showOpenPortError((const char *)name);
+		showOpenPortError((const char *)name, (const char *)_baudRate, openPortResult);
 	}
 	else
 	{
-		showOpenPortOK((const char *)name);
+		showOpenPortOK((const char *)name, (const char *)_baudRate);
 	}
 	m_button_clear->Enable(true);
 }
 
-void MyFrame::showOpenPortError(const char *name)
+void MyFrame::showOpenPortError(const char *name, const char *baudRate, int errorCode)
 {
-	char buffer[64];
-	snprintf(buffer, 64, "port %s failed to open", name);
+	char errorMessage[32];
+	if (errorCode == -4) snprintf(errorMessage, 32, "couldn't get terminal settings(2)");
+	if (errorCode == -3) snprintf(errorMessage, 32, "tcsetattr failed");
+	if (errorCode == -2) snprintf(errorMessage, 32, "'open_port' failed");
+	if (errorCode == -1) snprintf(errorMessage, 32, "couldn't get terminal settings(1)");
+	
+	char buffer[96];
+	snprintf(buffer, 64, "port %s failed to open at %s bps: %s", name, baudRate, errorMessage);
 	logMessage(buffer);
 	
 	wxMessageDialog dialog(this,buffer, " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
     dialog.ShowModal();
 }
 
-void MyFrame::showOpenPortOK(const char *name)
+void MyFrame::showOpenPortOK(const char *name, const char *baudRate)
 {
    	char commandMessage[640];
-    snprintf(commandMessage, 640, "Port opened: '%s'", name);
+    snprintf(commandMessage, 640, "Port opened: '%s', %s bps", name, baudRate);
    	logMessage((char*)commandMessage);
 
     _statusMessage->SetLabelText(commandMessage);   

@@ -521,26 +521,24 @@ speed_t getBaudRateFromString(const char *baudrate_str) {
     }
 }
 
-
 int open_port(const char *name, const char *baud)
 {
 	struct termios termsettings;
 	int r;
     char message[60];
     
-
 	logMessage("into open_port");
 	portfd = open(name, O_RDWR | O_NONBLOCK);
 	if (portfd < 0) 
 	{
 		logMessage("open_port failed");
-		return 0;
+		return -2;
 	}
 	r = tcgetattr(portfd, &termsettings);
 	if (r < 0) {
 		logMessage("couldn't get terminal settings");
 		close_port();
-		return 0;
+		return -1;
 	}
 	snprintf(message, 60, "    c_iflag: '%d' ", termsettings.c_iflag);
 	logMessage(message);
@@ -563,14 +561,14 @@ int open_port(const char *name, const char *baud)
 	if (r < 0) {
 	    logMessage("tcsetattr failed");
 		close_port();
-		return 0;
+		return -3;
 	}
 	
 	r = tcgetattr(portfd, &termsettings);
 	if (r < 0) {
 		logMessage("couldn't get terminal settings");
 		close_port();
-		return 0;
+		return -4;
 	}
 	snprintf(message, 60, "    c_iflag: '%d' ", termsettings.c_iflag);
 	logMessage(message);
