@@ -242,63 +242,97 @@ void MyFrame::showMessage(const char *message)
     dialog.ShowModal();
 }
 
-void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
+
+wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
 {
-	const wxPoint rawDataGridLocation = wxPoint(30,200);
-	const wxPoint orientationGridLocation = wxPoint(30,300);
-	const wxPoint messagesLocation = wxPoint(30,375);	
-	const wxPoint bitmapLocation = wxPoint(30,100);
-	const wxSize messagesSize = wxSize(350,100);
-		
-	wxSizer *topmostPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Connection");
-	topmostPanel->SetMinSize(wxSize(-1, 60)); 
-		
-	wxSizer *topPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Actions");
-	topPanel->SetMinSize(wxSize(-1, 60)); 
-
-	wxSizer *midPanel = new wxStaticBoxSizer(wxVERTICAL, panel, "Data");
-	midPanel->SetMinSize(wxSize(-1, 180)); 
+	wxSizer *connectionPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Connection");
 	
-	wxSizer *lowerPanel = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Status");
-	
-	parentPanel->Add(topmostPanel,1,wxEXPAND | wxALL,5);	
-	parentPanel->Add(topPanel,1,wxEXPAND | wxALL,5);	
-	parentPanel->Add(midPanel,2,wxEXPAND | wxALL,5);
-	parentPanel->Add(lowerPanel,2,wxEXPAND | wxALL,5);
-
-	wxStaticText* portLabel = new wxStaticText(panel, wxID_ANY, "Port");
-	topmostPanel->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
-	
-	m_port_list = new wxComboBox(panel, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	wxBoxSizer* portRow = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* portLabel = new wxStaticText(parent, wxID_ANY, "Port");
+	portLabel->SetMinSize(wxSize(_labelWidth, -1));
+	portRow->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	m_port_list = new wxComboBox(parent, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
 	m_port_list->Append("(none )");
 	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
 	m_port_list->SetSelection(0);
-	topmostPanel->Add(m_port_list, 1, wxALL |wxEXPAND, 5);
+	portRow->Add(m_port_list, 1, wxEXPAND);
+	connectionPanel->Add(portRow,0,wxEXPAND | wxALL, 5);
 	
-	wxStaticText* baudLabel = new wxStaticText(panel, wxID_ANY, "Baud Rate");
-	topmostPanel->Add(baudLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
-	_baudList = new wxComboBox(panel, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	topmostPanel->Add(_baudList, 1, wxALL |wxEXPAND, 5);
-		
-	m_button_clear = new wxButton(panel, ID_CLEAR_BUTTON, "Clear");
-	m_button_clear->Enable(false);
-	topPanel->Add(m_button_clear, 1, wxEXPAND, 0);
-		
-	m_button_sendcal = new wxButton(panel, ID_SENDCAL_BUTTON, "Send Cal");
-	m_button_sendcal->Enable(false);
-	topPanel->Add(m_button_sendcal, 1, wxEXPAND, 0);
+	wxBoxSizer* baudRow = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* baudLabel = new wxStaticText(parent, wxID_ANY, "Baud Rate");
+	baudLabel->SetMinSize(wxSize(_labelWidth, -1));
+	baudRow->Add(baudLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	_baudList = new wxComboBox(parent, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	baudRow->Add(_baudList, 1, wxEXPAND);
+	connectionPanel->Add(baudRow,0,wxEXPAND | wxALL, 5);
+	
+	connectionPanel->SetMinSize(wxSize(-1, 60)); 	
+	return connectionPanel;
+}
 
-	BuildRawDataGrid(panel, midPanel, rawDataGridLocation);
-	midPanel->AddSpacer(8);
-	BuildOrientationGrid(panel, midPanel, orientationGridLocation);
+wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
+{
+	wxSizer *actionsPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Actions");
+	actionsPanel->SetMinSize(wxSize(-1, 60)); 
+	
+	m_button_clear = new wxButton(parent, ID_CLEAR_BUTTON, "Clear");
+	m_button_clear->Enable(false);
+	actionsPanel->Add(m_button_clear, 1, wxEXPAND, 0);
 		
-	_statusMessage = new wxStaticText(panel, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
+	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Cal");
+	m_button_sendcal->Enable(false);
+	actionsPanel->Add(m_button_sendcal, 1, wxEXPAND, 0);
+	
+	return actionsPanel;
+}
+
+wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
+{
+	const wxPoint rawDataGridLocation = wxPoint(30,200);
+	const wxPoint orientationGridLocation = wxPoint(30,300);
+	
+	wxSizer *dataPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Data");
+	dataPanel->SetMinSize(wxSize(-1, 180)); 
+	
+	BuildRawDataGrid(parent, dataPanel, rawDataGridLocation);
+	dataPanel->AddSpacer(8);
+	BuildOrientationGrid(parent, dataPanel, orientationGridLocation);
+	
+	return dataPanel;
+}
+
+wxSizer* MyFrame::BuildStatusPanel(wxPanel *parent)
+{	
+	const wxPoint messagesLocation = wxPoint(30,375);	
+	const wxPoint bitmapLocation = wxPoint(30,100);
+	const wxSize messagesSize = wxSize(350,100);
+	
+	wxSizer *statusPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Status");
+	_statusMessage = new wxStaticText(parent, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
 	_statusMessage->Wrap(300);
-	lowerPanel->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
+	statusPanel->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
 
 	wxImage::AddHandler(new wxPNGHandler);
-	m_confirm_icon = new wxStaticBitmap(panel, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
-	lowerPanel->Add(m_confirm_icon, 0, wxALL , 0);
+	m_confirm_icon = new wxStaticBitmap(parent, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
+	statusPanel->Add(m_confirm_icon, 0, wxALL , 0);
+	
+	return statusPanel;
+}
+
+
+void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
+{	
+	wxSizer *topmostPanel = BuildConnectionPanel(panel); 
+	parentPanel->Add(topmostPanel,1,wxEXPAND | wxALL,5);	
+	
+	wxSizer* topPanel = BuildActionsPanel(panel);
+	parentPanel->Add(topPanel,1,wxEXPAND | wxALL,5);	
+	
+	wxSizer* midPanel = BuildDataPanel(panel);	
+	parentPanel->Add(midPanel,2,wxEXPAND | wxALL,5);
+	
+	wxSizer* lowerPanel = BuildStatusPanel(panel);
+	parentPanel->Add(lowerPanel,2,wxEXPAND | wxALL,5);
 }
 
 void MyFrame::BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation)

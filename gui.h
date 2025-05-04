@@ -147,6 +147,11 @@ private:
 	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
 	void BuildBufferDisplayCallBack();
 	
+	wxSizer* BuildConnectionPanel(wxPanel *panel);
+	wxSizer* BuildActionsPanel(wxPanel *parent);
+	wxSizer* BuildDataPanel(wxPanel *parent);
+	wxSizer* BuildStatusPanel(wxPanel *parent);
+	
 	
 	// Update UI	
 	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
@@ -160,6 +165,9 @@ private:
 	void UpdateOrientationGrid(char *token);
 	wxArrayString DeDuplicateList(wxArrayString originalList);
 	wxArrayString GetUniquePortList();
+	
+	int _labelWidth = 80;
+	
 	
 	DECLARE_EVENT_TABLE()
 };
