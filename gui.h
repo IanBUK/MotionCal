@@ -39,12 +39,13 @@
 #endif
 #include "stdio.h"
 
-#define ID_TIMER		10000
+#define ID_TIMER			10000
 #define ID_SENDCAL_MENU		10001
 #define ID_CLEAR_BUTTON		10002
 #define ID_SENDCAL_BUTTON	10003
-#define ID_PORTLIST		10004
-#define ID_BAUDLIST		10005
+#define ID_PORTLIST			10004
+#define ID_BAUDLIST			10005
+#define ID_LINEENDINGLIST	10010
 
 #define X_ROW 0
 #define Y_ROW 1
@@ -113,10 +114,11 @@ private:
 	wxMenu *m_port_menu;
 	wxComboBox *m_port_list;
 	wxComboBox *_baudList;
+	wxComboBox *_lineEndingList;
+	
 	wxMenu *m_sendcal_menu;
 	wxStaticText *_statusMessage;
 	
-	wxStaticText *_portLabel;	
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
 	
@@ -134,10 +136,15 @@ private:
 	
 	void OnShowBaudList(wxCommandEvent& event);
 	void OnBaudList(wxCommandEvent& event);
+	void PopulateBaudList();
+	
+	void OnShowLineEndingList(wxCommandEvent& event);
+	void OnLineEndingList(wxCommandEvent& event);
+	void PopulateLineEndingList();
 	
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
-	void showOpenPortError(const char *name, const char *baudRate, int errorCode);
-	void showOpenPortOK(const char *name, const char *baudRate);
+	void showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
+	void showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
 	void showMessage(const char *message);
 	
 	// Build UI components
@@ -146,6 +153,7 @@ private:
 	void BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation);
 	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
 	void BuildBufferDisplayCallBack();
+	void ResetConnectionParameters();
 	
 	wxSizer* BuildConnectionPanel(wxPanel *panel);
 	wxSizer* BuildActionsPanel(wxPanel *parent);
@@ -166,7 +174,7 @@ private:
 	wxArrayString DeDuplicateList(wxArrayString originalList);
 	wxArrayString GetUniquePortList();
 	
-	int _labelWidth = 80;
+	const int _labelWidth = 80;
 	
 	
 	DECLARE_EVENT_TABLE()

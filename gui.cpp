@@ -4,6 +4,7 @@
 #define BUFFER_SIZE 512
 wxString port_name;
 wxString _baudRate;
+wxString _lineEnding;
 static bool show_calibration_confirmed = false;
 MyFrame* MyFrame::instance = nullptr;
 
@@ -69,8 +70,12 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 	EVT_MENU_OPEN(MyFrame::OnShowMenu)
 	EVT_COMBOBOX(ID_PORTLIST, MyFrame::OnPortList)
 	EVT_COMBOBOX_DROPDOWN(ID_PORTLIST, MyFrame::OnShowPortList)
+	
 	EVT_COMBOBOX(ID_BAUDLIST, MyFrame::OnBaudList)
 	EVT_COMBOBOX_DROPDOWN(ID_BAUDLIST, MyFrame::OnShowBaudList)
+	
+	EVT_COMBOBOX(ID_LINEENDINGLIST, MyFrame::OnLineEndingList)
+	EVT_COMBOBOX_DROPDOWN(ID_LINEENDINGLIST, MyFrame::OnShowLineEndingList)
 END_EVENT_TABLE()
 
 
@@ -94,7 +99,6 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 
 	BuildMenu();
 	BuildBufferDisplayCallBack();		
-
 
 	topsizer = new wxBoxSizer(wxHORIZONTAL);
 	panel = new wxPanel(this);
@@ -211,7 +215,6 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	m_timer->Start(14, wxTIMER_CONTINUOUS);
 }
 
-
 void MyFrame::StaticUpdateGrid(unsigned char* buffer, int size) {
     if (instance) {
         instance->UpdateGrid(buffer, size);
@@ -242,7 +245,6 @@ void MyFrame::showMessage(const char *message)
     dialog.ShowModal();
 }
 
-
 wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
 {
 	wxSizer *connectionPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Connection");
@@ -265,6 +267,16 @@ wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
 	_baudList = new wxComboBox(parent, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
 	baudRow->Add(_baudList, 1, wxEXPAND);
 	connectionPanel->Add(baudRow,0,wxEXPAND | wxALL, 5);
+	PopulateBaudList();
+	
+	wxBoxSizer* lineEndingsRow = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* lineEndingsRowLabel = new wxStaticText(parent, wxID_ANY, "Line Endings");
+	lineEndingsRowLabel->SetMinSize(wxSize(_labelWidth, -1));
+	lineEndingsRow->Add(lineEndingsRowLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	_lineEndingList = new wxComboBox(parent, ID_LINEENDINGLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	PopulateLineEndingList();
+	lineEndingsRow->Add(_lineEndingList, 1, wxEXPAND);
+	connectionPanel->Add(lineEndingsRow,0,wxEXPAND | wxALL, 5);
 	
 	connectionPanel->SetMinSize(wxSize(-1, 60)); 	
 	return connectionPanel;
@@ -318,7 +330,6 @@ wxSizer* MyFrame::BuildStatusPanel(wxPanel *parent)
 	
 	return statusPanel;
 }
-
 
 void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 {	
@@ -453,6 +464,7 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 	{
 		logMessage("    too few bytes read");
 		_drawingData = false;
+		logMessage("    exiting UpdateGrid");
 		return;
 	}
 	
@@ -668,7 +680,7 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 	printf("No. bytes written: %d\n", bytesWritten);
 	
 	char messageBuffer[255];
-	sprintf(messageBuffer,
+	snprintf(messageBuffer, 255,
 		"Magnetic Calibration:   (%.1f%% fit error)\n   %7.2f   %6.3f %6.3f %6.3f\n   %7.2f   %6.3f %6.3f %6.3f\n   %7.2f   %6.3f %6.3f %6.3f\nNo. bytes written: %d\n",
 		magcal.FitError,
 		magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2],
@@ -676,8 +688,7 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 		magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2],
 		bytesWritten);
 		
-	showMessage(messageBuffer);
-	
+	showMessage(messageBuffer);	
 }
 
 void calibration_confirmed(void)
@@ -745,8 +756,9 @@ void MyFrame::OnShowMenu(wxMenuEvent &event)
 }
 
 
-void MyFrame::OnShowBaudList(wxCommandEvent& event)
+void MyFrame::PopulateBaudList()
 {
+	logMessage("Into PopulateBaudList");
 	_baudList->Clear();
 	_baudList->Append("300");	
 	_baudList->Append("1200");		
@@ -758,28 +770,101 @@ void MyFrame::OnShowBaudList(wxCommandEvent& event)
 	_baudList->Append("57600");	
 	_baudList->Append("115200");	
 	_baudList->Append("230400");	
+	_baudList->SetSelection(5);
+}
+
+void MyFrame::OnShowBaudList(wxCommandEvent& event)
+{
+	PopulateBaudList();	
+}
+
+void MyFrame::ResetConnectionParameters()
+{	
+	logMessage("Into ResetConnectionParameters");
+	int selectedBaudRate = _baudList->GetSelection();
+	int selectedPort = m_port_list->GetSelection();
+	int selectedLineEnding = _lineEndingList->GetSelection();
+	
+	if (selectedBaudRate == wxNOT_FOUND || selectedPort == wxNOT_FOUND || selectedLineEnding == wxNOT_FOUND) return;	
+
+	_baudRate = _baudList->GetString(selectedBaudRate);
+	port_name = m_port_list->GetString(selectedPort);
+	_lineEnding = _lineEndingList->GetString(selectedLineEnding);
+	
+	close_port();
+	raw_data_reset();
+	
+	int openPortResult = open_port((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
+	if (openPortResult <= 0)
+	{
+		showOpenPortError((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding, openPortResult);
+	}
+	else
+	{
+		showOpenPortOK((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
+	}
+	m_button_clear->Enable(true);
+}
+
+
+void MyFrame::OnPortList(wxCommandEvent& event)
+{
+	ResetConnectionParameters();
 }
 
 void MyFrame::OnBaudList(wxCommandEvent& event)
 {
-	int selected = _baudList->GetSelection();
-	if (selected == wxNOT_FOUND) return;
-	_baudRate = _baudList->GetString(selected);
-	int selectedPort = m_port_list->GetSelection();
-	wxString portName = m_port_list->GetString(selectedPort);
+	ResetConnectionParameters();
+}
+
+void MyFrame::OnLineEndingList(wxCommandEvent& event)
+{	
+	logMessage("Into OnLineEndingList");
+	ResetConnectionParameters();
+}
+
+void MyFrame::OnPortMenu(wxCommandEvent &event)
+{
+    int id = event.GetId();
+    wxString name = m_port_menu->FindItem(id)->GetItemLabelText();
+	int selectedBaudRate = _baudList->GetSelection();
+	if (selectedBaudRate == wxNOT_FOUND) return;
+	_baudRate = _baudList->GetString(selectedBaudRate);
+	int selectedLineEnding = _lineEndingList->GetSelection();
+	_lineEnding = _lineEndingList->GetString(selectedLineEnding);
 	close_port();
-	port_name = portName;
+	port_name = name;
+	m_port_list->Clear();
+	m_port_list->Append(port_name);
+	SetMinimumWidthFromContents(m_port_list, 50);
+	m_port_list->SetSelection(0);
+    if (id == 9000) return;
 	raw_data_reset();
-	int openPortResult = open_port((const char *)portName, (const char *)_baudRate);
+	int openPortResult = open_port((const char *)name, (const char *)_baudRate, (const char *)_lineEnding);
 	if (openPortResult <= 0)
 	{
-		showOpenPortError((const char *)portName, (const char *)_baudRate, openPortResult);
+		showOpenPortError((const char *)name, (const char *)_baudRate, (const char*) _lineEnding, openPortResult);
 	}
 	else
 	{
-		showOpenPortOK((const char *)portName, (const char *)_baudRate);
+		showOpenPortOK((const char *)name, (const char *)_baudRate, (const char*) _lineEnding);
 	}
 	m_button_clear->Enable(true);
+}
+
+void MyFrame::PopulateLineEndingList()
+{
+	_lineEndingList->Clear();
+	_lineEndingList->Append("(none)");	
+	_lineEndingList->Append("LF");		
+	_lineEndingList->Append("CR");	
+	_lineEndingList->Append("CRLF");	
+	_lineEndingList->SetSelection(1);
+}
+
+void MyFrame::OnShowLineEndingList(wxCommandEvent& event)
+{
+	PopulateLineEndingList();
 }
 
 void MyFrame::OnShowPortList(wxCommandEvent& event)
@@ -801,78 +886,28 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	SetMinimumWidthFromContents(m_port_list, 50);
 }
 
-void MyFrame::OnPortMenu(wxCommandEvent &event)
-{
-    int id = event.GetId();
-    wxString name = m_port_menu->FindItem(id)->GetItemLabelText();
-	int selectedBaudRate = _baudList->GetSelection();
-	if (selectedBaudRate == wxNOT_FOUND) return;
-	_baudRate = _baudList->GetString(selectedBaudRate);
-	close_port();
-	port_name = name;
-	m_port_list->Clear();
-	m_port_list->Append(port_name);
-	SetMinimumWidthFromContents(m_port_list, 50);
-	m_port_list->SetSelection(0);
-    if (id == 9000) return;
-	raw_data_reset();
-	int openPortResult = open_port((const char *)name, (const char *)_baudRate);
-	if (openPortResult <= 0)
-	{
-		showOpenPortError((const char *)name, (const char *)_baudRate, openPortResult);
-	}
-	else
-	{
-		showOpenPortOK((const char *)name, (const char *)_baudRate);
-	}
-	m_button_clear->Enable(true);
-}
 
-void MyFrame::OnPortList(wxCommandEvent& event)
+void MyFrame::showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode)
 {
-	int selected = m_port_list->GetSelection();
-	if (selected == wxNOT_FOUND) return;
-	wxString name = m_port_list->GetString(selected);
+	const int messageBufferSize = 128;
+	char errorMessage[messageBufferSize];
+	if (errorCode == -4) snprintf(errorMessage, messageBufferSize, "couldn't get terminal settings(2)");
+	if (errorCode == -3) snprintf(errorMessage, messageBufferSize, "tcsetattr failed");
+	if (errorCode == -2) snprintf(errorMessage, messageBufferSize, "'open_port' failed");
+	if (errorCode == -1) snprintf(errorMessage, messageBufferSize, "couldn't get terminal settings(1)");
 	
-	selected = _baudList->GetSelection();
-	if (selected == wxNOT_FOUND) return;
-	_baudRate = _baudList->GetString(selected);
-	close_port();
-	port_name = name;
-	if (name == "(none)") return;
-	raw_data_reset();
-	int openPortResult = open_port((const char *)name, (const char *)_baudRate);
-	if (openPortResult <= 0)
-	{
-		showOpenPortError((const char *)name, (const char *)_baudRate, openPortResult);
-	}
-	else
-	{
-		showOpenPortOK((const char *)name, (const char *)_baudRate);
-	}
-	m_button_clear->Enable(true);
-}
-
-void MyFrame::showOpenPortError(const char *name, const char *baudRate, int errorCode)
-{
-	char errorMessage[32];
-	if (errorCode == -4) snprintf(errorMessage, 32, "couldn't get terminal settings(2)");
-	if (errorCode == -3) snprintf(errorMessage, 32, "tcsetattr failed");
-	if (errorCode == -2) snprintf(errorMessage, 32, "'open_port' failed");
-	if (errorCode == -1) snprintf(errorMessage, 32, "couldn't get terminal settings(1)");
-	
-	char buffer[96];
-	snprintf(buffer, 64, "port %s failed to open at %s bps: %s", name, baudRate, errorMessage);
+	char buffer[messageBufferSize];
+	snprintf(buffer, messageBufferSize, "port %s failed to open at %s bps: %s,line ending: %s", name, baudRate, lineEnding, errorMessage);
 	logMessage(buffer);
 	
 	wxMessageDialog dialog(this,buffer, " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
     dialog.ShowModal();
 }
 
-void MyFrame::showOpenPortOK(const char *name, const char *baudRate)
+void MyFrame::showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding)
 {
    	char commandMessage[640];
-    snprintf(commandMessage, 640, "Port opened: '%s', %s bps", name, baudRate);
+    snprintf(commandMessage, 640, "Port opened: '%s', %s bps, %s line ending", name, baudRate, lineEnding);
    	logMessage((char*)commandMessage);
 
     _statusMessage->SetLabelText(commandMessage);   
@@ -900,7 +935,6 @@ MyFrame::~MyFrame(void)
 	m_timer->Stop();
 	close_port();
 }
-
 
 /*****************************************************************************/
 

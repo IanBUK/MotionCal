@@ -521,7 +521,8 @@ speed_t getBaudRateFromString(const char *baudrate_str) {
     }
 }
 
-int open_port(const char *name, const char *baud)
+
+int open_port(const char *name, const char *baud, const char *lineEnding)
 {
 	struct termios termsettings;
 	int r;
@@ -591,8 +592,9 @@ int read_serial_data(void)
 	unsigned char buf[BUFFER_SIZE];
 	static int nodata_count=0;
 	int n;
-
-	if (portfd < 0) return -1;
+	logMessage("read_serial_data: line 589");
+	
+		if (portfd < 0) return -1;
 	
 	while (1) {
 		n = read(portfd, buf, sizeof(buf));
@@ -757,6 +759,7 @@ int read_serial_data(void)
 	OVERLAPPED ov;
 	unsigned char buf[BUFFER_SIZE];
 	int r;
+	logMessage("read_serial_data: line 753");
 
 	if (port_handle == INVALID_HANDLE_VALUE) return -1;
 	while (1) {
