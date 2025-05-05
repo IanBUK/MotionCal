@@ -5,906 +5,7 @@ Into PopulateBaudList
 PortCount: 4
 Into ResetConnectionParameters
 into open_port
-    c_iflag: '0' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-    c_iflag: '1' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-Port opened: '/dev/cu.wchusbserial11110', 19200 bps, LF line ending
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-******************************************
-MotionCal.app - start instance
-******************************************
-Into PopulateBaudList
-PortCount: 4
-Into ResetConnectionParameters
-into open_port
-    c_iflag: '0' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-    c_iflag: '1' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-Port opened: '/dev/cu.wchusbserial11110', 19200 bps, LF line ending
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-into real_serial_data: line 593
-******************************************
-MotionCal.app - start instance
-******************************************
-Into PopulateBaudList
-PortCount: 4
-Into ResetConnectionParameters
-into open_port
-    c_iflag: '0' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-    c_iflag: '1' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-Port opened: '/dev/cu.wchusbserial11110', 19200 bps, LF line ending
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-into real_serial_data: line 603. bufferIndex 0, bufferSize 
-_lineEndingMode == LINE_ENDING_NOTSET
-******************************************
-MotionCal.app - start instance
-******************************************
-Into PopulateBaudList
-PortCount: 4
-Into ResetConnectionParameters
-into open_port
+    portfd: '6' 
     c_iflag: '0' 
     c_oflag: '0' 
     c_cflag: '19200' 
@@ -917,1282 +18,2379 @@ into open_port
     c_cc: 'ÿÿÿ' 
 Port opened: '/dev/cu.wchusbserial11110', 19200 bps, LF line ending
 into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+read_serial_data, no leftover buffer to process
+read_serial_data: '64' bytes. lineOffset: 0
+>>>>(0) 33 [3]
+>>>>(1) 2C [,]
+>>>>(2) 33 [3]
+>>>>(3) 2E [.]
+>>>>(4) 30 [0]
+>>>>(5) 36 [6]
+>>>>(6) 36 [6]
+>>>>(7) 33 [3]
+>>>>(8) 31 [1]
+>>>>(9) 35 [5]
+>>>>(10) 2C [,]
+>>>>(11) 30 [0]
+>>>>(12) 2E [.]
+>>>>(13) 30 [0]
+>>>>(14) 30 [0]
+>>>>(15) 30 [0]
+>>>>(16) 30 [0]
+>>>>(17) 30 [0]
+>>>>(18) 30 [0]
+>>>>(19) 2C [,]
+>>>>(20) 30 [0]
+>>>>(21) 2E [.]
+>>>>(22) 30 [0]
+>>>>(23) 30 [0]
+>>>>(24) 30 [0]
+>>>>(25) 30 [0]
+>>>>(26) 30 [0]
+>>>>(27) 30 [0]
+>>>>(28) 2C [,]
+>>>>(29) 30 [0]
+>>>>(30) 2E [.]
+>>>>(31) 30 [0]
+>>>>(32) C1 [Á]
+>>>>(33) 30 [0]
+>>>>(34) 30 [0]
+>>>>(35) 30 [0]
+>>>>(36) 30 [0]
+>>>>(37) 30 [0]
+>>>>(38) 2C [,]
+>>>>(39) 30 [0]
+>>>>(40) 2E [.]
+>>>>(41) 30 [0]
+>>>>(42) 30 [0]
+>>>>(43) 30 [0]
+>>>>(44) 30 [0]
+>>>>(45) 30 [0]
+>>>>(46) 30 [0]
+>>>>(47) 2C [,]
+>>>>(48) 30 [0]
+>>>>(49) 2E [.]
+>>>>(50) 30 [0]
+>>>>(51) 30 [0]
+>>>>(52) 30 [0]
+>>>>(53) 30 [0]
+>>>>(54) 30 [0]
+>>>>(55) 30 [0]
+>>>>(56) 2C [,]
+>>>>(57) 31 [1]
+>>>>(58) 2E [.]
+>>>>(59) 37 [7]
+>>>>(60) 37 [7]
+>>>>(61) 34 [4]
+>>>>(62) 35 [5]
+>>>>(63) 33 [3]
+read_serial_data: '32' bytes. lineOffset: 64
+>>>>(64) 33 [3]
+>>>>(65) 0A [
+]
+    read line: '65' bytes, '3,3.066315,0.000000,0.000000,0.0Á00000,0.000000,0.000000,1.774533'
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-return from read: -1 - exiting
-
-into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-8’_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-8’_m
+(÷l
     too few bytes read
     exiting UpdateGrid
 into real_serial_data: line 603
-
-read_serial_data: '0' bytes
-
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
 inside newdata
 log data : 'packet_parse', 0
-done
+done 0
 log data : 'ascii_parse', 0
-done
-è–_m
+done 0
+(÷l
 UpdateGrid called: 0 bytes read
-è–_m
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+(÷l
+UpdateGrid called: 0 bytes read
+(÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
+    too few bytes read
+    exiting UpdateGrid
+into real_serial_data: line 603
+process rest of buffer from last read: 32 bytes read, proce
+>>>>(0) 0A [
+]**
+    read leftover line: '0' bytes, ''
+inside newdata
+log data : 'packet_parse', 0
+done 0
+log data : 'ascii_parse', 0
+done 0
+x÷l
+UpdateGrid called: 0 bytes read
+x÷l
     too few bytes read
     exiting UpdateGrid

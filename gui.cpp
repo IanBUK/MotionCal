@@ -254,7 +254,7 @@ wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
 	portLabel->SetMinSize(wxSize(_labelWidth, -1));
 	portRow->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
 	m_port_list = new wxComboBox(parent, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	m_port_list->Append("(none )");
+	m_port_list->Append("(none)");
 	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
 	m_port_list->SetSelection(0);
 	portRow->Add(m_port_list, 1, wxEXPAND);
@@ -791,6 +791,8 @@ void MyFrame::ResetConnectionParameters()
 	port_name = m_port_list->GetString(selectedPort);
 	_lineEnding = _lineEndingList->GetString(selectedLineEnding);
 	
+	if (strcmp(port_name,"(none)") == 0) return;
+
 	close_port();
 	raw_data_reset();
 	
