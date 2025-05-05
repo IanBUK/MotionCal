@@ -133,6 +133,7 @@ private:
 	void OnTimer(wxTimerEvent &event);
 	void OnAbout(wxCommandEvent &event);
 	void OnQuit(wxCommandEvent &event);
+	void DebugPrint(const char *name, const unsigned char *data, int len);
 	
 	void OnShowBaudList(wxCommandEvent& event);
 	void OnBaudList(wxCommandEvent& event);

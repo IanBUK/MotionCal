@@ -445,10 +445,29 @@ void MyFrame::BuildMenu()
 	SetMenuBar(menuBar);
 }
 
+void MyFrame::DebugPrint(const char *name, const unsigned char *data, int len)
+{
+	int i;
+    char message[60];
+    
+	snprintf(message, 60, "log data : '%s', %d", name, len);
+	logMessage(message);
+
+	for (i=0; i < len; i++) {
+		snprintf(message, 60, "    %02X [%c]", data[i], data[i]);
+	    logMessage(message);
+	}
+	snprintf(message, 60, "done %d", len);
+	logMessage(message);
+}
+
+
+
 void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 {
 	char messageBuffer[BUFFER_SIZE];		
 	snprintf(messageBuffer,256,"UpdateGrid called: %d bytes read", bytesRead);
+	DebugPrint("UpdateGrid", serialBufferMessage, bytesRead);
 	logMessage(messageBuffer);	
 
 	if (_drawingData)

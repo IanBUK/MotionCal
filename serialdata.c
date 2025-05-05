@@ -56,8 +56,12 @@ void fireBufferDisplayCallback(const unsigned char *data, int len)
 	if(_displayBufferCallback != NULL)
 	{
 		unsigned char *serialBuffer = buildBuffer(data, len);
-		logMessage((const char*)serialBuffer);
+		//logMessage((const char*)serialBuffer);
 		_displayBufferCallback((unsigned char*)&serialBuffer, len);
+	}
+	else
+	{
+		logMessage("_displayBufferCallback is null");
 	}
 }
 
@@ -150,7 +154,7 @@ static int packet_magnetic_cal(const unsigned char *data)
 static int packet(const unsigned char *data, int len)
 {
 	if (len <= 0) return 0;
-	print_data("packet", data, len);
+	//print_data("packet", data, len);
 
 	if (data[0] == 1 && len == 34) {
 		return packet_primary_data(data);
@@ -208,7 +212,7 @@ static int packet_parse(const unsigned char *data, int len)
 	int copylen;
 	int ret=0;
 
-	print_data("packet_parse", data, len);
+	//print_data("packet_parse", data, len);
 	while (len > 0) {
 		p = memchr(data, 0x7E, len);
 		if (p == NULL) {
@@ -258,7 +262,7 @@ static int ascii_parse(const unsigned char *data, int len)
 	const char *p, *end;
 	int ret=0;
 
-	print_data("ascii_parse", data, len);
+	//print_data("ascii_parse", data, len);
 	end = (const char *)(data + len);
 	for (p = (const char *)data ; p < end; p++) {
 		if (ascii_state == ASCII_STATE_WORD) {
@@ -623,7 +627,7 @@ int read_serial_data(void)
     }
 
     if (_lineEndingMode == LINE_ENDING_NOTSET) {
-        logMessage("    _lineEndingMode == LINE_ENDING_NOTSET");
+        logMessage("    _lineEndingMode not set");
         return -1;
     }
 
@@ -663,9 +667,11 @@ int read_serial_data(void)
         bytesRemainingToProcess--;
 
         // Add char to line
-        if (lineOffset < BUFFER_SIZE - 1) {
+        if (lineOffset < BUFFER_SIZE - 1) 
+        {
             line[lineOffset++] = newReadCharacter;
-        } else {
+        } else 
+        {
             logMessage("line buffer overflow, resetting");
             lineOffset = 0;
             continue;
@@ -674,12 +680,12 @@ int read_serial_data(void)
         // Line ending check
         bool lineComplete = false;
 
-        if (_lineEndingMode == LINE_ENDING_LF && newReadCharacter == '\n') {
+        if ((_lineEndingMode == LINE_ENDING_LF && newReadCharacter == '\n') ||
+        	(_lineEndingMode == LINE_ENDING_CR && newReadCharacter == '\r'))
+        {
             lineComplete = true;
-        } else if (_lineEndingMode == LINE_ENDING_CR && newReadCharacter == '\r') {
-            lineComplete = true;
-        } else if (_lineEndingMode == LINE_ENDING_CRLF &&
-                   lastReadCharacter == '\r' && newReadCharacter == '\n') {
+        }
+        else if (_lineEndingMode == LINE_ENDING_CRLF && lastReadCharacter == '\r' && newReadCharacter == '\n') {
             line[lineOffset - 2] = '\0'; // strip CR
             lineComplete = true;
         }
@@ -697,363 +703,6 @@ int read_serial_data(void)
     }
 
     return 0;  // Buffer exhausted, but no complete line yet
-}
-
-int read_serial_data_errors(void)
-{
-	// Current sensor diagnostic code simply repeating message:
-	// Raw: 0.000000,0.100000,0.200000,1.000000,1.100000,1.200000,2.000000,2.100000,2.200000
-	
-	static unsigned char line[BUFFER_SIZE];
-	static int lineOffset = 0;
-	static int lineCharCount = 0;
-	static int bytesReadFromSerial = 0;
-	static unsigned char buffer[BUFFER_SIZE];
-	static int bufferIndex = 0;
-	static int bytesRemainingToProcess = 0;
-	char message[256];
-	unsigned char newReadCharacter;
-	unsigned char lastReadCharacter;	
-	static int nodata_count=0;
-	snprintf(message, 256, "into real_serial_data: line 603");
-	
-	logMessage(message);
-	int bufferSize = BUFFER_SIZE;
-	
-	if (portfd < 0){logMessage("    portfd < 0");return -1;}
-	if (_lineEndingMode == LINE_ENDING_NOTSET){ logMessage("    _lineEndingMode == LINE_ENDING_NOTSET");return -1;}
-	
-	if (bytesRemainingToProcess == 0)
-	{
-		bytesReadFromSerial = read(portfd, buffer, bufferSize);		
-		snprintf(message, 256, "read_serial_data, no leftover buffer to process, %d bytes read", bytesReadFromSerial);
-		logMessage(message);
-		bufferIndex = 0;
-	}
-	else
-	{
-		snprintf(message, 256, "process rest of buffer from last read: %d bytes read, bytes left to process %d, lineOffset %d", bytesReadFromSerial, bytesRemainingToProcess, lineOffset);
-		logMessage(message);			
-	}
-
-	while (1)
-	{
-		if (bytesReadFromSerial > 0 && bytesReadFromSerial < bufferSize)
-		{	
-			snprintf(message, 256, "process buffer, from %d, for %d bytes",bufferIndex, bytesReadFromSerial);
-			logMessage(message);		
-			for(int bufferLoop = bufferIndex; bufferLoop < bytesReadFromSerial; bufferLoop++)
-			{
-				newReadCharacter = buffer[bufferLoop];
-				snprintf(message, 256, ">>>>(%d) %02X [%c]", lineOffset, newReadCharacter, newReadCharacter);
-				logMessage(message);
-				line[lineOffset] = newReadCharacter;
-				
-				if ((_lineEndingMode == LINE_ENDING_LF && newReadCharacter == '\n')||
-					(_lineEndingMode == LINE_ENDING_CR && newReadCharacter == '\r'))
-				{
-					// null terminate the line
-					line[lineOffset] = '\0';
-					// process the line
-					snprintf(message, 256, "    read line: '%d' bytes, '%s'", lineOffset, line);
-					logMessage(message);
-					newdata(line, lineCharCount);
-					// reset and process remaining buffer characters
-					int returnVal = lineOffset;
-					lineCharCount = 0;
-					lineOffset = 0;	
-					bufferIndex = bufferLoop+1;
-					bytesRemainingToProcess = bytesReadFromSerial - bufferLoop;
-					return returnVal;			
-				}
-				else if (_lineEndingMode == LINE_ENDING_CRLF && lastReadCharacter == '\r' && newReadCharacter == '\n')
-				{
-					// null terminate the line
-					line[lineOffset-1] = '\0';
-					// process the line
-					snprintf(message, 256, "    read line (ends with CRLF): '%d' bytes, '%s'", lineOffset, line);
-					logMessage(message);
-					newdata(line, lineCharCount);
-					// reset and process remaining buffer characters
-					int returnVal = lineOffset;
-					lineCharCount = 0;
-					lineOffset = 0;	
-					bufferIndex = bufferLoop+1;
-					bytesRemainingToProcess = bytesReadFromSerial - bufferLoop;
-					return returnVal;							
-				}	
-				
-				lineOffset++;
-				if (lineOffset >= bufferSize)
-				{
-					logMessage("reached end of lineBuffer - reset pointer to start");
-					lineOffset = 0;
-				}
-				lastReadCharacter = newReadCharacter;		
-			}	
-		}
-		else if (errno == EAGAIN || errno == EWOULDBLOCK) 
-		{
-        	// No data now, but it's not an error
-        	usleep(100); // sleep 10ms or use select()/poll()
-        	continue;
-        }
-		else if (bytesReadFromSerial < 0)
-		{
-			snprintf(message, 256, "    exiting after %d bytes read, based on error '%s'", bytesReadFromSerial, strerror(errno));
-			logMessage(message);
-			lineCharCount = 0;
-			lineOffset = 0;
-			//bufferIndex = bufferLoop;
-			return -1;
-		}
-        else if (bytesReadFromSerial == 0)
-        {
-        	logMessage("0 bytes read");
-			if (++nodata_count > 6) 
-			{
-				logMessage("    nodata_count hit 6");
-				close_port();
-				nodata_count = 0;
-				close_port();
-				lineCharCount = 0;
-				lineOffset = 0;
-				return -1;
-			}
-		}
-		bytesReadFromSerial = read(portfd, buffer, bufferSize);		
-		bufferIndex = 0;
-	
-	}
-}
-
-
-/*
-
-int read_serial_data_3(void)
-{
-	char message[256];
-	unsigned char newReadCharacter;
-	unsigned char lastReadCharacter;	
-	static int nodata_count=0;
-	snprintf(message, 60, "into real_serial_data: line 603");
-	logMessage(message);
-	int bufferSize = sizeof(buffer);
-	
-	if (portfd < 0)
-	{
-		logMessage("    portfd < 0");
-		return -1;
-	}
-	if (_lineEndingMode == LINE_ENDING_NOTSET)
-	{
-		logMessage("    _lineEndingMode == LINE_ENDING_NOTSET");
-	    return -1;
-	} 
-	if (bufferIndex == 0)
-	{
-		logMessage("read_serial_data, no leftover buffer to process");
-	}
-	if (bufferIndex > 0)
-	{
-		snprintf(message, 256, "process rest of buffer from last read: %d bytes read, process from byte %d", bytesReadFromSerial, bufferIndex);
-		logMessage(message);	
-		// we've still got buffer to process
-		for(int bufferLoop = bufferIndex; bufferLoop < bytesReadFromSerial; bufferLoop++)
-		{
-			newReadCharacter = buffer[bufferLoop];
-			snprintf(message, 256, ">>>>(%d) %02X [%c]**", lineOffset, newReadCharacter, newReadCharacter);
-			logMessage(message);
-			line[lineOffset] = newReadCharacter;
-			
-			if ((_lineEndingMode == LINE_ENDING_LF && newReadCharacter == '\n')||
-				(_lineEndingMode == LINE_ENDING_CR && newReadCharacter == '\r'))
-			{
-				// null terminate the line
-				line[lineOffset] = '\0';
-				// process the line
-				snprintf(message, 256, "    read leftover line: '%d' bytes, '%s'", lineOffset, line);
-				logMessage(message);
-				newdata(line, lineCharCount);
-				// reset and process remaining buffer characters
-				int returnVal = lineOffset;
-				lineCharCount = 0;
-				lineOffset = 0;	
-				//bytesReadFromSerial = 0;
-				return returnVal;			
-			}
-			else if (_lineEndingMode == LINE_ENDING_CRLF && lastReadCharacter == '\r' && newReadCharacter == '\n')
-			{
-				// null terminate the line
-				line[lineOffset-1] = '\0';
-				// process the line
-				snprintf(message, 256, "    read leftover line (ends with CRLF): '%d' bytes, '%s'", lineOffset, line);
-				logMessage(message);
-				newdata(line, lineCharCount);
-				// reset and process remaining buffer characters
-				int returnVal = lineOffset;
-				lineCharCount = 0;
-				lineOffset = 0;	
-				//bytesReadFromSerial = 0;
-				return returnVal;							
-			}	
-			
-			lineOffset++;
-			if (lineOffset >= bufferSize)
-			{
-				logMessage("reached end of lineBuffer - reset pointer to start");
-				lineOffset = 0;
-			}
-			lastReadCharacter = newReadCharacter;		
-		}
-	}
-    bufferIndex = 0;
-	while (1)
-	{
-		bytesReadFromSerial = read(portfd, buffer, bufferSize);
-		if (bytesReadFromSerial > 0 && bytesReadFromSerial < bufferSize)
-		{
-			snprintf(message, 256, "read_serial_data: '%d' bytes. lineOffset: %d", bytesReadFromSerial, lineOffset);
-			logMessage(message);			
-			for(int bufferLoop = 0; bufferLoop < bytesReadFromSerial; bufferLoop++)
-			{
-	
-				newReadCharacter = buffer[bufferLoop];
-				snprintf(message, 256, ">>>>(%d) %02X [%c]", lineOffset, newReadCharacter, newReadCharacter);
-				logMessage(message);
-				line[lineOffset] = newReadCharacter;
-				
-				if ((_lineEndingMode == LINE_ENDING_LF && newReadCharacter == '\n')||
-					(_lineEndingMode == LINE_ENDING_CR && newReadCharacter == '\r'))
-				{
-					// null terminate the line
-					line[lineOffset] = '\0';
-					// process the line
-					snprintf(message, 256, "    read line: '%d' bytes, '%s'", lineOffset, line);
-					logMessage(message);
-					newdata(line, lineCharCount);
-					// reset and process remaining buffer characters
-					int returnVal = lineOffset;
-					lineCharCount = 0;
-					lineOffset = 0;	
-					bufferIndex = bufferLoop;
-					return returnVal;			
-				}
-				else if (_lineEndingMode == LINE_ENDING_CRLF && lastReadCharacter == '\r' && newReadCharacter == '\n')
-				{
-					// null terminate the line
-					line[lineOffset-1] = '\0';
-					// process the line
-					snprintf(message, 256, "    read line (ends with CRLF): '%d' bytes, '%s'", lineOffset, line);
-					logMessage(message);
-					newdata(line, lineCharCount);
-					// reset and process remaining buffer characters
-					int returnVal = lineOffset;
-					lineCharCount = 0;
-					lineOffset = 0;	
-					bufferIndex = bufferLoop;
-					return returnVal;							
-				}	
-				
-				lineOffset++;
-				if (lineOffset >= bufferSize)
-				{
-					logMessage("reached end of lineBuffer - reset pointer to start");
-					lineOffset = 0;
-				}
-				lastReadCharacter = newReadCharacter;		
-			}	
-		}
-		else if (errno == EAGAIN || errno == EWOULDBLOCK) 
-		{
-        	// No data now, but it's not an error
-        	usleep(100); // sleep 10ms or use select()/poll()
-        	continue;
-        }
-		else if (bytesReadFromSerial < 0)
-		{
-			snprintf(message, 256, "    exiting after %d bytes read, based on error '%s'", bytesReadFromSerial, strerror(errno));
-			logMessage(message);
-			lineCharCount = 0;
-			lineOffset = 0;
-			return -1;
-		}
-        else if (bytesReadFromSerial == 0)
-        {
-        	logMessage("0 bytes read");
-			if (++nodata_count > 6) 
-			{
-				logMessage("    nodata_count hit 6");
-				close_port();
-				nodata_count = 0;
-				close_port();
-				lineCharCount = 0;
-				lineOffset = 0;
-				return -1;
-			}
-		}	
-	}
-	//snprintf(message, 60, "read_serial_data: '%d' bytes", bufferIndex);
-	//logMessage(message);
-	//if (bufferIndex > 0)
-	//{
-	//	buffer[bufferIndex] = '\0';
-	//	newdata(buffer, bufferIndex);
-	//}
-	//nodata_count = 0;
-}
-*/
-
-int read_serial_data2(void)
-{
-    char message[60];
-	unsigned char buf[BUFFER_SIZE];
-	static int nodata_count=0;
-	int n;
-	logMessage("read_serial_data: line 589");
-	
-		if (portfd < 0) return -1;
-	
-	while (1) {
-		n = read(portfd, buf, sizeof(buf));
-		if (n > 0 && n <= sizeof(buf)) 
-		{
-			snprintf(message, 60, "read_serial_data: '%d' bytes", n);
-			logMessage(message);
-			newdata(buf, n);
-			nodata_count = 0;
-			return n;
-		} 
-		else if (n == 0) 
-		{
-			logMessage("0 bytes read");
-			if (++nodata_count > 6) 
-			{
-				close_port();
-				nodata_count = 0;
-				close_port();
-				return -1;
-			}
-			return 0;
-		}
-		else 
-		{
-			n = errno;
-			if (n == EAGAIN) 
-			{
-				return 0;
-			} 
-			else if (n == EINTR) 
-			{
-				return 0;
-			} 
-			else 
-			{
-				close_port();
-				return -1;
-			}
-		}
-	}
 }
 
 int write_serial_data(const void *ptr, int len)
