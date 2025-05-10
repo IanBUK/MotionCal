@@ -1,5 +1,6 @@
 #ifndef gui__h_
 #define gui__h_
+#include "imuread.h"
 
 #include <wx/wx.h>
 #include "wx/timer.h"
@@ -23,7 +24,6 @@
 #include <GL/glu.h>
 #endif
 #include "stdio.h"
-
 
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
 	#ifdef __DARWIN__
@@ -52,8 +52,8 @@
 #define Z_ROW 2
 
 #define ACCEL_COL 0
-#define MAG_COL 1
-#define GYRO_COL 2
+#define MAG_COL 2
+#define GYRO_COL 1
 
 #define YAW_COL 0
 #define PITCH_COL 1
@@ -163,11 +163,17 @@ private:
 	
 	
 	// Update UI	
-	void UpdateGrid(unsigned char *serialBufferMessage, int bytesRead);
-	static void StaticUpdateGrid(unsigned char* buffer, int size);
-    static MyFrame* instance; // Pointer to the current instance
-	//MyFrame* MyFrame::instance = nullptr; // Initialize it
+
+	void UpdateImuData(ImuData imuData);
+	static void StaticUpdateImuData(ImuData imuData);
 	
+	void UpdateOrientationData(Point_t orientation);	
+	static void StaticUpdateOrientationData(Point_t orientation);
+	
+	void UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead);
+	static void StaticUpdateGrid(const unsigned char* buffer, int size);
+
+    static MyFrame* instance; // Pointer to the current instance
 	
 	
 	void UpdateRawDataGrid(char *token);

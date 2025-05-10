@@ -12,6 +12,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdbool.h>
+
 #if defined(LINUX)
   #include <termios.h>
   #include <unistd.h>
@@ -53,6 +55,15 @@ typedef struct {
 	//int valid;
 } Point_t;
 
+typedef struct 
+{
+	Point_t accelerometer;
+	Point_t gyroscope;
+	Point_t magnetometer;
+} ImuData;
+
+
+
 typedef struct {
 	float q0; // w
 	float q1; // x
@@ -66,8 +77,16 @@ extern int open_port(const char *name, const char *baud, const char *lineEnding)
 extern int open_port_by_name(const char *name);
 extern int read_serial_data(void);
 extern void logMessage(const char *message);
-typedef void (*displayBufferCallback)(unsigned char *serialBufferMessage, int bytesRead);
+extern void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex);
+
+typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*imuDataCallback)(ImuData rawData);
+typedef void (*orientationDataCallback)(Point_t orientation);
+
+
 extern void setDisplayBufferCallback(displayBufferCallback displayBufferCallback);
+extern void setImuDataCallback(imuDataCallback imuDataCallback);
+extern void setOrientationDataCallback(orientationDataCallback orientationDataCallback);
 
 
 extern int write_serial_data(const void *ptr, int len);

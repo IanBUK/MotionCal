@@ -1,5 +1,5 @@
 #include "gui.h"
-#include "imuread.h"
+
 #include <string.h>
 #define BUFFER_SIZE 512
 wxString port_name;
@@ -215,14 +215,72 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	m_timer->Start(14, wxTIMER_CONTINUOUS);
 }
 
-void MyFrame::StaticUpdateGrid(unsigned char* buffer, int size) {
-    if (instance) {
+void MyFrame::StaticUpdateGrid(const unsigned char* buffer, int size) {
+    if (instance) 
         instance->UpdateGrid(buffer, size);
-    }
-    else
-    {
-    	logMessage("no instance set");
-    }
+}
+
+void MyFrame::StaticUpdateImuData(ImuData imuData) {
+    if (instance) 
+        instance->UpdateImuData(imuData);
+
+}
+
+void MyFrame::UpdateImuData(ImuData imuData)
+{
+	/*char message[255];
+	snprintf(message, 255, "imu: acc(%f,%f,%f) gyro(%f,%f,%f) mag(%f,%f,%f)", 
+		imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
+		imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
+		imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z
+	);
+	logMessage(message);*/
+	char buffer[20];
+	
+	snprintf(buffer,20, "%f", imuData.accelerometer.x);
+	_rawDataGrid->SetCellValue(X_ROW, ACCEL_COL,buffer);
+	snprintf(buffer,20,"%f", imuData.accelerometer.y);	
+	_rawDataGrid->SetCellValue(Y_ROW, ACCEL_COL,buffer);
+	snprintf(buffer,20,"%f", imuData.accelerometer.z);	
+	_rawDataGrid->SetCellValue(Z_ROW, ACCEL_COL,buffer);
+
+	snprintf(buffer,20,"%f", imuData.gyroscope.x);
+	_rawDataGrid->SetCellValue(X_ROW, GYRO_COL,buffer);
+	snprintf(buffer,20,"%f", imuData.gyroscope.y);	
+	_rawDataGrid->SetCellValue(Y_ROW, GYRO_COL,buffer);
+	snprintf(buffer,20,"%f", imuData.gyroscope.z);	
+	_rawDataGrid->SetCellValue(Z_ROW, GYRO_COL,buffer);
+	
+	snprintf(buffer,20,"%f", imuData.magnetometer.x);
+	_rawDataGrid->SetCellValue(X_ROW, MAG_COL,buffer);
+	snprintf(buffer,20,"%f", imuData.magnetometer.y);	
+	_rawDataGrid->SetCellValue(Y_ROW, MAG_COL,buffer);
+	snprintf(buffer,20,"%f", imuData.magnetometer.z);	
+	_rawDataGrid->SetCellValue(Z_ROW, MAG_COL,buffer);
+
+}
+
+void MyFrame::StaticUpdateOrientationData(Point_t orientation) {
+    if (instance)
+        instance->UpdateOrientationData(orientation);
+}
+
+void MyFrame::UpdateOrientationData(Point_t orientation)
+{
+	/*logMessage("UpdateOrientationData");
+		char message[255];
+	snprintf(message, 255, "orientation: (%f,%f,%f)", 
+		orientation.x, orientation.y, orientation.z
+	);
+	logMessage(message);*/
+	char buffer[20];
+	
+	snprintf(buffer,20,"%f", orientation.x);	
+	_orientationGrid->SetCellValue(READING_ROW, ROLL_COL,buffer);
+	snprintf(buffer,20,"%f", orientation.y);
+	_orientationGrid->SetCellValue(READING_ROW, PITCH_COL,buffer);
+	snprintf(buffer,20,"%f", orientation.z);	
+	_orientationGrid->SetCellValue(READING_ROW, YAW_COL,buffer);
 }
 
 // Set a callback function for when there's grid data to display.
@@ -233,6 +291,8 @@ void MyFrame::BuildBufferDisplayCallBack()
 	_drawingData = false;
 	MyFrame::instance = this;//&frameInstance;
 	setDisplayBufferCallback(MyFrame::StaticUpdateGrid);
+	setImuDataCallback(MyFrame::StaticUpdateImuData);
+	setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
 }
 
 void MyFrame::showMessage(const char *message)
@@ -463,12 +523,10 @@ void MyFrame::DebugPrint(const char *name, const unsigned char *data, int len)
 
 
 
-void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
+void MyFrame::UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead)
 {
 	char messageBuffer[BUFFER_SIZE];		
-	snprintf(messageBuffer,256,"UpdateGrid called: %d bytes read", bytesRead);
-	DebugPrint("UpdateGrid", serialBufferMessage, bytesRead);
-	logMessage(messageBuffer);	
+	//debugPrint("UpdateGrid:", serialBufferMessage, bytesRead, false);
 
 	if (_drawingData)
 	{
@@ -478,18 +536,17 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 		
 	_drawingData = true;
 
-	logMessage((char*)serialBufferMessage);	
+	//logMessage((char*)serialBufferMessage);	
 	if (bytesRead < 40)
 	{
-		logMessage("    too few bytes read");
+		logMessage("    too few bytes read - exiting UpdateGrid");
 		_drawingData = false;
-		logMessage("    exiting UpdateGrid");
 		return;
 	}
 	
 	if (strcmp(messageBuffer,"reset check") == 0)
 	{
-		logMessage("    doing reset check");
+		logMessage("    doing reset check - exiting UpdateGrid");
 		_drawingData = false;
 		return;
 	}
@@ -497,25 +554,27 @@ void MyFrame::UpdateGrid(unsigned char *serialBufferMessage, int bytesRead)
 	char *token = strtok((char*)serialBufferMessage,":");
 	if (token == NULL)
 	{
-	  char errorMessage[640];
-	  snprintf(errorMessage, 640, "    no colon in message '%s', %d", serialBufferMessage, bytesRead);
-	  logMessage(errorMessage);
+		char errorMessage[640];
+		snprintf(errorMessage, 640, "    no colon in message '%s', %d - exiting UpdateGrid", serialBufferMessage, bytesRead);
+		logMessage(errorMessage);
+		_drawingData = false;
+		return;
 	}
     else
     {
     	char commandMessage[640];
-	    snprintf(commandMessage, 640, "command: '%s'", token);
-    	logMessage((char*)commandMessage);
+	    //snprintf(commandMessage, 640, "command: '%s'", token);
+    	//logMessage((char*)commandMessage);
     	
     	if (strcmp(token,"Raw") == 0)
 		{
-		    logMessage("read Raw");
+		    //logMessage("read Raw");
 		    _statusMessage->SetLabelText("read Raw2");
 			//UpdateRawDataGrid((char*)serialBufferMessage);
 		}
-		else if (strcmp(token,"orientationOutput") == 0)
+		else if (strcmp(token,"Ori") == 0)
 		{
-			logMessage("read orientation");
+			//logMessage("read orientation");
 			_statusMessage->SetLabelText(token);
 			//UpdateOrientationGrid(token);
 		}
@@ -562,6 +621,7 @@ void MyFrame::UpdateRawDataGrid(char *token)
 	if (token == NULL) return;
 	_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);
 }
+
 
 void MyFrame::UpdateOrientationGrid(char *token)
 {

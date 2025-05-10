@@ -4,6 +4,141 @@
 #include <stdbool.h>
 #define BUFFER_SIZE 512
 
+// Define Callbacks
+typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*imuDataCallback)(ImuData rawData);
+typedef void (*orientationDataCallback)(Point_t orientation);
+
+// Define local references to callbacks
+displayBufferCallback _displayBufferCallback;
+imuDataCallback _imuDataCallback;
+orientationDataCallback _orientationDataCallback;
+
+// Setters to callbacks
+void setDisplayBufferCallback(displayBufferCallback displayBufferCallback)
+{
+	_displayBufferCallback = displayBufferCallback;
+}
+
+void setImuDataCallback(imuDataCallback imuDataCallback)
+{
+	_imuDataCallback = imuDataCallback;
+}
+
+void setOrientationDataCallback(orientationDataCallback orientationDataCallback)
+{
+	_orientationDataCallback = orientationDataCallback;
+}
+
+// Wrappers around callbacks, adding null-safety tests
+void fireBufferDisplayCallback(const unsigned char *data, int len)
+{
+	if(_displayBufferCallback != NULL)
+		_displayBufferCallback(data, len);
+}
+
+void fireImuCallback(ImuData data)
+{
+	logMessage("into fireImuCallback");
+	if (_imuDataCallback != NULL)
+		_imuDataCallback(data);
+}
+
+void fireOrientationCallback(Point_t orientation)
+{
+	logMessage("into fireOrientationCallback");
+	if (_orientationDataCallback != NULL)
+		_orientationDataCallback(orientation);
+}
+
+// data callback wrapper, inflating data from unsigned char* into ImuData or Vector3D 
+// depending on raw data
+void sendDataCallback(const unsigned char *data, int len)
+{
+    if (len <= 0 || data == NULL) return;
+
+    char buffer[len + 1];
+    memcpy(buffer, data, len);
+    buffer[len] = '\0'; // null-terminate
+    if (memcmp(buffer, "Raw", 3) == 0)
+    {
+        debugPrint("sendDataCallback(Raw)", data, len, false);
+
+        char *token = strtok(buffer, " \r\n"); // "Raw"
+        token = strtok(NULL, " \r\n");         // CSV part
+
+        if (!token) {
+            logMessage("Malformed Raw data: no CSV payload");
+            return;
+        }
+
+        ImuData imuData;
+        char *val = strtok(token, ",");
+        if (!val) { logMessage("Missing accel.x"); return; }
+        imuData.accelerometer.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing accel.y"); return; }
+        imuData.accelerometer.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing accel.z"); return; }
+        imuData.accelerometer.z = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing gyro.x"); return; }
+        imuData.gyroscope.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing gyro.y"); return; }
+        imuData.gyroscope.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing gyro.z"); return; }
+        imuData.gyroscope.z = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing mag.x"); return; }
+        imuData.magnetometer.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing mag.y"); return; }
+        imuData.magnetometer.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing mag.z"); return; }
+        imuData.magnetometer.z = strtof(val, NULL);
+        fireImuCallback(imuData);
+    }
+    else if (memcmp(buffer, "Ori", 3) == 0)
+    {
+        char *token = strtok(buffer, " "); // "Ori"
+        token = strtok(NULL, " ");         // CSV part
+
+        if (!token) {
+            logMessage("Malformed Ori data: no CSV payload");
+            return;
+        }
+
+        Point_t orientationData;
+
+        char *val = strtok(token, ",");
+        if (!val) { logMessage("Missing ori.x"); return; }
+        orientationData.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing ori.y"); return; }
+        orientationData.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing ori.z"); return; }
+        orientationData.z = strtof(val, NULL);
+
+        fireOrientationCallback(orientationData);
+    }
+}
+
+// Logging functions
 void logMessage(const char *message) 
 {
     int fd = open("log.txt", O_WRONLY | O_APPEND | O_CREAT, 0644);  // Open file in append mode
@@ -19,12 +154,31 @@ void logMessage(const char *message)
     close(fd);  // Close the file
 }
 
-
-typedef void (*displayBufferCallback)(unsigned char *serialBufferMessage, int bytesRead);
-displayBufferCallback _displayBufferCallback;
-void setDisplayBufferCallback(displayBufferCallback displayBufferCallback)
+void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex)
 {
-	_displayBufferCallback = displayBufferCallback;
+	int i;
+    int charWidth = showHex? 6:1; 
+	int lengthName = strlen(name);
+	
+    int len = lengthName + 5 + (lengthData*charWidth);
+    char message[len];
+	snprintf(message, sizeof(message), "%s ", name);
+    char* messagePtr = message + strlen(message);
+    
+    for (i = 0; i < lengthData; i++) 
+    {
+    	char thisChar[charWidth + 1];
+    		snprintf(thisChar, sizeof(thisChar), 
+    			showHex? "%02X[%c] ": "%c", 
+    			data[i],(data[i] >= 32 && data[i] <= 126) ? data[i] : '.');	
+		if (messagePtr - message + strlen(thisChar) < sizeof(message)) {
+            strcpy(messagePtr, thisChar);
+            messagePtr += strlen(thisChar);
+        } else {
+            break; // Avoid buffer overflow
+        }
+	}	
+	logMessage(message);
 }
 
 int _bufferOffset = 0;
@@ -48,21 +202,6 @@ unsigned char* buildBuffer(const unsigned char *data, int len)
 		}		
 	}
 	return serialBuffer;
-}
-
-
-void fireBufferDisplayCallback(const unsigned char *data, int len)
-{
-	if(_displayBufferCallback != NULL)
-	{
-		unsigned char *serialBuffer = buildBuffer(data, len);
-		//logMessage((const char*)serialBuffer);
-		_displayBufferCallback((unsigned char*)&serialBuffer, len);
-	}
-	else
-	{
-		logMessage("_displayBufferCallback is null");
-	}
 }
 
 void print_data(const char *name, const unsigned char *data, int len)
@@ -427,10 +566,10 @@ fail:
 
 static void newdata(const unsigned char *data, int len)
 {
-	logMessage("inside newdata");
-	packet_parse(data, len);
-	ascii_parse(data, len);
+	//packet_parse(data, len);
+	//ascii_parse(data, len);
 	//buildBuffer(data, len);
+	sendDataCallback(data, len);
 	fireBufferDisplayCallback(data, len);
 }
 
@@ -618,9 +757,6 @@ int read_serial_data(void)
     unsigned char newReadCharacter, lastReadCharacter = 0;
     char message[256];
 
-    snprintf(message, sizeof(message), "into read_serial_data");
-    logMessage(message);
-
     if (portfd < 0) {
         logMessage("    portfd < 0");
         return -1;
@@ -692,8 +828,6 @@ int read_serial_data(void)
 
         if (lineComplete) {
             line[lineOffset - 1] = '\0'; // strip line ending
-            snprintf(message, sizeof(message), "    read line (%d bytes): '%s'", lineOffset, line);
-            logMessage(message);
             newdata(line, lineOffset);
             lineOffset = 0;
             return lineOffset;  // Successfully read a line
