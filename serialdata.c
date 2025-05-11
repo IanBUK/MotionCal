@@ -7,7 +7,7 @@
 // Define Callbacks
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*imuDataCallback)(ImuData rawData);
-typedef void (*orientationDataCallback)(Point_t orientation);
+typedef void (*orientationDataCallback)(YawPitchRoll orientation);
 
 // Define local references to callbacks
 displayBufferCallback _displayBufferCallback;
@@ -44,7 +44,7 @@ void fireImuCallback(ImuData data)
 		_imuDataCallback(data);
 }
 
-void fireOrientationCallback(Point_t orientation)
+void fireOrientationCallback(YawPitchRoll orientation)
 {
 	logMessage("into fireOrientationCallback");
 	if (_orientationDataCallback != NULL)
@@ -120,21 +120,21 @@ void sendDataCallback(const unsigned char *data, int len)
             return;
         }
 
-        Point_t orientationData;
+        YawPitchRoll orientation;
 
         char *val = strtok(token, ",");
         if (!val) { logMessage("Missing ori.x"); return; }
-        orientationData.x = strtof(val, NULL);
+        orientation.yaw = strtof(val, NULL);
 
         val = strtok(NULL, ",");
         if (!val) { logMessage("Missing ori.y"); return; }
-        orientationData.y = strtof(val, NULL);
+        orientation.pitch = strtof(val, NULL);
 
         val = strtok(NULL, ",");
         if (!val) { logMessage("Missing ori.z"); return; }
-        orientationData.z = strtof(val, NULL);
+        orientation.roll = strtof(val, NULL);
 
-        fireOrientationCallback(orientationData);
+        fireOrientationCallback(orientation);
     }
 }
 

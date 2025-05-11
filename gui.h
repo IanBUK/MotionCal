@@ -167,8 +167,8 @@ private:
 	void UpdateImuData(ImuData imuData);
 	static void StaticUpdateImuData(ImuData imuData);
 	
-	void UpdateOrientationData(Point_t orientation);	
-	static void StaticUpdateOrientationData(Point_t orientation);
+	void UpdateOrientationData(YawPitchRoll orientation);	
+	static void StaticUpdateOrientationData(YawPitchRoll orientation);
 	
 	void UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUpdateGrid(const unsigned char* buffer, int size);

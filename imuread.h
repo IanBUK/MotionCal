@@ -55,6 +55,12 @@ typedef struct {
 	//int valid;
 } Point_t;
 
+typedef struct {
+	float yaw;
+	float pitch;
+	float roll;
+} YawPitchRoll;
+
 typedef struct 
 {
 	Point_t accelerometer;
@@ -81,7 +87,7 @@ extern void debugPrint(const char *name, const unsigned char *data, int lengthDa
 
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*imuDataCallback)(ImuData rawData);
-typedef void (*orientationDataCallback)(Point_t orientation);
+typedef void (*orientationDataCallback)(YawPitchRoll orientation);
 
 
 extern void setDisplayBufferCallback(displayBufferCallback displayBufferCallback);

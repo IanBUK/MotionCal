@@ -260,12 +260,12 @@ void MyFrame::UpdateImuData(ImuData imuData)
 
 }
 
-void MyFrame::StaticUpdateOrientationData(Point_t orientation) {
+void MyFrame::StaticUpdateOrientationData(YawPitchRoll orientation) {
     if (instance)
         instance->UpdateOrientationData(orientation);
 }
 
-void MyFrame::UpdateOrientationData(Point_t orientation)
+void MyFrame::UpdateOrientationData(YawPitchRoll orientation)
 {
 	/*logMessage("UpdateOrientationData");
 		char message[255];
@@ -275,12 +275,12 @@ void MyFrame::UpdateOrientationData(Point_t orientation)
 	logMessage(message);*/
 	char buffer[20];
 	
-	snprintf(buffer,20,"%f", orientation.x);	
-	_orientationGrid->SetCellValue(READING_ROW, ROLL_COL,buffer);
-	snprintf(buffer,20,"%f", orientation.y);
-	_orientationGrid->SetCellValue(READING_ROW, PITCH_COL,buffer);
-	snprintf(buffer,20,"%f", orientation.z);	
+	snprintf(buffer,20,"%f", orientation.yaw);	
 	_orientationGrid->SetCellValue(READING_ROW, YAW_COL,buffer);
+	snprintf(buffer,20,"%f", orientation.pitch);
+	_orientationGrid->SetCellValue(READING_ROW, PITCH_COL,buffer);
+	snprintf(buffer,20,"%f", orientation.roll);	
+	_orientationGrid->SetCellValue(READING_ROW, ROLL_COL,buffer);
 }
 
 // Set a callback function for when there's grid data to display.
