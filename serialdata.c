@@ -1,15 +1,219 @@
 #include "imuread.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <stdbool.h>
+#define BUFFER_SIZE 512
 
+// Define Callbacks
+typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*imuDataCallback)(ImuData rawData);
+typedef void (*orientationDataCallback)(YawPitchRoll orientation);
+
+// Define local references to callbacks
+displayBufferCallback _displayBufferCallback;
+imuDataCallback _imuDataCallback;
+orientationDataCallback _orientationDataCallback;
+
+// Setters to callbacks
+void setDisplayBufferCallback(displayBufferCallback displayBufferCallback)
+{
+	_displayBufferCallback = displayBufferCallback;
+}
+
+void setImuDataCallback(imuDataCallback imuDataCallback)
+{
+	_imuDataCallback = imuDataCallback;
+}
+
+void setOrientationDataCallback(orientationDataCallback orientationDataCallback)
+{
+	_orientationDataCallback = orientationDataCallback;
+}
+
+// Wrappers around callbacks, adding null-safety tests
+void fireBufferDisplayCallback(const unsigned char *data, int len)
+{
+	if(_displayBufferCallback != NULL)
+		_displayBufferCallback(data, len);
+}
+
+void fireImuCallback(ImuData data)
+{
+	if (_imuDataCallback != NULL)
+		_imuDataCallback(data);
+}
+
+void fireOrientationCallback(YawPitchRoll orientation)
+{
+	if (_orientationDataCallback != NULL)
+		_orientationDataCallback(orientation);
+}
+
+// data callback wrapper, inflating data from unsigned char* into ImuData or Vector3D 
+// depending on raw data
+void sendDataCallback(const unsigned char *data, int len)
+{
+    if (len <= 0 || data == NULL) return;
+
+    char buffer[len + 1];
+    memcpy(buffer, data, len);
+    buffer[len] = '\0'; // null-terminate
+    if (memcmp(buffer, "Raw", 3) == 0)
+    {
+        char *token = strtok(buffer, " \r\n"); // "Raw"
+        token = strtok(NULL, " \r\n");         // CSV part
+
+        if (!token) {
+            logMessage("Malformed Raw data: no CSV payload");
+            return;
+        }
+
+        ImuData imuData;
+        char *val = strtok(token, ",");
+        if (!val) { logMessage("Missing accel.x"); return; }
+        imuData.accelerometer.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing accel.y"); return; }
+        imuData.accelerometer.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing accel.z"); return; }
+        imuData.accelerometer.z = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing gyro.x"); return; }
+        imuData.gyroscope.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing gyro.y"); return; }
+        imuData.gyroscope.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing gyro.z"); return; }
+        imuData.gyroscope.z = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing mag.x"); return; }
+        imuData.magnetometer.x = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing mag.y"); return; }
+        imuData.magnetometer.y = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing mag.z"); return; }
+        imuData.magnetometer.z = strtof(val, NULL);
+        fireImuCallback(imuData);
+    }
+    else if (memcmp(buffer, "Ori", 3) == 0)
+    {
+        char *token = strtok(buffer, " "); // "Ori"
+        token = strtok(NULL, " ");         // CSV part
+
+        if (!token) {
+            logMessage("Malformed Ori data: no CSV payload");
+            return;
+        }
+
+        YawPitchRoll orientation;
+
+        char *val = strtok(token, ",");
+        if (!val) { logMessage("Missing ori.x"); return; }
+        orientation.yaw = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing ori.y"); return; }
+        orientation.pitch = strtof(val, NULL);
+
+        val = strtok(NULL, ",");
+        if (!val) { logMessage("Missing ori.z"); return; }
+        orientation.roll = strtof(val, NULL);
+
+        fireOrientationCallback(orientation);
+    }
+}
+
+// Logging functions
+void logMessage(const char *message) 
+{
+    int fd = open("log.txt", O_WRONLY | O_APPEND | O_CREAT, 0644);  // Open file in append mode
+
+    if (fd < 0) {
+        perror("Error opening log file");
+        return;
+    }
+
+    write(fd, message, strlen(message));  // Write message
+    write(fd, "\n", 1);  // Newline for readability
+
+    close(fd);  // Close the file
+}
+
+void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex)
+{
+	int i;
+    int charWidth = showHex? 6:1; 
+	int lengthName = strlen(name);
+	
+    int len = lengthName + 5 + (lengthData*charWidth);
+    char message[len];
+	snprintf(message, sizeof(message), "%s ", name);
+    char* messagePtr = message + strlen(message);
+    
+    for (i = 0; i < lengthData; i++) 
+    {
+    	char thisChar[charWidth + 1];
+    		snprintf(thisChar, sizeof(thisChar), 
+    			showHex? "%02X[%c] ": "%c", 
+    			data[i],(data[i] >= 32 && data[i] <= 126) ? data[i] : '.');	
+		if (messagePtr - message + strlen(thisChar) < sizeof(message)) {
+            strcpy(messagePtr, thisChar);
+            messagePtr += strlen(thisChar);
+        } else {
+            break; // Avoid buffer overflow
+        }
+	}	
+	logMessage(message);
+}
+
+int _bufferOffset = 0;
+
+unsigned char* buildBuffer(const unsigned char *data, int len)
+{
+    int firstLine = 1;
+	unsigned char serialBuffer[BUFFER_SIZE];
+	for(int i = 0; i< len; i++)
+	{
+		if (firstLine == 1)
+			serialBuffer[i] = data[i];
+		if (data[i] == '\n' || data[i] =='\r')
+		{
+			serialBuffer[i] = '\0';
+			firstLine = 0;
+			// hit a newline
+			//_serialBuffer[_bufferOffset] ='\0';
+			//strcpy((char *)serialBuffer, (char *)_serialBuffer);
+			//_bufferOffset = 0;
+		}		
+	}
+	return serialBuffer;
+}
 
 void print_data(const char *name, const unsigned char *data, int len)
 {
 	int i;
+    char message[60];
+    
+	snprintf(message, 60, "log data : '%s', %d", name, len);
+	logMessage(message);
 
-	printf("%s (%2d bytes):", name, len);
 	for (i=0; i < len; i++) {
-		printf(" %02X", data[i]);
+		snprintf(message, 60, "    %02X [%c]", data[i], data[i]);
+	    logMessage(message);
 	}
-	printf("\n");
+	snprintf(message, 60, "done %d", len);
+	logMessage(message);
 }
 
 static int packet_primary_data(const unsigned char *data)
@@ -98,7 +302,7 @@ static int packet(const unsigned char *data, int len)
 static int packet_encoded(const unsigned char *data, int len)
 {
 	const unsigned char *p;
-	unsigned char buf[256];
+	unsigned char buf[BUFFER_SIZE];
 	int buflen=0, copylen;
 
 	//printf("packet_encoded, len = %d\n", len);
@@ -137,7 +341,7 @@ static int packet_encoded(const unsigned char *data, int len)
 
 static int packet_parse(const unsigned char *data, int len)
 {
-	static unsigned char packetbuf[256];
+	static unsigned char packetbuf[BUFFER_SIZE];
 	static unsigned int packetlen=0;
 	const unsigned char *p;
 	int copylen;
@@ -182,6 +386,7 @@ static int packet_parse(const unsigned char *data, int len)
 #define ASCII_STATE_CAL1  2
 #define ASCII_STATE_CAL2  3
 
+
 static int ascii_parse(const unsigned char *data, int len)
 {
 	static int ascii_state=ASCII_STATE_WORD;
@@ -197,6 +402,7 @@ static int ascii_parse(const unsigned char *data, int len)
 	for (p = (const char *)data ; p < end; p++) {
 		if (ascii_state == ASCII_STATE_WORD) {
 			if (ascii_count == 0) {
+
 				if (*p == 'R') {
 					ascii_num = ASCII_STATE_RAW;
 					ascii_count = 1;
@@ -221,6 +427,7 @@ static int ascii_parse(const unsigned char *data, int len)
 					ascii_count = 0;
 				}
 			} else if (ascii_count == 3) {
+
 				if (*p == ':' && ascii_num == ASCII_STATE_RAW) {
 					ascii_state = ASCII_STATE_RAW;
 					ascii_raw_data_count = 0;
@@ -236,6 +443,7 @@ static int ascii_parse(const unsigned char *data, int len)
 					ascii_count = 0;
 				}
 			} else if (ascii_count == 4) {
+
 				if (*p == ':' && ascii_num == ASCII_STATE_CAL1) {
 					ascii_state = ASCII_STATE_CAL1;
 					ascii_raw_data_count = 0;
@@ -265,7 +473,7 @@ static int ascii_parse(const unsigned char *data, int len)
 			} else if (*p == ',') {
 				//printf("ascii_parse comma, %d\n", ascii_num);
 				if (ascii_neg) ascii_num = -ascii_num;
-				if (ascii_num < -32768 && ascii_num > 32767) goto fail;
+				if (ascii_num < -32768 || ascii_num > 32767) goto fail;
 				if (ascii_raw_data_count >= 8) goto fail;
 				ascii_raw_data[ascii_raw_data_count++] = ascii_num;
 				ascii_num = 0;
@@ -274,7 +482,7 @@ static int ascii_parse(const unsigned char *data, int len)
 			} else if (*p == 13) {
 				//printf("ascii_parse newline\n");
 				if (ascii_neg) ascii_num = -ascii_num;
-				if (ascii_num < -32768 && ascii_num > 32767) goto fail;
+				if (ascii_num < -32768 || ascii_num > 32767) goto fail;
 				if (ascii_raw_data_count != 8) goto fail;
 				ascii_raw_data[ascii_raw_data_count] = ascii_num;
 				raw_data(ascii_raw_data);
@@ -284,6 +492,7 @@ static int ascii_parse(const unsigned char *data, int len)
 				ascii_neg = 0;
 				ascii_count = 0;
 				ascii_state = ASCII_STATE_WORD;
+								
 			} else if (*p == 10) {
 			} else {
 				goto fail;
@@ -326,6 +535,7 @@ static int ascii_parse(const unsigned char *data, int len)
 				} else if (ascii_state == ASCII_STATE_CAL2) {
 					cal2_data(ascii_cal_data);
 				}
+				
 				ret = 1;
 				ascii_raw_data_count = 0;
 				ascii_num = 0;
@@ -352,16 +562,24 @@ fail:
 
 static void newdata(const unsigned char *data, int len)
 {
-	packet_parse(data, len);
-	ascii_parse(data, len);
-	// TODO: learn which one and skip the other
+	//packet_parse(data, len);
+	//ascii_parse(data, len);
+	//buildBuffer(data, len);
+	sendDataCallback(data, len);
+	fireBufferDisplayCallback(data, len);
 }
-
-
 
 #if defined(LINUX) || defined(MACOSX)
 
 static int portfd=-1;
+typedef enum {
+    LINE_ENDING_NOTSET,
+    LINE_ENDING_LF,    // "\n"
+    LINE_ENDING_CR,    // "\r"
+    LINE_ENDING_CRLF   // "\r\n"
+} LineEnding;
+
+LineEnding _lineEndingMode = LINE_ENDING_NOTSET;
 
 int port_is_open(void)
 {
@@ -369,60 +587,252 @@ int port_is_open(void)
 	return 0;
 }
 
-int open_port(const char *name)
+int open_port_by_name(const char *name)
 {
 	struct termios termsettings;
 	int r;
+    char message[60];
+    
 
+	logMessage("into open_port");
 	portfd = open(name, O_RDWR | O_NONBLOCK);
-	if (portfd < 0) return 0;
+	if (portfd < 0) 
+	{
+		logMessage("open_port failed");
+		return 0;
+	}
 	r = tcgetattr(portfd, &termsettings);
 	if (r < 0) {
+		logMessage("couldn't get terminal settings");
 		close_port();
 		return 0;
 	}
+	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	
 	cfmakeraw(&termsettings);
 	cfsetspeed(&termsettings, B115200);
+	
 	r = tcsetattr(portfd, TCSANOW, &termsettings);
 	if (r < 0) {
+	    logMessage("tcsetattr failed");
 		close_port();
 		return 0;
 	}
+	
+	r = tcgetattr(portfd, &termsettings);
+	if (r < 0) {
+		logMessage("couldn't get terminal settings");
+		close_port();
+		return 0;
+	}
+	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	return 1;
+}
+
+speed_t getBaudRateFromString(const char *baudrate_str) {
+    if (strcmp(baudrate_str, "0") == 0) return B0;
+    else if (strcmp(baudrate_str, "300") == 0) return B300;
+    else if (strcmp(baudrate_str, "1200") == 0) return B1200;
+    else if (strcmp(baudrate_str, "2400") == 0) return B2400;
+    else if (strcmp(baudrate_str, "4800") == 0) return B4800;
+    else if (strcmp(baudrate_str, "9600") == 0) return B9600;
+    else if (strcmp(baudrate_str, "19200") == 0) return B19200;
+    else if (strcmp(baudrate_str, "38400") == 0) return B38400;
+    else if (strcmp(baudrate_str, "57600") == 0) return B57600;
+    else if (strcmp(baudrate_str, "115200") == 0) return B115200;
+    else if (strcmp(baudrate_str, "230400") == 0) return B230400;
+    else {
+        return (speed_t)-1; // invalid or unsupported baud rate
+    }
+}
+
+
+int open_port(const char *name, const char *baud, const char *lineEnding)
+{
+	struct termios termsettings;
+	int r;
+    char message[60];
+    
+	logMessage("into open_port");
+	portfd = open(name, O_RDWR | O_NONBLOCK);
+	snprintf(message, 60, "    portfd: '%d' ", portfd);
+	logMessage(message);
+	if (portfd < 0) 
+	{
+		logMessage("open_port failed");
+		return -2;
+	}
+	r = tcgetattr(portfd, &termsettings);
+	if (r < 0) {
+		logMessage("couldn't get terminal settings");
+		close_port();
+		return -1;
+	}
+	
+	if (strcmp(lineEnding, "LF") == 0) _lineEndingMode = LINE_ENDING_LF;
+	if (strcmp(lineEnding, "CR") == 0) _lineEndingMode = LINE_ENDING_CR;
+	if (strcmp(lineEnding, "CRLF") == 0) _lineEndingMode = LINE_ENDING_CRLF;
+	
+	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
+	
+	cfmakeraw(&termsettings);
+	speed_t realBaudRate = getBaudRateFromString(baud);
+	cfsetspeed(&termsettings, realBaudRate);
+	
+	r = tcsetattr(portfd, TCSANOW, &termsettings);
+	if (r < 0) {
+	    logMessage("tcsetattr failed");
+		close_port();
+		return -3;
+	}
+	
+	r = tcgetattr(portfd, &termsettings);
+	if (r < 0) {
+		logMessage("couldn't get terminal settings");
+		close_port();
+		return -4;
+	}
+	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
+	logMessage(message);
+	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
+	//logMessage(message);	
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);	
 	return 1;
 }
 
 int read_serial_data(void)
 {
-	unsigned char buf[256];
-	static int nodata_count=0;
-	int n;
+    static unsigned char line[BUFFER_SIZE];
+    static int lineOffset = 0;
+    static unsigned char buffer[BUFFER_SIZE];
+    static int bufferIndex = 0;
+    static int bytesReadFromSerial = 0;
+    static int bytesRemainingToProcess = 0;
+    static int nodata_count = 0;
 
-	if (portfd < 0) return -1;
-	while (1) {
-		n = read(portfd, buf, sizeof(buf));
-		if (n > 0 && n <= sizeof(buf)) {
-			newdata(buf, n);
-			nodata_count = 0;
-			return n;
-		} else if (n == 0) {
-			if (++nodata_count > 6) {
-				close_port();
-				nodata_count = 0;
-				close_port();
-				return -1;
-			}
-			return 0;
-		} else {
-			n = errno;
-			if (n == EAGAIN) {
-				return 0;
-			} else if (n == EINTR) {
-			} else {
-				close_port();
-				return -1;
-			}
-		}
-	}
+    unsigned char newReadCharacter, lastReadCharacter = 0;
+    char message[256];
+
+    if (portfd < 0) {
+        logMessage("    portfd < 0");
+        return -1;
+    }
+
+    if (_lineEndingMode == LINE_ENDING_NOTSET) {
+        logMessage("    _lineEndingMode not set");
+        return -1;
+    }
+
+    // If nothing left to process, read from serial
+    if (bytesRemainingToProcess <= 0) {
+        bytesReadFromSerial = read(portfd, buffer, BUFFER_SIZE);
+
+        if (bytesReadFromSerial < 0) {
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                usleep(10000); // 10 ms wait
+                return 0;      // no data, not an error
+            } else {
+                snprintf(message, sizeof(message), "read error: %s", strerror(errno));
+                logMessage(message);
+                return -1;
+            }
+        }
+
+        if (bytesReadFromSerial == 0) {
+            if (++nodata_count > 6) {
+                logMessage("    nodata_count hit 6 — closing port");
+                close_port();
+                nodata_count = 0;
+                return -1;
+            }
+            return 0;
+        }
+
+        // Reset buffer processing state
+        nodata_count = 0;
+        bufferIndex = 0;
+        bytesRemainingToProcess = bytesReadFromSerial;
+    }
+
+    while (bufferIndex < bytesReadFromSerial) {
+        newReadCharacter = buffer[bufferIndex++];
+        bytesRemainingToProcess--;
+
+        // Add char to line
+        if (lineOffset < BUFFER_SIZE - 1) 
+        {
+            line[lineOffset++] = newReadCharacter;
+        } else 
+        {
+            logMessage("line buffer overflow, resetting");
+            lineOffset = 0;
+            continue;
+        }
+
+        // Line ending check
+        bool lineComplete = false;
+
+        if ((_lineEndingMode == LINE_ENDING_LF && newReadCharacter == '\n') ||
+        	(_lineEndingMode == LINE_ENDING_CR && newReadCharacter == '\r'))
+        {
+            lineComplete = true;
+        }
+        else if (_lineEndingMode == LINE_ENDING_CRLF && lastReadCharacter == '\r' && newReadCharacter == '\n') {
+            line[lineOffset - 2] = '\0'; // strip CR
+            lineComplete = true;
+        }
+
+        if (lineComplete) {
+            line[lineOffset - 1] = '\0'; // strip line ending
+            newdata(line, lineOffset);
+            lineOffset = 0;
+            return lineOffset;  // Successfully read a line
+        }
+
+        lastReadCharacter = newReadCharacter;
+    }
+
+    return 0;  // Buffer exhausted, but no complete line yet
 }
 
 int write_serial_data(const void *ptr, int len)
@@ -539,13 +949,14 @@ int open_port(const char *name)
 	return 1;
 }
 
-int read_serial_data(void)
+int read_serial_data3(void)
 {
 	COMSTAT st;
 	DWORD errmask=0, num_read, num_request;
 	OVERLAPPED ov;
-	unsigned char buf[256];
+	unsigned char buf[BUFFER_SIZE];
 	int r;
+	logMessage("read_serial_data: line 753");
 
 	if (port_handle == INVALID_HANDLE_VALUE) return -1;
 	while (1) {
