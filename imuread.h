@@ -12,6 +12,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdbool.h>
+
 #if defined(LINUX)
   #include <termios.h>
   #include <unistd.h>
@@ -54,6 +56,21 @@ typedef struct {
 } Point_t;
 
 typedef struct {
+	float yaw;
+	float pitch;
+	float roll;
+} YawPitchRoll;
+
+typedef struct 
+{
+	Point_t accelerometer;
+	Point_t gyroscope;
+	Point_t magnetometer;
+} ImuData;
+
+
+
+typedef struct {
 	float q0; // w
 	float q1; // x
 	float q2; // y
@@ -62,10 +79,24 @@ typedef struct {
 extern Quaternion_t current_orientation;
 
 extern int port_is_open(void);
-extern int open_port(const char *name);
+extern int open_port(const char *name, const char *baud, const char *lineEnding);
+extern int open_port_by_name(const char *name);
 extern int read_serial_data(void);
+extern void logMessage(const char *message);
+extern void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex);
+
+typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*imuDataCallback)(ImuData rawData);
+typedef void (*orientationDataCallback)(YawPitchRoll orientation);
+
+
+extern void setDisplayBufferCallback(displayBufferCallback displayBufferCallback);
+extern void setImuDataCallback(imuDataCallback imuDataCallback);
+extern void setOrientationDataCallback(orientationDataCallback orientationDataCallback);
+
+
 extern int write_serial_data(const void *ptr, int len);
-extern unsigned char *getSerialBuffer();
+//extern unsigned char *getSerialBuffer();
 extern void close_port(void);
 void raw_data_reset(void);
 void cal1_data(const float *data);
