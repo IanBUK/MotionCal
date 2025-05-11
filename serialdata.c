@@ -3,18 +3,10 @@
 #include <unistd.h>
 #include <stdbool.h>
 #define BUFFER_SIZE 512
-
-unsigned char serialBuffer[256];
-unsigned char _serialBuffer[256];
-
-unsigned char *getSerialBuffer()
-{
-	return &serialBuffer;
-}
-
-
-
-
+#define ASCII_STATE_WORD  0
+#define ASCII_STATE_RAW   1
+#define ASCII_STATE_CAL1  2
+#define ASCII_STATE_CAL2  3
 
 
 // Define Callbacks
@@ -192,37 +184,6 @@ void debugPrint(const char *name, const unsigned char *data, int lengthData, boo
         }
 	}	
 	logMessage(message);
-}
-
-int _bufferOffset = 0;
-
-unsigned char* buildBuffer(const unsigned char *data, int len)
-{
-    int firstLine = 1;
-	unsigned char serialBuffer[BUFFER_SIZE];
-	for(int i = 0; i< len; i++)
-	{
-		if (firstLine == 1)
-			serialBuffer[i] = data[i];
-		if (data[i] == '\n' || data[i] =='\r')
-		{
-			serialBuffer[i] = '\0';
-			firstLine = 0;
-			// hit a newline
-			//_serialBuffer[_bufferOffset] ='\0';
-			//strcpy((char *)serialBuffer, (char *)_serialBuffer);
-			//_bufferOffset = 0;
-		}		
-	}
-	return serialBuffer;
-}
-
-unsigned char serialBuffer[256];
-unsigned char _serialBuffer[256];
-
-unsigned char *getSerialBuffer()
-{
-	return &serialBuffer;
 }
 
 void print_data(const char *name, const unsigned char *data, int len)
@@ -404,29 +365,6 @@ static int packet_parse(const unsigned char *data, int len)
 		}
 	}
 	return ret;
-}
-
-#define ASCII_STATE_WORD  0
-#define ASCII_STATE_RAW   1
-#define ASCII_STATE_CAL1  2
-#define ASCII_STATE_CAL2  3
-
-
-int _bufferOffset = 0;
-static void buildBuffer(const unsigned char *data, int len)
-{
-	for(int i = 0; i< len; i++)
-	{
-		_serialBuffer[_bufferOffset] = data[i];
-		_bufferOffset++;
-		if (data[i] == '\n' || data[i] =='\r')
-		{
-			// hit a newline
-			_serialBuffer[_bufferOffset] ='\0';
-			strcpy((char *)serialBuffer, (char *)_serialBuffer);
-			_bufferOffset = 0;
-		}		
-	}
 }
 
 static int ascii_parse(const unsigned char *data, int len)
