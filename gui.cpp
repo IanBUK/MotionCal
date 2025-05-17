@@ -226,6 +226,29 @@ void MyFrame::StaticUpdateImuData(ImuData imuData) {
 
 }
 
+void MyFrame::LogImuData(ImuData imuData)
+{
+	logMessage("into LogImuData");	
+	char buffer[120];
+	snprintf(buffer, 120, "Raw: a(%f,%f,%f),g(%f,%f,%f), m(%f,%f,%f)", 
+		imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
+		imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
+		imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z);
+	logMessage("    - built message");		
+	showMessageInLog(buffer);
+}
+
+void MyFrame::LogOrientiationData(YawPitchRoll orientation)
+{
+	logMessage("into LogOrientiationData");
+	char buffer[120];
+	snprintf(buffer, 120, "Ori: yaw: %f, pitch %f, roll %f", 
+		orientation.yaw, orientation.pitch, orientation.roll);
+	logMessage("    - built message");		
+	showMessageInLog(buffer);
+}
+
+
 void MyFrame::UpdateImuData(ImuData imuData)
 {
 	char buffer[20];
@@ -251,9 +274,8 @@ void MyFrame::UpdateImuData(ImuData imuData)
 	snprintf(buffer,20,"%f", imuData.magnetometer.z);	
 	_rawDataGrid->SetCellValue(Z_ROW, MAG_COL,buffer);
 	
-	
 	ProcessImuDataFromCallback(imuData);
-
+	LogImuData(imuData);
 }
 
 void MyFrame::StaticUpdateOrientationData(YawPitchRoll orientation) {
@@ -353,7 +375,6 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 	wxSizerItem* icon = row->Add(m_confirm_icon, 0, wxALL , 1);
 	icon->SetMinSize(wxSize(240, -1)); 
 	
-	
 	// Add the commands column
 	wxBoxSizer* commandsColumn = new wxBoxSizer(wxVERTICAL);
 	// Add the 'Clear' command
@@ -361,7 +382,6 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 	m_button_clear->Enable(false);
 	commandsColumn->Add(m_button_clear, 0, wxALL, 1);
 	m_button_clear->SetMinSize(wxSize(120, -1)); 
-	
 	
 	// Add the 'Send Calibration'
 	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Calibration");
@@ -395,15 +415,45 @@ wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
 
 wxSizer* MyFrame::BuildStatusPanel(wxPanel *parent)
 {	
-	const wxPoint messagesLocation = wxPoint(30,375);	
-	const wxSize messagesSize = wxSize(350,100);
+	const wxPoint messagesLocation = wxPoint(10,10);	
+	const wxSize messagesSize = wxSize(400,100);
 	
 	wxSizer *statusPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Messages");
-	_statusMessage = new wxStaticText(parent, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
-	_statusMessage->Wrap(300);
-	statusPanel->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
+	
+	_messageLog = new wxTextCtrl(parent, ID_MESSAGE_LOG, "",messagesLocation, messagesSize,
+		wxTE_MULTILINE | wxTE_DONTWRAP| wxTE_MULTILINE  | wxTE_LEFT,
+		wxDefaultValidator, "messageLog"); 
+	
+	wxTextAttr currentStyle;
+	/*_messageLog->GetStyle(0, currentStyle);
+	currentStyle.SetFontFamily(wxFONTFAMILY_TELETYPE);
+	currentStyle.SetFontSize(8);*/
+	
+	wxFont font(wxFontInfo(11).Family(wxFONTFAMILY_TELETYPE));
+	_messageLog->SetFont(font);
+	//_messageLog->SetStyle(0, 999999, currentStyle);
+	
+	statusPanel->Add(_messageLog, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);		
 	
 	return statusPanel;
+}
+
+void MyFrame::showMessageInLog(const char *message)
+{
+	int xPos = _messageLog->GetScrollPos(wxHORIZONTAL);
+	int yPos = _messageLog->GetScrollPos(wxVERTICAL);
+
+	_messageLog->AppendText(message);
+	_messageLog->AppendText('\n');
+	
+	int lineCount = _messageLog->GetNumberOfLines();
+	if (lineCount > 999)
+	{
+		long firstLineLength = _messageLog->GetLineLength(0);
+		_messageLog->Remove(0, firstLineLength + 1);  
+	}
+	
+	_messageLog->SetScrollPos(wxHORIZONTAL, xPos, true); 
 }
 
 void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
@@ -536,8 +586,6 @@ void MyFrame::DebugPrint(const char *name, const unsigned char *data, int len)
 	logMessage(message);
 }
 
-
-
 void MyFrame::UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead)
 {
 	char messageBuffer[BUFFER_SIZE];		
@@ -582,22 +630,16 @@ void MyFrame::UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead
     	
     	if (strcmp(token,"Raw") == 0)
 		{
-		    //logMessage("read Raw");
-		    _statusMessage->SetLabelText("read Raw2");
-			//UpdateRawDataGrid((char*)serialBufferMessage);
 		}
 		else if (strcmp(token,"Ori") == 0)
 		{
-			//logMessage("read orientation");
-			_statusMessage->SetLabelText(token);
-			//UpdateOrientationGrid(token);
 		}
 		else
 		{
 			char errorMessage[640];
-			snprintf(errorMessage, 640, "**Error '%s'", token);
+			snprintf(errorMessage, 640, "Unknown message: '%s'", token);
 			logMessage(errorMessage);		
-			_statusMessage->SetLabelText(errorMessage);
+			showMessageInLog(errorMessage);
 		}
 	}
 	_drawingData = false;
@@ -657,7 +699,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		read_serial_data();
 	} else {
 		if (!port_name.IsEmpty()) {
-			_statusMessage->SetLabelText("port has closed, updating stuff");
+			showMessageInLog("port has closed, updating stuff");
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_clear->Enable(false);
 			m_button_sendcal->Enable(false);
@@ -1008,8 +1050,7 @@ void MyFrame::showOpenPortOK(const char *name, const char *baudRate, const char 
    	char commandMessage[640];
     snprintf(commandMessage, 640, "Port opened: '%s', %s bps, %s line ending", name, baudRate, lineEnding);
    	logMessage((char*)commandMessage);
-
-    _statusMessage->SetLabelText(commandMessage);   
+    showMessageInLog(commandMessage);  
 }
 
 void MyFrame::OnAbout(wxCommandEvent &event)

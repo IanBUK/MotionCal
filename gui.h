@@ -46,6 +46,8 @@
 #define ID_PORTLIST			10004
 #define ID_BAUDLIST			10005
 #define ID_LINEENDINGLIST	10010
+#define ID_MESSAGE_LOG		10020
+
 
 #define X_ROW 0
 #define Y_ROW 1
@@ -105,6 +107,8 @@ private:
 	wxStaticText *m_mag_field;
 	wxStaticText *m_accel[3];
 	wxStaticText *m_gyro[3];
+	
+	wxTextCtrl *_messageLog;
 
 	MyCanvas *m_canvas;
 	wxTimer *m_timer;
@@ -147,7 +151,10 @@ private:
 	void showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
 	void showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
 	void showMessage(const char *message);
-	
+	void showMessageInLog(const char *message);
+	void LogImuData(ImuData imuData);
+	void LogOrientiationData(YawPitchRoll orientation);
+		
 	// Build UI components
 	void BuildMenu();
 	void BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
