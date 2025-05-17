@@ -153,7 +153,7 @@ private:
 	void showMessage(const char *message);
 	void showMessageInLog(const char *message);
 	void LogImuData(ImuData imuData);
-	void LogOrientiationData(YawPitchRoll orientation);
+	void LogOrientationData(YawPitchRoll orientation);
 		
 	// Build UI components
 	void BuildMenu();

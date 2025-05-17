@@ -238,7 +238,7 @@ void MyFrame::LogImuData(ImuData imuData)
 	showMessageInLog(buffer);
 }
 
-void MyFrame::LogOrientiationData(YawPitchRoll orientation)
+void MyFrame::LogOrientationData(YawPitchRoll orientation)
 {
 	logMessage("into LogOrientiationData");
 	char buffer[120];
@@ -285,20 +285,14 @@ void MyFrame::StaticUpdateOrientationData(YawPitchRoll orientation) {
 
 void MyFrame::UpdateOrientationData(YawPitchRoll orientation)
 {
-	/*logMessage("UpdateOrientationData");
-		char message[255];
-	snprintf(message, 255, "orientation: (%f,%f,%f)", 
-		orientation.x, orientation.y, orientation.z
-	);
-	logMessage(message);*/
 	char buffer[20];
-	
 	snprintf(buffer,20,"%f", orientation.yaw);	
 	_orientationGrid->SetCellValue(READING_ROW, YAW_COL,buffer);
 	snprintf(buffer,20,"%f", orientation.pitch);
 	_orientationGrid->SetCellValue(READING_ROW, PITCH_COL,buffer);
 	snprintf(buffer,20,"%f", orientation.roll);	
 	_orientationGrid->SetCellValue(READING_ROW, ROLL_COL,buffer);
+	LogOrientationData(orientation);
 }
 
 // Set a callback function for when there's grid data to display.
@@ -314,8 +308,7 @@ void MyFrame::BuildBufferDisplayCallBack()
 }
 
 void MyFrame::showMessage(const char *message)
-{
-	
+{	
 	char log[512];
 	snprintf(log, 512, "showMessage: '%s'\n", message);\
 	logMessage(log);
@@ -625,9 +618,7 @@ void MyFrame::UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead
     else
     {
     	char commandMessage[640];
-	    //snprintf(commandMessage, 640, "command: '%s'", token);
-    	//logMessage((char*)commandMessage);
-    	
+
     	if (strcmp(token,"Raw") == 0)
 		{
 		}
