@@ -340,16 +340,40 @@ wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
 
 wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 {
-	wxSizer *actionsPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Actions");
+	wxSizer *actionsPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Actions");	
 	actionsPanel->SetMinSize(wxSize(-1, 60)); 
+
+	// Create the row
+	wxBoxSizer* row = new wxBoxSizer(wxHORIZONTAL);
 	
+	// Add the status icon
+	wxImage::AddHandler(new wxPNGHandler);
+	const wxPoint bitmapLocation = wxPoint(5,5);//30,100);
+	m_confirm_icon = new wxStaticBitmap(parent, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
+	wxSizerItem* icon = row->Add(m_confirm_icon, 0, wxALL , 1);
+	icon->SetMinSize(wxSize(240, -1)); 
+	
+	
+	// Add the commands column
+	wxBoxSizer* commandsColumn = new wxBoxSizer(wxVERTICAL);
+	// Add the 'Clear' command
 	m_button_clear = new wxButton(parent, ID_CLEAR_BUTTON, "Clear");
 	m_button_clear->Enable(false);
-	actionsPanel->Add(m_button_clear, 1, wxEXPAND, 0);
-		
-	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Cal");
+	commandsColumn->Add(m_button_clear, 0, wxALL, 1);
+	m_button_clear->SetMinSize(wxSize(120, -1)); 
+	
+	
+	// Add the 'Send Calibration'
+	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Calibration");
 	m_button_sendcal->Enable(false);
-	actionsPanel->Add(m_button_sendcal, 1, wxEXPAND, 0);
+	commandsColumn->Add(m_button_sendcal, 0, wxALL, 1);
+	m_button_sendcal->SetMinSize(wxSize(120, -1)); 
+	
+	// Add command column to row
+	row->Add(commandsColumn,0, wxALL, 5);
+
+	// Add row to panel
+	actionsPanel->Add(row, 1, wxEXPAND, 0);
 	
 	return actionsPanel;
 }
@@ -372,17 +396,12 @@ wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
 wxSizer* MyFrame::BuildStatusPanel(wxPanel *parent)
 {	
 	const wxPoint messagesLocation = wxPoint(30,375);	
-	const wxPoint bitmapLocation = wxPoint(30,100);
 	const wxSize messagesSize = wxSize(350,100);
 	
-	wxSizer *statusPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Status");
+	wxSizer *statusPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Messages");
 	_statusMessage = new wxStaticText(parent, wxID_ANY, "Messages", messagesLocation, messagesSize, 0,wxStaticTextNameStr);
 	_statusMessage->Wrap(300);
 	statusPanel->Add(_statusMessage, 0, wxTOP|wxBOTTOM, 4);	
-
-	wxImage::AddHandler(new wxPNGHandler);
-	m_confirm_icon = new wxStaticBitmap(parent, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
-	statusPanel->Add(m_confirm_icon, 0, wxALL , 0);
 	
 	return statusPanel;
 }
