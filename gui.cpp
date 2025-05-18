@@ -312,6 +312,12 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 	// Add the commands column
 	wxBoxSizer* commandsColumn = new wxBoxSizer(wxVERTICAL);
 	
+	// Add the 'Pause' command
+	m_button_pause = new wxButton(parent, ID_PAUSE_BUTTON, "Pause");
+	m_button_pause->Enable(false);
+	commandsColumn->Add(m_button_pause, 0, wxALL, 1);
+	m_button_pause->SetMinSize(wxSize(120, -1)); 
+	
 	// Add the 'Clear' command
 	m_button_clear = new wxButton(parent, ID_CLEAR_BUTTON, "Clear");
 	m_button_clear->Enable(false);
@@ -324,11 +330,6 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 	commandsColumn->Add(m_button_sendcal, 0, wxALL, 1);
 	m_button_sendcal->SetMinSize(wxSize(120, -1)); 
 		
-	// Add the 'Pause' command
-	m_button_pause = new wxButton(parent, ID_PAUSE_BUTTON, "Pause");
-	m_button_pause->Enable(false);
-	commandsColumn->Add(m_button_pause, 0, wxALL, 1);
-	m_button_pause->SetMinSize(wxSize(120, -1)); 
 	_paused = false;
 	
 	
