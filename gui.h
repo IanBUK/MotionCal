@@ -121,7 +121,6 @@ private:
 	wxComboBox *_lineEndingList;
 	
 	wxMenu *m_sendcal_menu;
-	wxStaticText *_statusMessage;
 	
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
@@ -157,7 +156,7 @@ private:
 		
 	// Build UI components
 	void BuildMenu();
-	void BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
+	void BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
 	void BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation);
 	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
 	void BuildBufferDisplayCallBack();
@@ -166,8 +165,8 @@ private:
 	wxSizer* BuildConnectionPanel(wxPanel *panel);
 	wxSizer* BuildActionsPanel(wxPanel *parent);
 	wxSizer* BuildDataPanel(wxPanel *parent);
-	wxSizer* BuildStatusPanel(wxPanel *parent);
-	
+	void BuildStatusPanel(wxPanel *parent, wxBoxSizer *panel);
+	wxBoxSizer* BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent);
 	
 	// Update UI	
 

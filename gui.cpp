@@ -90,8 +90,11 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	wxPanel *panel;
 	
 
+	wxBoxSizer *topLeftSizer;
+	wxBoxSizer *bottomLeftSizer;
 	wxSizer *topsizer;
 	wxBoxSizer *leftsizer;
+	wxBoxSizer *commsSizer;
 	wxSizer *middlesizer, *rightsizer;
 	wxSizer *hsizer, *vsizer, *calsizer;
 	wxStaticText *text;
@@ -103,15 +106,33 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	topsizer = new wxBoxSizer(wxHORIZONTAL);
 	panel = new wxPanel(this);
 	
-	leftsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Communication");
+	leftsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "");
+	
+	topLeftSizer = new wxStaticBoxSizer(wxHORIZONTAL, panel, "");
+	bottomLeftSizer = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Messsages");
+			
+	commsSizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Communication");
 	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Magnetometer");
+	
+	wxSizer *magnetometerPanel = BuildMagnetomerPanel(panel, middlesizer);
+	//middlesizer->Add(magnetometerPanel, 1, wxEXPAND | wxALL, 8);
+	
+			
+	topLeftSizer->Add(commsSizer, 4,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
+	topLeftSizer->Add(middlesizer, 5, wxALL | wxEXPAND, 5);	
+	
+	leftsizer->Add(topLeftSizer, 3, wxALL | wxEXPAND, 5);	
+	leftsizer->Add(bottomLeftSizer, 1, wxALL | wxEXPAND, 5);	
+	BuildTopLeftPanel(commsSizer, panel);
+	BuildStatusPanel(panel, bottomLeftSizer);
+
+
 	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
 
 	topsizer->Add(leftsizer, 0,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
-	topsizer->Add(middlesizer, 1, wxALL | wxEXPAND, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 
-	BuildLeftPanel(leftsizer, panel);
+/*
 
 	vsizer = new wxBoxSizer(wxVERTICAL);
 	middlesizer->Add(vsizer, 1, wxEXPAND | wxALL, 8);
@@ -125,6 +146,7 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	m_canvas = new MyCanvas(panel, wxID_ANY, gl_attrib);
 	m_canvas->SetMinSize(wxSize(480,480));
 	vsizer->Add(m_canvas, 1, wxEXPAND | wxALL, 0);
+	
 
 	hsizer = new wxGridSizer(4, 0, 15);
 	middlesizer->Add(hsizer, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
@@ -152,6 +174,10 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
 	m_err_fit = new wxStaticText(panel, wxID_ANY, "100.0%");
 	vsizer->Add(m_err_fit, 1, wxALIGN_CENTER_HORIZONTAL);
+	
+	*/
+	
+	vsizer = new wxBoxSizer(wxVERTICAL);
 
 	calsizer = new wxBoxSizer(wxVERTICAL);
 	rightsizer->Add(calsizer, 0, wxALL, 8);
@@ -213,6 +239,58 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	//open_port(PORT);
 	m_timer = new wxTimer(this, ID_TIMER);
 	m_timer->Start(14, wxTIMER_CONTINUOUS);
+}
+
+
+wxBoxSizer* MyFrame::BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent)
+{
+	logMessage("Into BuildMagnetomerPanel");
+	wxSizer *hsizer;
+	wxBoxSizer *vsizer = new wxBoxSizer(wxVERTICAL);
+	parent->Add(vsizer, 1, wxEXPAND | wxALL, 8);
+
+	wxStaticText *text = new wxStaticText(panel, wxID_ANY, "");
+	text->SetLabelMarkup("<small><i>Ideal calibration is a perfectly centered sphere</i></small>");
+	vsizer->Add(text, 0, wxALIGN_CENTER_HORIZONTAL, 0);
+
+	int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1, WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1, WX_GL_DOUBLEBUFFER, 0};
+	m_canvas = new MyCanvas(panel, wxID_ANY, gl_attrib);
+	m_canvas->SetMinSize(wxSize(480,480));
+	vsizer->Add(m_canvas, 1, wxEXPAND | wxALL, 0);
+	
+	hsizer = new wxGridSizer(4, 0, 10);
+	
+	parent->Add(hsizer, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
+	vsizer = new wxBoxSizer(wxVERTICAL);
+	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
+	
+	text = new wxStaticText(panel, wxID_ANY, "Gaps");
+	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
+	m_err_coverage = new wxStaticText(panel, wxID_ANY, "100.0%");
+	vsizer->Add(m_err_coverage, 1, wxALIGN_CENTER_HORIZONTAL);
+	vsizer = new wxBoxSizer(wxVERTICAL);
+	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
+	
+	text = new wxStaticText(panel, wxID_ANY, "Variance");
+	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
+	m_err_variance = new wxStaticText(panel, wxID_ANY, "100.0%");
+	vsizer->Add(m_err_variance, 1, wxALIGN_CENTER_HORIZONTAL);
+	vsizer = new wxBoxSizer(wxVERTICAL);
+	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
+	
+	text = new wxStaticText(panel, wxID_ANY, "Wobble");
+	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
+	m_err_wobble = new wxStaticText(panel, wxID_ANY, "100.0%");
+	vsizer->Add(m_err_wobble, 1, wxALIGN_CENTER_HORIZONTAL);
+	vsizer = new wxBoxSizer(wxVERTICAL);
+	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
+	
+	text = new wxStaticText(panel, wxID_ANY, "Fit Error");
+	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
+	m_err_fit = new wxStaticText(panel, wxID_ANY, "100.0%");
+	vsizer->Add(m_err_fit, 1, wxALIGN_CENTER_HORIZONTAL);
+	
+	return vsizer;
 }
 
 void MyFrame::StaticUpdateGrid(const unsigned char* buffer, int size) {
@@ -406,35 +484,25 @@ wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
 	return dataPanel;
 }
 
-wxSizer* MyFrame::BuildStatusPanel(wxPanel *parent)
+void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
 {	
-	const wxPoint messagesLocation = wxPoint(10,10);	
-	const wxSize messagesSize = wxSize(400,100);
-	
-	wxSizer *statusPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Messages");
+	const wxPoint messagesLocation = wxPoint(0,0);	
+	const wxSize messagesSize = wxSize(1000,100);
 	
 	_messageLog = new wxTextCtrl(parent, ID_MESSAGE_LOG, "",messagesLocation, messagesSize,
 		wxTE_MULTILINE | wxTE_DONTWRAP| wxTE_MULTILINE  | wxTE_LEFT,
 		wxDefaultValidator, "messageLog"); 
 	
 	wxTextAttr currentStyle;
-	/*_messageLog->GetStyle(0, currentStyle);
-	currentStyle.SetFontFamily(wxFONTFAMILY_TELETYPE);
-	currentStyle.SetFontSize(8);*/
-	
 	wxFont font(wxFontInfo(11).Family(wxFONTFAMILY_TELETYPE));
 	_messageLog->SetFont(font);
-	//_messageLog->SetStyle(0, 999999, currentStyle);
 	
-	statusPanel->Add(_messageLog, 0, wxTOP|wxBOTTOM|wxEXPAND, 4);		
-	
-	return statusPanel;
+	bottomLeftSizer->Add(_messageLog, 0, wxALL|wxEXPAND, 4);		
 }
 
 void MyFrame::showMessageInLog(const char *message)
 {
 	int xPos = _messageLog->GetScrollPos(wxHORIZONTAL);
-	int yPos = _messageLog->GetScrollPos(wxVERTICAL);
 
 	_messageLog->AppendText(message);
 	_messageLog->AppendText('\n');
@@ -449,7 +517,7 @@ void MyFrame::showMessageInLog(const char *message)
 	_messageLog->SetScrollPos(wxHORIZONTAL, xPos, true); 
 }
 
-void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
+void MyFrame::BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 {	
 	wxSizer *topmostPanel = BuildConnectionPanel(panel); 
 	parentPanel->Add(topmostPanel,1,wxEXPAND | wxALL,5);	
@@ -460,8 +528,6 @@ void MyFrame::BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
 	wxSizer* midPanel = BuildDataPanel(panel);	
 	parentPanel->Add(midPanel,2,wxEXPAND | wxALL,5);
 	
-	wxSizer* lowerPanel = BuildStatusPanel(panel);
-	parentPanel->Add(lowerPanel,2,wxEXPAND | wxALL,5);
 }
 
 void MyFrame::BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation)
@@ -617,9 +683,7 @@ void MyFrame::UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead
 	}
     else
     {
-    	char commandMessage[640];
-
-    	if (strcmp(token,"Raw") == 0)
+	   	if (strcmp(token,"Raw") == 0)
 		{
 		}
 		else if (strcmp(token,"Ori") == 0)
@@ -723,7 +787,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 		//printf("Canvas initial size = %d, %d\n", w, h);
 		firstrun = 0;
 		logMessage("    firstRun set to 0");
-
+		showMessageInLog("    firstRun set to 0");
 	}
 	
 	m_canvas->Refresh();
@@ -734,6 +798,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	
 	snprintf(messageBuffer, sizeof(messageBuffer),"    gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
 	logMessage(messageBuffer);
+	showMessageInLog(messageBuffer);
 	m_canvas->Refresh();
 		
 	if (gaps < 15.0f && variance < 4.5f && wobble < 4.0f && fiterror < 5.0f) {
@@ -743,6 +808,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
 			m_button_sendcal->Enable(true);
 			m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
+			showMessageInLog("    2. !m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || !m_button_sendcal->IsEnabled()");
 		}
 	} else if (gaps > 20.0f && variance > 5.0f && wobble > 5.0f && fiterror > 6.0f) {
 		logMessage("    3. gaps > 20.0f && variance > 5.0f && wobble > 5.0f && fiterror > 6.0f");
@@ -751,6 +817,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_sendcal->Enable(false);
 			m_confirm_icon->SetBitmap(MyBitmap("checkemptygray.png"));
+			showMessageInLog("    4. m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || m_button_sendcal->IsEnabled()");
 		}
 	}
 	float qualitySurfaceGapError = quality_surface_gap_error();
@@ -760,6 +827,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	
 	snprintf(messageBuffer, 256, "gaps: %.1f%%, magVar: %.1f%%, wobble: %.1f%%. spher.: %.1f%%",
 		qualitySurfaceGapError, qualityMagnitudeVarianceError, qualityWobbleError, qualitySphericalFitError);
+	showMessageInLog(messageBuffer);
 	
 	
 	snprintf(buf, sizeof(buf), "%.1f%%", quality_surface_gap_error());
@@ -889,6 +957,11 @@ void MyFrame::OnShowMenu(wxMenuEvent &event)
 void MyFrame::PopulateBaudList()
 {
 	logMessage("Into PopulateBaudList");
+	if(_baudList == NULL)
+	{
+		logMessage("_baudList is null");
+		return;
+	}
 	_baudList->Clear();
 	_baudList->Append("300");	
 	_baudList->Append("1200");		
@@ -901,6 +974,7 @@ void MyFrame::PopulateBaudList()
 	_baudList->Append("115200");	
 	_baudList->Append("230400");	
 	_baudList->SetSelection(5);
+	logMessage("Done PopulateBaudList");
 }
 
 void MyFrame::OnShowBaudList(wxCommandEvent& event)
