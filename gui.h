@@ -47,7 +47,7 @@
 #define ID_BAUDLIST			10005
 #define ID_LINEENDINGLIST	10010
 #define ID_MESSAGE_LOG		10020
-
+#define ID_PAUSE_BUTTON		10030
 
 #define X_ROW 0
 #define Y_ROW 1
@@ -114,6 +114,7 @@ private:
 	wxTimer *m_timer;
 	wxButton *m_button_clear;
 	wxButton *m_button_sendcal;
+	wxButton *m_button_pause;
 	wxStaticBitmap *m_confirm_icon;
 	wxMenu *m_port_menu;
 	wxComboBox *m_port_list;
@@ -126,9 +127,11 @@ private:
 	wxGrid *_orientationGrid;
 	
 	bool _drawingData;
+	bool _paused = true;
 		
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
+	void OnPause(wxCommandEvent &event);
 	void OnShowMenu(wxMenuEvent &event);
 	void OnShowPortList(wxCommandEvent &event);
 	void OnPortList(wxCommandEvent& event);
@@ -156,6 +159,8 @@ private:
 		
 	// Build UI components
 	void BuildMenu();
+	wxBoxSizer* BuildLeftPanel(wxPanel *panel);
+	wxBoxSizer* BuildRightPanel(wxPanel *panel);
 	void BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
 	void BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation);
 	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
@@ -167,6 +172,8 @@ private:
 	wxSizer* BuildDataPanel(wxPanel *parent);
 	void BuildStatusPanel(wxPanel *parent, wxBoxSizer *panel);
 	wxBoxSizer* BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent);
+	
+	void SetPausable(bool pausable);
 	
 	// Update UI	
 

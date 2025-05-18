@@ -64,6 +64,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 	EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
 	EVT_MENU(ID_SENDCAL_MENU, MyFrame::OnSendCal)
 	EVT_BUTTON(ID_CLEAR_BUTTON, MyFrame::OnClear)
+	EVT_BUTTON(ID_PAUSE_BUTTON, MyFrame::OnPause)	
 	EVT_BUTTON(ID_SENDCAL_BUTTON, MyFrame::OnSendCal)
 	EVT_TIMER(ID_TIMER, MyFrame::OnTimer)
 	EVT_MENU_RANGE(9000, 9999, MyFrame::OnPortMenu)
@@ -85,28 +86,41 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 {
 	logMessage("******************************************");
 	logMessage("MotionCal.app - start instance");
-	
 	logMessage("******************************************");
-	wxPanel *panel;
-	
-
-	wxStaticBoxSizer *topLeftSizer;
-	wxBoxSizer *bottomLeftSizer;
-	wxSizer *topsizer;
-	wxBoxSizer *leftsizer;
-	wxBoxSizer *commsSizer;
-	wxSizer *middlesizer, *rightsizer;
-	wxSizer *hsizer, *vsizer, *calsizer;
-	wxStaticText *text;
-	int i, j;
 
 	BuildMenu();
 	BuildBufferDisplayCallBack();		
 
-	topsizer = new wxBoxSizer(wxHORIZONTAL);
-	panel = new wxPanel(this);
+	wxBoxSizer *topsizer = new wxBoxSizer(wxHORIZONTAL);
+	wxPanel *panel = new wxPanel(this);
 	
-	leftsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Processing");
+	wxBoxSizer *leftsizer = BuildLeftPanel(panel);	
+	wxBoxSizer *rightsizer = BuildRightPanel(panel);//new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
+
+	topsizer->Add(leftsizer, 0,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
+	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
+
+	panel->SetSizer(topsizer);
+	topsizer->SetSizeHints(panel);
+	Fit();
+	Show(true);
+	Raise();
+
+	m_canvas->InitGL();
+	raw_data_reset();
+	//open_port(PORT);
+	m_timer = new wxTimer(this, ID_TIMER);
+	m_timer->Start(14, wxTIMER_CONTINUOUS);
+}
+
+wxBoxSizer* MyFrame::BuildLeftPanel(wxPanel *panel)
+{
+	wxBoxSizer *parent = new wxStaticBoxSizer(wxVERTICAL, panel, "Processing");
+	wxStaticBoxSizer *topLeftSizer;
+	wxBoxSizer *bottomLeftSizer;
+	wxBoxSizer *commsSizer;
+	wxSizer *middlesizer;
+	
 	topLeftSizer = new wxStaticBoxSizer(wxHORIZONTAL, panel, "");
 	bottomLeftSizer = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Messsages");
 			
@@ -116,28 +130,28 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	BuildMagnetomerPanel(panel, middlesizer);
 	BuildTopLeftPanel(commsSizer, panel);
 	BuildStatusPanel(panel, bottomLeftSizer);
-	
-					
+						
 	topLeftSizer->Add(commsSizer, 4,  wxLEFT | wxTOP | wxBOTTOM | wxEXPAND | wxALIGN_TOP, -10);
 	topLeftSizer->AddSpacer(10);
 	topLeftSizer->Add(middlesizer, 5,  wxRIGHT | wxTOP | wxBOTTOM |  wxEXPAND, -10);	
 	
-	/*wxColour bg = topLeftSizer->GetStaticBox()->GetBackgroundColour();
+	wxColour bg = topLeftSizer->GetStaticBox()->GetBackgroundColour();
 	topLeftSizer->GetStaticBox()->SetBackgroundColour(bg);
-	topLeftSizer->GetStaticBox()->SetForegroundColour(bg);	*/
+	topLeftSizer->GetStaticBox()->SetForegroundColour(bg);
 	
-	leftsizer->Add(topLeftSizer, 3, wxALL | wxEXPAND, 0);	
-	leftsizer->Add(bottomLeftSizer, 1, wxALL | wxEXPAND, 0);
-		
-
-
-
-	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
-
-	topsizer->Add(leftsizer, 0,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
-	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
-
+	parent->Add(topLeftSizer, 3, wxALL | wxEXPAND, 0);	
+	parent->Add(bottomLeftSizer, 1, wxALL | wxEXPAND, 0);
 	
+	return parent;
+}
+
+wxBoxSizer* MyFrame::BuildRightPanel(wxPanel *panel)
+{
+	wxSizer *vsizer, *calsizer;
+	wxStaticText *text;
+	int i, j;
+	
+	wxStaticBoxSizer *rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
 	vsizer = new wxBoxSizer(wxVERTICAL);
 
 	calsizer = new wxBoxSizer(wxVERTICAL);
@@ -188,20 +202,9 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	//text->Wrap(200);
 	//calsizer->Add(text, 0, wxEXPAND | wxALIGN_CENTER_HORIZONTAL, 0);
 	calsizer->Add(text, 0, wxALIGN_CENTER_HORIZONTAL, 0);
-
-	panel->SetSizer(topsizer);
-	topsizer->SetSizeHints(panel);
-	Fit();
-	Show(true);
-	Raise();
-
-	m_canvas->InitGL();
-	raw_data_reset();
-	//open_port(PORT);
-	m_timer = new wxTimer(this, ID_TIMER);
-	m_timer->Start(14, wxTIMER_CONTINUOUS);
+	
+	return rightsizer;
 }
-
 
 wxBoxSizer* MyFrame::BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent)
 {
@@ -252,6 +255,121 @@ wxBoxSizer* MyFrame::BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent)
 	vsizer->Add(m_err_fit, 1, wxALIGN_CENTER_HORIZONTAL);
 	
 	return vsizer;
+}
+
+wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
+{
+	wxSizer *connectionPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Connection");
+	
+	wxBoxSizer* portRow = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* portLabel = new wxStaticText(parent, wxID_ANY, "Port");
+	portLabel->SetMinSize(wxSize(_labelWidth, -1));
+	portRow->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	m_port_list = new wxComboBox(parent, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	m_port_list->Append("(none)");
+	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
+	m_port_list->SetSelection(0);
+	portRow->Add(m_port_list, 1, wxEXPAND);
+	connectionPanel->Add(portRow,0,wxEXPAND | wxALL, 5);
+	
+	wxBoxSizer* baudRow = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* baudLabel = new wxStaticText(parent, wxID_ANY, "Baud Rate");
+	baudLabel->SetMinSize(wxSize(_labelWidth, -1));
+	baudRow->Add(baudLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	_baudList = new wxComboBox(parent, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	baudRow->Add(_baudList, 1, wxEXPAND);
+	connectionPanel->Add(baudRow,0,wxEXPAND | wxALL, 5);
+	PopulateBaudList();
+	
+	wxBoxSizer* lineEndingsRow = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText* lineEndingsRowLabel = new wxStaticText(parent, wxID_ANY, "Line Endings");
+	lineEndingsRowLabel->SetMinSize(wxSize(_labelWidth, -1));
+	lineEndingsRow->Add(lineEndingsRowLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
+	_lineEndingList = new wxComboBox(parent, ID_LINEENDINGLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+	PopulateLineEndingList();
+	lineEndingsRow->Add(_lineEndingList, 1, wxEXPAND);
+	connectionPanel->Add(lineEndingsRow,0,wxEXPAND | wxALL, 5);
+	
+	connectionPanel->SetMinSize(wxSize(-1, 60)); 	
+	return connectionPanel;
+}
+
+wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
+{
+	wxSizer *actionsPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Actions");	
+	actionsPanel->SetMinSize(wxSize(-1, 60)); 
+
+	// Create the row
+	wxBoxSizer* row = new wxBoxSizer(wxHORIZONTAL);
+	
+	// Add the status icon
+	wxImage::AddHandler(new wxPNGHandler);
+	const wxPoint bitmapLocation = wxPoint(5,5);//30,100);
+	m_confirm_icon = new wxStaticBitmap(parent, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
+	wxSizerItem* icon = row->Add(m_confirm_icon, 0, wxALL , 1);
+	icon->SetMinSize(wxSize(240, -1)); 
+	
+	// Add the commands column
+	wxBoxSizer* commandsColumn = new wxBoxSizer(wxVERTICAL);
+	
+	// Add the 'Clear' command
+	m_button_clear = new wxButton(parent, ID_CLEAR_BUTTON, "Clear");
+	m_button_clear->Enable(false);
+	commandsColumn->Add(m_button_clear, 0, wxALL, 1);
+	m_button_clear->SetMinSize(wxSize(120, -1)); 
+	
+	// Add the 'Send Calibration' command
+	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Calibration");
+	m_button_sendcal->Enable(false);
+	commandsColumn->Add(m_button_sendcal, 0, wxALL, 1);
+	m_button_sendcal->SetMinSize(wxSize(120, -1)); 
+		
+	// Add the 'Pause' command
+	m_button_pause = new wxButton(parent, ID_PAUSE_BUTTON, "Pause");
+	m_button_pause->Enable(false);
+	commandsColumn->Add(m_button_pause, 0, wxALL, 1);
+	m_button_pause->SetMinSize(wxSize(120, -1)); 
+	_paused = false;
+	
+	
+	// Add command column to row
+	row->Add(commandsColumn,0, wxALL, 5);
+
+	// Add row to panel
+	actionsPanel->Add(row, 1, wxEXPAND, 0);
+	
+	return actionsPanel;
+}
+
+wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
+{
+	const wxPoint rawDataGridLocation = wxPoint(30,200);
+	const wxPoint orientationGridLocation = wxPoint(30,300);
+	
+	wxSizer *dataPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Data");
+	dataPanel->SetMinSize(wxSize(-1, 180)); 
+	
+	BuildRawDataGrid(parent, dataPanel, rawDataGridLocation);
+	dataPanel->AddSpacer(8);
+	BuildOrientationGrid(parent, dataPanel, orientationGridLocation);
+	
+	return dataPanel;
+}
+
+void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
+{	
+	const wxPoint messagesLocation = wxPoint(0,0);	
+	const wxSize messagesSize = wxSize(1000,100);
+	
+	_messageLog = new wxTextCtrl(parent, ID_MESSAGE_LOG, "",messagesLocation, messagesSize,
+		wxTE_MULTILINE | wxTE_DONTWRAP| wxTE_MULTILINE  | wxTE_LEFT,
+		wxDefaultValidator, "messageLog"); 
+	
+	wxTextAttr currentStyle;
+	wxFont font(wxFontInfo(12).Family(wxFONTFAMILY_TELETYPE));
+	_messageLog->SetFont(font);
+	
+	bottomLeftSizer->Add(_messageLog, 0, wxALL|wxEXPAND, 4);		
 }
 
 void MyFrame::StaticUpdateGrid(const unsigned char* buffer, int size) {
@@ -355,116 +473,8 @@ void MyFrame::showMessage(const char *message)
     dialog.ShowModal();
 }
 
-wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
-{
-	wxSizer *connectionPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Connection");
-	
-	wxBoxSizer* portRow = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* portLabel = new wxStaticText(parent, wxID_ANY, "Port");
-	portLabel->SetMinSize(wxSize(_labelWidth, -1));
-	portRow->Add(portLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
-	m_port_list = new wxComboBox(parent, ID_PORTLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	m_port_list->Append("(none)");
-	m_port_list->Append(SAMPLE_PORT_NAME); // never seen, only for initial size
-	m_port_list->SetSelection(0);
-	portRow->Add(m_port_list, 1, wxEXPAND);
-	connectionPanel->Add(portRow,0,wxEXPAND | wxALL, 5);
-	
-	wxBoxSizer* baudRow = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* baudLabel = new wxStaticText(parent, wxID_ANY, "Baud Rate");
-	baudLabel->SetMinSize(wxSize(_labelWidth, -1));
-	baudRow->Add(baudLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
-	_baudList = new wxComboBox(parent, ID_BAUDLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	baudRow->Add(_baudList, 1, wxEXPAND);
-	connectionPanel->Add(baudRow,0,wxEXPAND | wxALL, 5);
-	PopulateBaudList();
-	
-	wxBoxSizer* lineEndingsRow = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText* lineEndingsRowLabel = new wxStaticText(parent, wxID_ANY, "Line Endings");
-	lineEndingsRowLabel->SetMinSize(wxSize(_labelWidth, -1));
-	lineEndingsRow->Add(lineEndingsRowLabel, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);	
-	_lineEndingList = new wxComboBox(parent, ID_LINEENDINGLIST, "", wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-	PopulateLineEndingList();
-	lineEndingsRow->Add(_lineEndingList, 1, wxEXPAND);
-	connectionPanel->Add(lineEndingsRow,0,wxEXPAND | wxALL, 5);
-	
-	connectionPanel->SetMinSize(wxSize(-1, 60)); 	
-	return connectionPanel;
-}
-
-wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
-{
-	wxSizer *actionsPanel = new wxStaticBoxSizer(wxHORIZONTAL, parent, "Actions");	
-	actionsPanel->SetMinSize(wxSize(-1, 60)); 
-
-	// Create the row
-	wxBoxSizer* row = new wxBoxSizer(wxHORIZONTAL);
-	
-	// Add the status icon
-	wxImage::AddHandler(new wxPNGHandler);
-	const wxPoint bitmapLocation = wxPoint(5,5);//30,100);
-	m_confirm_icon = new wxStaticBitmap(parent, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
-	wxSizerItem* icon = row->Add(m_confirm_icon, 0, wxALL , 1);
-	icon->SetMinSize(wxSize(240, -1)); 
-	
-	// Add the commands column
-	wxBoxSizer* commandsColumn = new wxBoxSizer(wxVERTICAL);
-	// Add the 'Clear' command
-	m_button_clear = new wxButton(parent, ID_CLEAR_BUTTON, "Clear");
-	m_button_clear->Enable(false);
-	commandsColumn->Add(m_button_clear, 0, wxALL, 1);
-	m_button_clear->SetMinSize(wxSize(120, -1)); 
-	
-	// Add the 'Send Calibration'
-	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Calibration");
-	m_button_sendcal->Enable(false);
-	commandsColumn->Add(m_button_sendcal, 0, wxALL, 1);
-	m_button_sendcal->SetMinSize(wxSize(120, -1)); 
-	
-	// Add command column to row
-	row->Add(commandsColumn,0, wxALL, 5);
-
-	// Add row to panel
-	actionsPanel->Add(row, 1, wxEXPAND, 0);
-	
-	return actionsPanel;
-}
-
-wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
-{
-	const wxPoint rawDataGridLocation = wxPoint(30,200);
-	const wxPoint orientationGridLocation = wxPoint(30,300);
-	
-	wxSizer *dataPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Data");
-	dataPanel->SetMinSize(wxSize(-1, 180)); 
-	
-	BuildRawDataGrid(parent, dataPanel, rawDataGridLocation);
-	dataPanel->AddSpacer(8);
-	BuildOrientationGrid(parent, dataPanel, orientationGridLocation);
-	
-	return dataPanel;
-}
-
-void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
-{	
-	const wxPoint messagesLocation = wxPoint(0,0);	
-	const wxSize messagesSize = wxSize(1000,100);
-	
-	_messageLog = new wxTextCtrl(parent, ID_MESSAGE_LOG, "",messagesLocation, messagesSize,
-		wxTE_MULTILINE | wxTE_DONTWRAP| wxTE_MULTILINE  | wxTE_LEFT,
-		wxDefaultValidator, "messageLog"); 
-	
-	wxTextAttr currentStyle;
-	wxFont font(wxFontInfo(11).Family(wxFONTFAMILY_TELETYPE));
-	_messageLog->SetFont(font);
-	
-	bottomLeftSizer->Add(_messageLog, 0, wxALL|wxEXPAND, 4);		
-}
-
 void MyFrame::showMessageInLog(const char *message)
 {
-	int xPos = _messageLog->GetScrollPos(wxHORIZONTAL);
-
 	_messageLog->AppendText(message);
 	_messageLog->AppendText('\n');
 	
@@ -474,8 +484,9 @@ void MyFrame::showMessageInLog(const char *message)
 		long firstLineLength = _messageLog->GetLineLength(0);
 		_messageLog->Remove(0, firstLineLength + 1);  
 	}
-	
-	_messageLog->SetScrollPos(wxHORIZONTAL, xPos, true); 
+		
+	_messageLog->SetInsertionPointEnd();
+	_messageLog->ShowPosition(_messageLog->GetLastPosition()); 
 }
 
 void MyFrame::BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
@@ -710,6 +721,9 @@ void MyFrame::UpdateOrientationGrid(char *token)
 
 void MyFrame::OnTimer(wxTimerEvent &event)
 {
+	if (_paused)
+		return;
+		
 	if (port_is_open()) {
 		//int bytesRead = read_serial_data();
 		read_serial_data();
@@ -824,6 +838,21 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 void MyFrame::OnClear(wxCommandEvent &event)
 {
 	raw_data_reset();
+}
+
+void MyFrame::OnPause(wxCommandEvent &event)
+{
+	_paused = !_paused;
+	if (_paused)
+	{
+		m_button_pause->SetLabel("Capture");
+		showMessageInLog("Capturing paused");
+	}
+	else
+	{
+		m_button_pause->SetLabel("Pause");
+		showMessageInLog("Capturing enabled");
+	}
 }
 
 void MyFrame::OnSendCal(wxCommandEvent &event)
@@ -970,7 +999,14 @@ void MyFrame::ResetConnectionParameters()
 	{
 		showOpenPortOK((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
 	}
+	SetPausable(openPortResult > 0);
 	m_button_clear->Enable(true);
+}
+
+
+void MyFrame::SetPausable(bool pausable)
+{
+	m_button_pause->Enable(pausable);
 }
 
 
@@ -1016,6 +1052,7 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
 	{
 		showOpenPortOK((const char *)name, (const char *)_baudRate, (const char*) _lineEnding);
 	}
+	SetPausable(openPortResult > 0);
 	m_button_clear->Enable(true);
 }
 
