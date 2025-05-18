@@ -111,4 +111,3 @@ matrix.o: matrix.c imuread.h Makefile
 fusion.o: fusion.c imuread.h Makefile
 quality.o: quality.c imuread.h Makefile
 mahony.o: mahony.c imuread.h Makefile
-

@@ -11,6 +11,19 @@
 #include "wx/wfstream.h"
 #include "wx/zstream.h"
 #include "wx/txtstrm.h"
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#ifdef __DARWIN__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <gl.h>
+#include <glu.h>
+#endif
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+#include "stdio.h"
 
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
 	#ifdef __DARWIN__
@@ -33,6 +46,8 @@
 #define ID_PORTLIST			10004
 #define ID_BAUDLIST			10005
 #define ID_LINEENDINGLIST	10010
+#define ID_MESSAGE_LOG		10020
+#define ID_PAUSE_BUTTON		10030
 
 #define X_ROW 0
 #define Y_ROW 1
@@ -92,11 +107,14 @@ private:
 	wxStaticText *m_mag_field;
 	wxStaticText *m_accel[3];
 	wxStaticText *m_gyro[3];
+	
+	wxTextCtrl *_messageLog;
 
 	MyCanvas *m_canvas;
 	wxTimer *m_timer;
 	wxButton *m_button_clear;
 	wxButton *m_button_sendcal;
+	wxButton *m_button_pause;
 	wxStaticBitmap *m_confirm_icon;
 	wxMenu *m_port_menu;
 	wxComboBox *m_port_list;
@@ -104,15 +122,16 @@ private:
 	wxComboBox *_lineEndingList;
 	
 	wxMenu *m_sendcal_menu;
-	wxStaticText *_statusMessage;
 	
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
 	
 	bool _drawingData;
+	bool _paused = true;
 		
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
+	void OnPause(wxCommandEvent &event);
 	void OnShowMenu(wxMenuEvent &event);
 	void OnShowPortList(wxCommandEvent &event);
 	void OnPortList(wxCommandEvent& event);
@@ -134,10 +153,15 @@ private:
 	void showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
 	void showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
 	void showMessage(const char *message);
-	
+	void showMessageInLog(const char *message);
+	void LogImuData(ImuData imuData);
+	void LogOrientationData(YawPitchRoll orientation);
+		
 	// Build UI components
 	void BuildMenu();
-	void BuildLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
+	wxBoxSizer* BuildLeftPanel(wxPanel *panel);
+	wxBoxSizer* BuildRightPanel(wxPanel *panel);
+	void BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel);
 	void BuildRawDataGrid(wxPanel *panel, wxSizer *parent, wxPoint rawDataGridLocation);
 	void BuildOrientationGrid(wxPanel *panel, wxSizer *parent, wxPoint orientationGridLocation);
 	void BuildBufferDisplayCallBack();
@@ -146,8 +170,10 @@ private:
 	wxSizer* BuildConnectionPanel(wxPanel *panel);
 	wxSizer* BuildActionsPanel(wxPanel *parent);
 	wxSizer* BuildDataPanel(wxPanel *parent);
-	wxSizer* BuildStatusPanel(wxPanel *parent);
+	void BuildStatusPanel(wxPanel *parent, wxBoxSizer *panel);
+	wxBoxSizer* BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent);
 	
+	void SetPausable(bool pausable);
 	
 	// Update UI	
 
@@ -159,6 +185,8 @@ private:
 	
 	void UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUpdateGrid(const unsigned char* buffer, int size);
+
+	void ProcessImuDataFromCallback(ImuData imuData);
 
     static MyFrame* instance; // Pointer to the current instance
 	

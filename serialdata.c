@@ -3,11 +3,6 @@
 #include <unistd.h>
 #include <stdbool.h>
 #define BUFFER_SIZE 512
-#define ASCII_STATE_WORD  0
-#define ASCII_STATE_RAW   1
-#define ASCII_STATE_CAL1  2
-#define ASCII_STATE_CAL2  3
-
 
 // Define Callbacks
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
@@ -44,14 +39,12 @@ void fireBufferDisplayCallback(const unsigned char *data, int len)
 
 void fireImuCallback(ImuData data)
 {
-	logMessage("into fireImuCallback");
 	if (_imuDataCallback != NULL)
 		_imuDataCallback(data);
 }
 
 void fireOrientationCallback(YawPitchRoll orientation)
 {
-	logMessage("into fireOrientationCallback");
 	if (_orientationDataCallback != NULL)
 		_orientationDataCallback(orientation);
 }
@@ -67,8 +60,6 @@ void sendDataCallback(const unsigned char *data, int len)
     buffer[len] = '\0'; // null-terminate
     if (memcmp(buffer, "Raw", 3) == 0)
     {
-        debugPrint("sendDataCallback(Raw)", data, len, false);
-
         char *token = strtok(buffer, " \r\n"); // "Raw"
         token = strtok(NULL, " \r\n");         // CSV part
 
@@ -184,6 +175,29 @@ void debugPrint(const char *name, const unsigned char *data, int lengthData, boo
         }
 	}	
 	logMessage(message);
+}
+
+int _bufferOffset = 0;
+
+unsigned char* buildBuffer(const unsigned char *data, int len)
+{
+    int firstLine = 1;
+	unsigned char serialBuffer[BUFFER_SIZE];
+	for(int i = 0; i< len; i++)
+	{
+		if (firstLine == 1)
+			serialBuffer[i] = data[i];
+		if (data[i] == '\n' || data[i] =='\r')
+		{
+			serialBuffer[i] = '\0';
+			firstLine = 0;
+			// hit a newline
+			//_serialBuffer[_bufferOffset] ='\0';
+			//strcpy((char *)serialBuffer, (char *)_serialBuffer);
+			//_bufferOffset = 0;
+		}		
+	}
+	return serialBuffer;
 }
 
 void print_data(const char *name, const unsigned char *data, int len)
@@ -367,6 +381,12 @@ static int packet_parse(const unsigned char *data, int len)
 	return ret;
 }
 
+#define ASCII_STATE_WORD  0
+#define ASCII_STATE_RAW   1
+#define ASCII_STATE_CAL1  2
+#define ASCII_STATE_CAL2  3
+
+
 static int ascii_parse(const unsigned char *data, int len)
 {
 	static int ascii_state=ASCII_STATE_WORD;
@@ -382,6 +402,7 @@ static int ascii_parse(const unsigned char *data, int len)
 	for (p = (const char *)data ; p < end; p++) {
 		if (ascii_state == ASCII_STATE_WORD) {
 			if (ascii_count == 0) {
+
 				if (*p == 'R') {
 					ascii_num = ASCII_STATE_RAW;
 					ascii_count = 1;
@@ -406,6 +427,7 @@ static int ascii_parse(const unsigned char *data, int len)
 					ascii_count = 0;
 				}
 			} else if (ascii_count == 3) {
+
 				if (*p == ':' && ascii_num == ASCII_STATE_RAW) {
 					ascii_state = ASCII_STATE_RAW;
 					ascii_raw_data_count = 0;
@@ -421,6 +443,7 @@ static int ascii_parse(const unsigned char *data, int len)
 					ascii_count = 0;
 				}
 			} else if (ascii_count == 4) {
+
 				if (*p == ':' && ascii_num == ASCII_STATE_CAL1) {
 					ascii_state = ASCII_STATE_CAL1;
 					ascii_raw_data_count = 0;
@@ -469,6 +492,7 @@ static int ascii_parse(const unsigned char *data, int len)
 				ascii_neg = 0;
 				ascii_count = 0;
 				ascii_state = ASCII_STATE_WORD;
+								
 			} else if (*p == 10) {
 			} else {
 				goto fail;
@@ -511,6 +535,7 @@ static int ascii_parse(const unsigned char *data, int len)
 				} else if (ascii_state == ASCII_STATE_CAL2) {
 					cal2_data(ascii_cal_data);
 				}
+				
 				ret = 1;
 				ascii_raw_data_count = 0;
 				ascii_num = 0;
@@ -924,13 +949,14 @@ int open_port(const char *name)
 	return 1;
 }
 
-int read_serial_data(void)
+int read_serial_data3(void)
 {
 	COMSTAT st;
 	DWORD errmask=0, num_read, num_request;
 	OVERLAPPED ov;
-	unsigned char buf[256];
+	unsigned char buf[BUFFER_SIZE];
 	int r;
+	logMessage("read_serial_data: line 753");
 
 	if (port_handle == INVALID_HANDLE_VALUE) return -1;
 	while (1) {
@@ -986,7 +1012,7 @@ int read_serial_data(void)
 		CloseHandle(port_handle);
 		port_handle = INVALID_HANDLE_VALUE;
 	}
-	return r;
+        return r;
 }
 
 int write_serial_data(const void *ptr, int len)
