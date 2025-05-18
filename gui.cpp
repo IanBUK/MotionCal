@@ -90,7 +90,7 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	wxPanel *panel;
 	
 
-	wxBoxSizer *topLeftSizer;
+	wxStaticBoxSizer *topLeftSizer;
 	wxBoxSizer *bottomLeftSizer;
 	wxSizer *topsizer;
 	wxBoxSizer *leftsizer;
@@ -106,25 +106,30 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	topsizer = new wxBoxSizer(wxHORIZONTAL);
 	panel = new wxPanel(this);
 	
-	leftsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "");
-	
+	leftsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Processing");
 	topLeftSizer = new wxStaticBoxSizer(wxHORIZONTAL, panel, "");
 	bottomLeftSizer = new wxStaticBoxSizer(wxHORIZONTAL, panel, "Messsages");
 			
-	commsSizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Communication");
-	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Magnetometer");
+	commsSizer = new wxStaticBoxSizer(wxVERTICAL, panel, "");
+	middlesizer = new wxStaticBoxSizer(wxVERTICAL, panel, "");
 	
-	wxSizer *magnetometerPanel = BuildMagnetomerPanel(panel, middlesizer);
-	//middlesizer->Add(magnetometerPanel, 1, wxEXPAND | wxALL, 8);
-	
-			
-	topLeftSizer->Add(commsSizer, 4,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
-	topLeftSizer->Add(middlesizer, 5, wxALL | wxEXPAND, 5);	
-	
-	leftsizer->Add(topLeftSizer, 3, wxALL | wxEXPAND, 5);	
-	leftsizer->Add(bottomLeftSizer, 1, wxALL | wxEXPAND, 5);	
+	BuildMagnetomerPanel(panel, middlesizer);
 	BuildTopLeftPanel(commsSizer, panel);
 	BuildStatusPanel(panel, bottomLeftSizer);
+	
+					
+	topLeftSizer->Add(commsSizer, 4,  wxLEFT | wxTOP | wxBOTTOM | wxEXPAND | wxALIGN_TOP, -10);
+	topLeftSizer->AddSpacer(10);
+	topLeftSizer->Add(middlesizer, 5,  wxRIGHT | wxTOP | wxBOTTOM |  wxEXPAND, -10);	
+	
+	/*wxColour bg = topLeftSizer->GetStaticBox()->GetBackgroundColour();
+	topLeftSizer->GetStaticBox()->SetBackgroundColour(bg);
+	topLeftSizer->GetStaticBox()->SetForegroundColour(bg);	*/
+	
+	leftsizer->Add(topLeftSizer, 3, wxALL | wxEXPAND, 0);	
+	leftsizer->Add(bottomLeftSizer, 1, wxALL | wxEXPAND, 0);
+		
+
 
 
 	rightsizer = new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
@@ -132,50 +137,6 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	topsizer->Add(leftsizer, 0,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
 
-/*
-
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	middlesizer->Add(vsizer, 1, wxEXPAND | wxALL, 8);
-
-	text = new wxStaticText(panel, wxID_ANY, "");
-	text->SetLabelMarkup("<small><i>Ideal calibration is a perfectly centered sphere</i></small>");
-	vsizer->Add(text, 0, wxALIGN_CENTER_HORIZONTAL, 0);
-
-	int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
-		WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1, WX_GL_DOUBLEBUFFER, 0};
-	m_canvas = new MyCanvas(panel, wxID_ANY, gl_attrib);
-	m_canvas->SetMinSize(wxSize(480,480));
-	vsizer->Add(m_canvas, 1, wxEXPAND | wxALL, 0);
-	
-
-	hsizer = new wxGridSizer(4, 0, 15);
-	middlesizer->Add(hsizer, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
-	text = new wxStaticText(panel, wxID_ANY, "Gaps");
-	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
-	m_err_coverage = new wxStaticText(panel, wxID_ANY, "100.0%");
-	vsizer->Add(m_err_coverage, 1, wxALIGN_CENTER_HORIZONTAL);
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
-	text = new wxStaticText(panel, wxID_ANY, "Variance");
-	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
-	m_err_variance = new wxStaticText(panel, wxID_ANY, "100.0%");
-	vsizer->Add(m_err_variance, 1, wxALIGN_CENTER_HORIZONTAL);
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
-	text = new wxStaticText(panel, wxID_ANY, "Wobble");
-	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
-	m_err_wobble = new wxStaticText(panel, wxID_ANY, "100.0%");
-	vsizer->Add(m_err_wobble, 1, wxALIGN_CENTER_HORIZONTAL);
-	vsizer = new wxBoxSizer(wxVERTICAL);
-	hsizer->Add(vsizer, 1, wxALIGN_CENTER_HORIZONTAL);
-	text = new wxStaticText(panel, wxID_ANY, "Fit Error");
-	vsizer->Add(text, 1, wxALIGN_CENTER_HORIZONTAL);
-	m_err_fit = new wxStaticText(panel, wxID_ANY, "100.0%");
-	vsizer->Add(m_err_fit, 1, wxALIGN_CENTER_HORIZONTAL);
-	
-	*/
 	
 	vsizer = new wxBoxSizer(wxVERTICAL);
 
