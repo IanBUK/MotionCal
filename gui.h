@@ -172,11 +172,10 @@ private:
 	wxSizer* BuildDataPanel(wxPanel *parent);
 	void BuildStatusPanel(wxPanel *parent, wxBoxSizer *panel);
 	wxBoxSizer* BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent);
-	
 	void SetPausable(bool pausable);
 	
-	// Update UI	
 
+	// Callback handlers from serial data processor
 	void UpdateImuData(ImuData imuData);
 	static void StaticUpdateImuData(ImuData imuData);
 	
@@ -186,10 +185,21 @@ private:
 	void UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUpdateGrid(const unsigned char* buffer, int size);
 
+	void UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead);
+	static void StaticUnknownMessageReceived(const unsigned char* buffer, int size);
+
+	void SoftIronCalibrationDataReceived(float softIron[]);
+	static void StaticSoftIronCalibrationDataReceived(float softIron[]);
+
+	void OffsetCalibrationDataReceived(float offsets[]);
+	static void StaticOffsetCalibrationDataReceived(float offsets[]);
+
 	void ProcessImuDataFromCallback(ImuData imuData);
 
+
+	// Update UI	
+
     static MyFrame* instance; // Pointer to the current instance
-	
 	
 	void UpdateRawDataGrid(char *token);
 	void UpdateOrientationGrid(char *token);

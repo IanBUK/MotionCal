@@ -55,8 +55,6 @@ void MyCanvas::InitGL()
 	OnSize(e);
 }
 
-
-
 /*****************************************************************************/
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
@@ -373,6 +371,28 @@ void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
 	bottomLeftSizer->Add(_messageLog, 0, wxALL|wxEXPAND, 4);		
 }
 
+
+void MyFrame::LogImuData(ImuData imuData)
+{
+	char buffer[120];
+	snprintf(buffer, 120, "Raw: a(%f,%f,%f), g(%f,%f,%f), m(%f,%f,%f)", 
+		imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
+		imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
+		imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z);
+
+	showMessageInLog(buffer);
+}
+
+void MyFrame::LogOrientationData(YawPitchRoll orientation)
+{
+	char buffer[120];
+	snprintf(buffer, 120, "Ori: yaw: %f, pitch %f, roll %f", 
+		orientation.yaw, orientation.pitch, orientation.roll);
+
+	showMessageInLog(buffer);
+}
+
+// Callbacks - including statics
 void MyFrame::StaticUpdateGrid(const unsigned char* buffer, int size) {
     if (instance) 
         instance->UpdateGrid(buffer, size);
@@ -381,31 +401,27 @@ void MyFrame::StaticUpdateGrid(const unsigned char* buffer, int size) {
 void MyFrame::StaticUpdateImuData(ImuData imuData) {
     if (instance) 
         instance->UpdateImuData(imuData);
-
 }
 
-void MyFrame::LogImuData(ImuData imuData)
-{
-	logMessage("into LogImuData");	
-	char buffer[120];
-	snprintf(buffer, 120, "Raw: a(%f,%f,%f),g(%f,%f,%f), m(%f,%f,%f)", 
-		imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
-		imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
-		imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z);
-	logMessage("    - built message");		
-	showMessageInLog(buffer);
+void MyFrame::StaticUpdateOrientationData(YawPitchRoll orientation) {
+    if (instance)
+        instance->UpdateOrientationData(orientation);
 }
 
-void MyFrame::LogOrientationData(YawPitchRoll orientation)
-{
-	logMessage("into LogOrientiationData");
-	char buffer[120];
-	snprintf(buffer, 120, "Ori: yaw: %f, pitch %f, roll %f", 
-		orientation.yaw, orientation.pitch, orientation.roll);
-	logMessage("    - built message");		
-	showMessageInLog(buffer);
+void MyFrame::StaticUnknownMessageReceived(const unsigned char* buffer, int size) {
+    if (instance) 
+        instance->UnknownMessageReceived(buffer, size);
 }
 
+void MyFrame::StaticSoftIronCalibrationDataReceived(float softIron[]) {
+    if (instance) 
+        instance->SoftIronCalibrationDataReceived(softIron);
+}
+
+void MyFrame::StaticOffsetCalibrationDataReceived(float offsets[]) {
+    if (instance) 
+        instance->OffsetCalibrationDataReceived(offsets);
+}
 
 void MyFrame::UpdateImuData(ImuData imuData)
 {
@@ -436,11 +452,6 @@ void MyFrame::UpdateImuData(ImuData imuData)
 	LogImuData(imuData);
 }
 
-void MyFrame::StaticUpdateOrientationData(YawPitchRoll orientation) {
-    if (instance)
-        instance->UpdateOrientationData(orientation);
-}
-
 void MyFrame::UpdateOrientationData(YawPitchRoll orientation)
 {
 	char buffer[20];
@@ -453,6 +464,49 @@ void MyFrame::UpdateOrientationData(YawPitchRoll orientation)
 	LogOrientationData(orientation);
 }
 
+void MyFrame::UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead)
+{
+	int bufferSize = 255;//bytesRead + 17;
+	char buffer[255];
+	snprintf(buffer, 255,"Unknown Message: %s", serialBufferMessage);
+	showMessageInLog(buffer);
+}
+
+void MyFrame::SoftIronCalibrationDataReceived(float softIron[])
+{
+	showMessageInLog("SoftIron calibration received");
+	int numElements = sizeof(softIron) / sizeof(softIron[0]);
+	if (numElements != 9)
+		showMessageInLog("    - wrong no. of soft-iron items");
+	else
+	{
+		char buffer[255];
+		snprintf(buffer, 255,"SoftIron: %f,%f,%f,%f,%f,%f,%f,%f,%f calMag: %f", 
+		softIron[0],softIron[1],softIron[2],
+		softIron[3],softIron[4],softIron[5],
+		softIron[6],softIron[7],softIron[8],
+		softIron[9]);
+		showMessageInLog(buffer);	
+	}
+}
+
+void MyFrame::OffsetCalibrationDataReceived(float offsets[])
+{
+	showMessageInLog("Offset calibration received");
+		int numElements = sizeof(offsets) / sizeof(offsets[0]);
+	if (numElements != 10)
+		showMessageInLog("    - wrong no. of offset items");
+	else
+	{
+		char buffer[255];
+		snprintf(buffer, 255,"Offsets: %f,%f,%f,%f,%f,%f,%f,%f,%f", 
+		offsets[0],offsets[1],offsets[2],
+		offsets[3],offsets[4],offsets[5],
+		offsets[6],offsets[7],offsets[8]);
+		showMessageInLog(buffer);
+	}	
+}
+
 // Set a callback function for when there's grid data to display.
 // Doing this enables us to decouple events. It also allows us to 
 // reduce the chance of race conditions.
@@ -463,6 +517,7 @@ void MyFrame::BuildBufferDisplayCallBack()
 	setDisplayBufferCallback(MyFrame::StaticUpdateGrid);
 	setImuDataCallback(MyFrame::StaticUpdateImuData);
 	setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
+	setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
 }
 
 void MyFrame::showMessage(const char *message)
@@ -801,7 +856,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	float qualityWobbleError = quality_wobble_error();
 	float qualitySphericalFitError = quality_spherical_fit_error();
 	
-	snprintf(messageBuffer, 256, "gaps: %.1f%%, magVar: %.1f%%, wobble: %.1f%%. spher.: %.1f%%",
+	snprintf(messageBuffer, 256, "    gaps: %.1f%%, magVar: %.1f%%, wobble: %.1f%%. spher.: %.1f%%",
 		qualitySurfaceGapError, qualityMagnitudeVarianceError, qualityWobbleError, qualitySphericalFitError);
 	showMessageInLog(messageBuffer);
 	

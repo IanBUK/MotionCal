@@ -68,6 +68,32 @@ typedef struct
 	Point_t magnetometer;
 } ImuData;
 
+/*
+Cal1 - 10 floats
+Cal1: 
+0.000,
+0.000,
+0.000,
+0.000,
+0.000,
+0.000,
+0.000,
+0.000,
+0.000,
+50.000
+
+Cal2: - 9 floats
+0.0000,
+0.0000,
+0.0000,
+0.0000,
+0.0000,
+0.0000,
+0.0000,
+0.0000,
+0.0000
+
+*/
 
 
 typedef struct {
@@ -88,11 +114,16 @@ extern void debugPrint(const char *name, const unsigned char *data, int lengthDa
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
-
+typedef void (*unknownMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*calibrationOffsetsCallback)(float calibrationOffsets[]);
+typedef void (*calibrationSoftIronCallback)(float calibrationSoftIron[]);
 
 extern void setDisplayBufferCallback(displayBufferCallback displayBufferCallback);
 extern void setImuDataCallback(imuDataCallback imuDataCallback);
 extern void setOrientationDataCallback(orientationDataCallback orientationDataCallback);
+extern void setUnknownMessageCallback(unknownMessageCallback unknownMessageCallback);
+extern void setOffsetsCalibrationCallback(calibrationOffsetsCallback offsetsCallback);
+extern void setSoftIronCalibrationCallback(calibrationSoftIronCallback softIronCallback);
 
 
 extern int write_serial_data(const void *ptr, int len);

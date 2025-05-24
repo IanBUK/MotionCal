@@ -8,11 +8,17 @@
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
+typedef void (*unknownMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*calibrationOffsetsCallback)(float calibrationOffsets[]);
+typedef void (*calibrationSoftIronCallback)(float calibrationSoftIron[]);
 
 // Define local references to callbacks
 displayBufferCallback _displayBufferCallback;
 imuDataCallback _imuDataCallback;
 orientationDataCallback _orientationDataCallback;
+unknownMessageCallback _unknownMessageCallback;
+calibrationOffsetsCallback _offsetsCallback;
+calibrationSoftIronCallback _softIronCallback;
 
 // Setters to callbacks
 void setDisplayBufferCallback(displayBufferCallback displayBufferCallback)
@@ -28,6 +34,21 @@ void setImuDataCallback(imuDataCallback imuDataCallback)
 void setOrientationDataCallback(orientationDataCallback orientationDataCallback)
 {
 	_orientationDataCallback = orientationDataCallback;
+}
+
+void setUnknownMessageCallback(unknownMessageCallback unknownMessageCallback)
+{
+	_unknownMessageCallback = unknownMessageCallback;
+}
+
+void setOffsetsCalibrationCallback(calibrationOffsetsCallback offsetsCallback)
+{
+	_offsetsCallback = offsetsCallback;
+}
+
+void setSoftIronCalibrationCallback(calibrationSoftIronCallback softIronCallback)
+{
+	_softIronCallback = softIronCallback;
 }
 
 // Wrappers around callbacks, adding null-safety tests
@@ -48,6 +69,25 @@ void fireOrientationCallback(YawPitchRoll orientation)
 	if (_orientationDataCallback != NULL)
 		_orientationDataCallback(orientation);
 }
+
+void fireUnknownMessageCallback(const unsigned char *data, int len)
+{
+	if (_unknownMessageCallback != NULL)
+		_unknownMessageCallback(data, len);
+}
+
+void fireOffsetsCalibrationCallback(float offsets[])
+{
+	if (_offsetsCallback != NULL)
+		_offsetsCallback(offsets);
+}
+
+void fireSoftIronCalibrationCallback(float softIron[])
+{
+	if (_softIronCallback != NULL)
+		_softIronCallback(softIron);
+}
+
 
 // data callback wrapper, inflating data from unsigned char* into ImuData or Vector3D 
 // depending on raw data
@@ -131,6 +171,112 @@ void sendDataCallback(const unsigned char *data, int len)
         orientation.roll = strtof(val, NULL);
 
         fireOrientationCallback(orientation);
+    }
+    else if (memcmp(buffer, "Cal1", 4) == 0)
+    {
+    	float offsets[10];
+     	logMessage("cal1");   	
+    	char *token = strtok(buffer, " \r\n"); // "Cal1"
+        token = strtok(NULL, " \r\n");         // CSV part
+        if (!token) {
+            logMessage("Cal1 Malformed Raw data: no CSV payload");
+            return;
+        }
+
+        char *val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[0]"); return; }
+        offsets[0] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[1]"); return; }
+        offsets[1] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[2]"); return; }
+        offsets[2] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[3]"); return; }
+        offsets[3] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[4]"); return; }
+        offsets[4] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[5]"); return; }
+        offsets[5] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[6]"); return; }
+        offsets[6] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[7]"); return; }
+        offsets[7] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[8]"); return; }
+        offsets[8] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing offset[9]"); return; }
+        offsets[9] = strtof(val, NULL);   	
+    	
+    	fireOffsetsCalibrationCallback(offsets);
+    }
+    else if (memcmp(buffer, "Cal2", 4) == 0)
+    {
+    	float softIron[9];	
+    	logMessage("cal2");
+    	char *token = strtok(buffer, " \r\n"); // "Cal1"
+        /*token = strtok(NULL, " \r\n");         // CSV part
+        if (!token) {
+            logMessage("Cal2 Malformed Raw data: no CSV payload");
+            return;
+        }*/
+
+        char *val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[0]"); return; }
+        softIron[0] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[1]"); return; }
+        softIron[1] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[2]"); return; }
+        softIron[2] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[3]"); return; }
+        softIron[3] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[4]"); return; }
+        softIron[4] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[5]"); return; }
+        softIron[5] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[6]"); return; }
+        softIron[6] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[7]"); return; }
+        softIron[7] = strtof(val, NULL);
+    	
+    	val = strtok(token, ",");
+        if (!val) { logMessage("Missing softIron[8]"); return; }
+        softIron[8] = strtof(val, NULL);
+          	  	
+    	fireSoftIronCalibrationCallback(softIron);
+    }
+    else
+    {
+     	fireUnknownMessageCallback(data, len);
     }
 }
 
@@ -566,7 +712,7 @@ static void newdata(const unsigned char *data, int len)
 	//ascii_parse(data, len);
 	//buildBuffer(data, len);
 	sendDataCallback(data, len);
-	fireBufferDisplayCallback(data, len);
+	//fireBufferDisplayCallback(data, len);
 }
 
 #if defined(LINUX) || defined(MACOSX)
@@ -587,12 +733,26 @@ int port_is_open(void)
 	return 0;
 }
 
+void logTerminalSettings(struct termios termsettings)
+{
+    char message[60];
+	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
+	logMessage(message);	
+	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
+	logMessage(message);		
+	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
+	logMessage(message);
+	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
+	logMessage(message);
+}
+
+
 int open_port_by_name(const char *name)
 {
 	struct termios termsettings;
-	int r;
-    char message[60];
-    
+	int r;  
 
 	logMessage("into open_port");
 	portfd = open(name, O_RDWR | O_NONBLOCK);
@@ -607,18 +767,7 @@ int open_port_by_name(const char *name)
 		close_port();
 		return 0;
 	}
-	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
-	logMessage(message);
-	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
-	logMessage(message);	
-	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
-	logMessage(message);		
-	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
-	logMessage(message);
-	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
-	//logMessage(message);	
-	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
-	logMessage(message);	
+	logTerminalSettings(termsettings);
 	
 	cfmakeraw(&termsettings);
 	cfsetspeed(&termsettings, B115200);
@@ -636,18 +785,7 @@ int open_port_by_name(const char *name)
 		close_port();
 		return 0;
 	}
-	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
-	logMessage(message);
-	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
-	logMessage(message);	
-	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
-	logMessage(message);		
-	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
-	logMessage(message);
-	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
-	//logMessage(message);	
-	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
-	logMessage(message);	
+	logTerminalSettings(termsettings);	
 	return 1;
 }
 
@@ -667,7 +805,6 @@ speed_t getBaudRateFromString(const char *baudrate_str) {
         return (speed_t)-1; // invalid or unsupported baud rate
     }
 }
-
 
 int open_port(const char *name, const char *baud, const char *lineEnding)
 {
@@ -695,18 +832,7 @@ int open_port(const char *name, const char *baud, const char *lineEnding)
 	if (strcmp(lineEnding, "CR") == 0) _lineEndingMode = LINE_ENDING_CR;
 	if (strcmp(lineEnding, "CRLF") == 0) _lineEndingMode = LINE_ENDING_CRLF;
 	
-	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
-	logMessage(message);
-	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
-	logMessage(message);	
-	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
-	logMessage(message);		
-	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
-	logMessage(message);
-	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
-	//logMessage(message);	
-	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
-	logMessage(message);	
+	logTerminalSettings(termsettings);	
 	
 	cfmakeraw(&termsettings);
 	speed_t realBaudRate = getBaudRateFromString(baud);
@@ -725,18 +851,7 @@ int open_port(const char *name, const char *baud, const char *lineEnding)
 		close_port();
 		return -4;
 	}
-	snprintf(message, 60, "    c_iflag: '%lu' ", termsettings.c_iflag);
-	logMessage(message);
-	snprintf(message, 60, "    c_oflag: '%lu' ", termsettings.c_oflag);
-	logMessage(message);	
-	snprintf(message, 60, "    c_cflag: '%lu' ", termsettings.c_cflag);
-	logMessage(message);		
-	snprintf(message, 60, "    c_lflag: '%lu' ", termsettings.c_lflag);
-	logMessage(message);
-	//snprintf(message, 60, "    c_line: '%c' ", termsettings.c_line);
-	//logMessage(message);	
-	snprintf(message, 60, "    c_cc: '%s' ", termsettings.c_cc);
-	logMessage(message);	
+	logTerminalSettings(termsettings);	
 	return 1;
 }
 
@@ -804,7 +919,10 @@ int read_serial_data(void)
             line[lineOffset++] = newReadCharacter;
         } else 
         {
-            logMessage("line buffer overflow, resetting");
+            logMessage("line buffer overflow, resetting>>>");
+       		line[BUFFER_SIZE-1] = '\0';
+        	logMessage(line);
+            logMessage("<<<line buffer overflow, resetting");
             lineOffset = 0;
             continue;
         }
@@ -824,6 +942,9 @@ int read_serial_data(void)
 
         if (lineComplete) {
             line[lineOffset - 1] = '\0'; // strip line ending
+            /*logMessage("lineComplete>>>");
+            logMessage(line);
+            logMessage("<<<lineComplete");*/
             newdata(line, lineOffset);
             lineOffset = 0;
             return lineOffset;  // Successfully read a line
