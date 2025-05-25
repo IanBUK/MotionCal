@@ -19,538 +19,564 @@ into open_port
     c_lflag: '0' 
     c_cc: 'ÿÿÿ' 
 Port opened: '/dev/cu.wchusbserial11110', 19200 bps, LF line ending
-into ProcessImuDataFromCallback
+packet_parse
+5
+packet_parse
+Cal1:0.000,0.000,0.000,0.000,Œ¢‚ª’bºÂ²ÂbŠšbj¢bjŠbj¢’ªbjš‚ŠbjŠ‚²šj
+Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 0.000000
+packet_parse
+Raw: 2036,-4048,7872,16,-4,0,-428,-293,-1084
     firstRun set to 0
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4048,7868,11,-10,2,-422,-291,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4056,7852,7,-5,-2,-419,-291,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4044,7880,16,-2,-3,-426,-293,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4044,7892,17,-2,3,-430,-287,-1078
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4044,7864,7,-4,-1,-424,-283,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4032,7864,12,0,1,-425,-293,-1071
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2004,-4044,7864,7,-3,0,-424,-285,-1090
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4040,7884,15,-5,1,-423,-290,-1095
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4044,7868,8,-3,0,-425,-277,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4056,7856,8,-2,3,-424,-293,-1080
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4044,7884,6,-4,1,-428,-294,-1081
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4060,7868,13,-4,1,-415,-295,-1088
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4048,7880,8,-7,1,-420,-288,-1080
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4052,7860,11,-6,1,-423,-292,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4064,7892,10,-2,-2,-415,-298,-1067
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4040,7876,12,-2,1,-425,-283,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4044,7864,12,-6,2,-421,-291,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4044,7872,11,-1,1,-419,-290,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4052,7868,15,2,-3,-415,-301,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4048,7860,11,-7,2,-414,-289,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4052,7872,5,-3,-2,-426,-287,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4048,7880,12,-6,-3,-419,-292,-1063
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4048,7864,10,-5,-2,-423,-297,-1085
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4052,7876,7,-6,-1,-422,-293,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2004,-4040,7864,19,-3,4,-424,-284,-1063
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4044,7868,13,-4,-3,-422,-290,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4048,7864,8,-4,0,-429,-289,-1078
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4040,7868,12,2,-1,-424,-298,-1093
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4036,7880,8,-2,-1,-429,-280,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2036,-4040,7880,22,-6,-2,-437,-288,-1083
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4056,7884,9,-1,-1,-422,-294,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4048,7864,11,-5,-2,-426,-292,-1074
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2040,-4040,7868,13,-1,0,-427,-297,-1074
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2044,-4048,7856,14,-4,4,-417,-294,-1086
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4044,7880,9,-3,-2,-432,-297,-1078
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4032,7880,11,-5,-1,-424,-288,-1090
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4040,7892,11,-3,1,-418,-291,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4044,7864,13,-5,0,-418,-281,-1089
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2004,-4060,7864,14,-2,0,-430,-290,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4044,7884,18,-4,3,-412,-292,-1089
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2040,-4036,7888,8,-5,1,-428,-296,-1075
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4056,7860,9,-4,-1,-423,-294,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4036,7876,10,0,2,-411,-287,-1080
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4052,7880,5,1,3,-418,-285,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4048,7888,12,0,-1,-421,-297,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4048,7864,8,-5,-3,-425,-290,-1083
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4040,7868,16,-4,-2,-429,-285,-1080
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Raw: 2016,-4056,7876,6,-7,0,-407,-294,-1077
+    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
+Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
+Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4036,7876,9,-2,-2,-423,-284,-1074
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4048,7884,11,-5,3,-419,-298,-1073
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4048,7856,10,0,3,-430,-285,-1069
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2036,-4052,7848,12,-2,1,-413,-294,-1074
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4036,7880,14,-5,0,-433,-297,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4052,7872,11,-4,0,-427,-302,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4040,7888,11,-5,1,-423,-288,-1081
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4056,7868,14,-1,1,-407,-298,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4064,7872,20,-2,-2,-422,-288,-1074
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4056,7888,16,-3,-2,-431,-289,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4036,7872,10,0,0,-430,-293,-1065
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4056,7872,7,-6,0,-417,-298,-1072
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4056,7888,12,-2,0,-412,-294,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2004,-4056,7864,11,-3,-2,-408,-297,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4056,7872,9,-7,-4,-416,-296,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4048,7868,16,0,2,-416,-295,-1073
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2036,-4048,7868,11,-2,5,-420,-294,-1086
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4044,7864,6,-7,-2,-427,-284,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4060,7864,11,0,-2,-418,-292,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4044,7892,12,-6,-2,-423,-287,-1080
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4040,7844,15,1,0,-418,-279,-1082
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4052,7852,13,-4,2,-419,-299,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4040,7872,13,-6,-3,-419,-291,-1079
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4056,7864,16,0,-3,-418,-292,-1072
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2036,-4056,7860,18,0,0,-421,-290,-1092
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4052,7872,14,4,1,-427,-296,-1070
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4044,7860,16,-2,-3,-426,-286,-1067
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4040,7864,10,-5,0,-424,-292,-1069
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4044,7864,13,-3,-1,-430,-283,-1080
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4048,7888,8,0,0,-425,-292,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4048,7884,9,-1,-3,-426,-296,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4044,7880,16,-3,-2,-424,-292,-1071
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4056,7876,11,-2,2,-427,-305,-1078
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4036,7868,13,-6,-3,-423,-294,-1075
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4040,7884,10,-6,1,-408,-295,-1081
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4028,7864,15,-5,-2,-420,-289,-1071
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4040,7868,18,-4,1,-411,-290,-1070
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4044,7876,12,1,1,-413,-290,-1078
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4060,7872,16,-3,0,-416,-292,-1074
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4040,7868,13,-4,-5,-424,-293,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2040,-4032,7880,12,0,2,-422,-292,-1064
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2040,-4048,7876,9,-3,2,-425,-289,-1075
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4048,7864,11,1,4,-420,-288,-1068
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4032,7880,10,-1,3,-432,-289,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4044,7884,9,1,-1,-422,-293,-1065
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4036,7860,6,-6,2,-421,-286,-1078
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4052,7876,11,-3,0,-418,-290,-1085
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2000,-4052,7860,13,-4,-1,-423,-289,-1070
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2000,-4040,7860,13,-4,2,-422,-300,-1058
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4036,7868,13,-2,0,-418,-289,-1069
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4036,7856,15,-6,-4,-415,-295,-1063
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2004,-4052,7876,19,-3,1,-424,-297,-1071
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4056,7884,13,-2,-1,-437,-290,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4056,7876,11,-3,-1,-420,-285,-1072
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2028,-4048,7856,11,-3,4,-414,-293,-1086
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4064,7848,2,-1,5,-414,-292,-1086
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4044,7860,8,-2,-1,-424,-297,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2012,-4044,7888,8,2,1,-426,-293,-1073
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4052,7868,15,-5,1,-423,-296,-1093
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4044,7860,12,-5,-1,-425,-291,-1053
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4056,7856,14,-4,-3,-424,-289,-1073
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4052,7884,17,-6,1,-422,-289,-1072
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 1996,-4052,7872,4,-1,-5,-413,-290,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4056,7868,10,-3,2,-423,-293,-1081
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2032,-4048,7876,14,1,-1,-428,-299,-1077
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2004,-4052,7884,12,-7,1,-427,-290,-1083
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4048,7856,10,-1,1,-417,-297,-1075
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2024,-4064,7876,13,-3,-1,-411,-281,-1084
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2020,-4044,7864,15,0,0,-416,-288,-1083
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4052,7888,7,-6,0,-418,-295,-1088
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
+packet_parse
 Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
 Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
+packet_parse
+Cal2:0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
 SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2008,-4048,7892,14,-1,-2,-415,-289,-1092
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-******************************************
-MotionCal.app - start instance
-******************************************
-Into BuildMagnetomerPanel
-Into PopulateBaudList
-Done PopulateBaudList
-PortCount: 4
-Into ResetConnectionParameters
-into open_port
-    portfd: '6' 
-    c_iflag: '0' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-    c_iflag: '1' 
-    c_oflag: '0' 
-    c_cflag: '19200' 
-    c_lflag: '0' 
-    c_cc: 'ÿÿÿ' 
-Port opened: '/dev/cu.wchusbserial11110', 19200 bps, LF line ending
-into ProcessImuDataFromCallback
-    firstRun set to 0
+packet_parse
+Raw: 2020,-4048,7856,15,-1,5,-425,-290,-1076
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
+packet_parse
+Raw: 2016,-4048,7876,9,-4,0,-419,-300,-1067
     gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-SoftIron: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000
-into ProcessImuDataFromCallback
-    gaps 100.00 var. nan, wobble 100.00 fitError 100.00
-Cal1:0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,50.000
-Offsets: 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, calMag: 50.000000

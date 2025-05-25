@@ -80,35 +80,6 @@ typedef struct
 	float calMag;
 } OffsetsCalibrationData;
 
-
-/*
-Cal1 - 10 floats
-Cal1: 
-0.000,
-0.000,
-0.000,
-0.000,
-0.000,
-0.000,
-0.000,
-0.000,
-0.000,
-50.000
-
-Cal2: - 9 floats
-0.0000,
-0.0000,
-0.0000,
-0.0000,
-0.0000,
-0.0000,
-0.0000,
-0.0000,
-0.0000
-
-*/
-
-
 typedef struct {
 	float q0; // w
 	float q1; // x

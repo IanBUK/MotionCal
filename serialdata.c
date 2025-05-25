@@ -187,7 +187,6 @@ void sendDataCallback(const unsigned char *data, int len)
 		if (dataPtr != NULL) {
 			OffsetsCalibrationData offsets;
 			dataPtr++;  // Skip the colon
-			char debugMessage[255];
 			
 			// Copy the data part into a local buffer so strtok doesn't modify the original
 			char dataCopy[256];
@@ -195,11 +194,9 @@ void sendDataCallback(const unsigned char *data, int len)
 			dataCopy[sizeof(dataCopy) - 1] = '\0';  // Ensure null termination
 
 			char *token = strtok(dataCopy, ",");
-			int counter = 0;
 			while (token != NULL && floatCount < MAX_OFFSETS) {
 				offsets.offsetData[floatCount++] = strtof(token, NULL);
 				token = strtok(NULL, ",");
-				counter++;
 			}
 			if (token != NULL)
 			{
@@ -221,8 +218,7 @@ void sendDataCallback(const unsigned char *data, int len)
 		if (dataPtr != NULL) {
 			SoftIronCalibrationData softIron;
 			dataPtr++;  // Skip the colon
-			char debugMessage[255];
-			
+	
 			// Copy the data part into a local buffer so strtok doesn't modify the original
 			char dataCopy[256];
 			strncpy(dataCopy, dataPtr, sizeof(dataCopy));
@@ -330,6 +326,8 @@ void print_data(const char *name, const unsigned char *data, int len)
 
 static int packet_primary_data(const unsigned char *data)
 {
+	logMessage("into packet_primary_data");
+	logMessage((const char *)data);
 	//current_position.x = (float)((int16_t)((data[13] << 8) | data[12])) / 10.0f;
 	//current_position.y = (float)((int16_t)((data[15] << 8) | data[14])) / 10.0f;
 	//current_position.z = (float)((int16_t)((data[17] << 8) | data[16])) / 10.0f;
@@ -337,6 +335,19 @@ static int packet_primary_data(const unsigned char *data)
 	current_orientation.q1 = (float)((int16_t)((data[27] << 8) | data[26])) / 30000.0f;
 	current_orientation.q2 = (float)((int16_t)((data[29] << 8) | data[28])) / 30000.0f;
 	current_orientation.q3 = (float)((int16_t)((data[31] << 8) | data[30])) / 30000.0f;
+	
+	char buffer[255];
+	snprintf(buffer,255, "  current_orientation: q0:%f, q1:%f, q2:%f, q3:%f",current_orientation.q0,
+		current_orientation.q1, current_orientation.q2, current_orientation.q3);
+	logMessage(buffer);
+	/*snprintf(buffer,255, "  current_orientation: w:%f, x:%f, y:%f, z:%f",current_orientation.w,
+		current_orientation.x, current_orientation.y, current_orientation.z);
+	logMessage(buffer);*/
+	/*snprintf(buffer,255, "  current_position: x:%f, y:%f, z:%f",
+		current_position.x, current_position.y, current_position.z);
+	logMessage(buffer);	*/	
+	
+	
 #if 0
 	printf("mag data, %5.2f %5.2f %5.2f\n",
 		current_position.x,
@@ -359,21 +370,30 @@ static int packet_magnetic_cal(const unsigned char *data)
 {
 	int16_t id, x, y, z;
 	int n;
-
+	char buffer[255];
+	
 	id = (data[7] << 8) | data[6];
 	x = (data[9] << 8) | data[8];
 	y = (data[11] << 8) | data[10];
 	z = (data[13] << 8) | data[12];
 
+	snprintf(buffer,255, "  id:%d, x:%d, y:%d, z:%d", id, x, y, z);
+	logMessage(buffer);	
+	
+	
 	if (id == 1) {
 		magcal.V[0] = (float)x * 0.1f;
 		magcal.V[1] = (float)y * 0.1f;
 		magcal.V[2] = (float)z * 0.1f;
+		snprintf(buffer,255, "  magcal.V[0]:%f, .V[1]:%f, .V[2]:%f", magcal.V[0], magcal.V[1], magcal.V[2]);
+		logMessage(buffer);	
 		return 1;
 	} else if (id == 2) {
 		magcal.invW[0][0] = (float)x * 0.001f;
 		magcal.invW[1][1] = (float)y * 0.001f;
 		magcal.invW[2][2] = (float)z * 0.001f;
+		snprintf(buffer,255, "  magcal.invW[0][0]:%f, invW[1][1]:%f, invW[2][2]:%f", magcal.invW[0][0], magcal.invW[1][1], magcal.invW[2][2]);
+		logMessage(buffer);	
 		return 1;
 	} else if (id == 3) {
 		magcal.invW[0][1] = (float)x / 1000.0f;
@@ -382,6 +402,9 @@ static int packet_magnetic_cal(const unsigned char *data)
 		magcal.invW[1][2] = (float)y / 1000.0f; // TODO: check this assignment
 		magcal.invW[1][2] = (float)z / 1000.0f;
 		magcal.invW[2][1] = (float)z / 1000.0f; // TODO: check this assignment
+		snprintf(buffer,255, "  magcal.invW[0][1]:%f, magcal.invW[1][0]:%f, magcal.invW[0][2]:%f, magcal.invW[1][2]:%f, magcal.invW[1][2]:%f, magcal.invW[2][1]:%f",
+			magcal.invW[0][1], magcal.invW[1][0], magcal.invW[0][2], magcal.invW[1][2] , magcal.invW[1][2], magcal.invW[2][1]);
+		logMessage(buffer);	
 		return 1;
 	} else if (id >= 10 && id < MAGBUFFSIZE+10) {
 		n = id - 10;
@@ -392,6 +415,9 @@ static int packet_magnetic_cal(const unsigned char *data)
 			magcal.BpFast[2][n] = z;
 			magcal.valid[n] = 1;
 			//printf("mag cal, n=%3d: %5d %5d %5d\n", n, x, y, z);
+			snprintf(buffer,255, "  magcal.BpFast[0][n]: %d, ,magcal.BpFast[1][n]: %d, , magcal.BpFast[2][n]: %d",
+				magcal.BpFast[0][n],magcal.BpFast[1][n], magcal.BpFast[2][n]);
+		logMessage(buffer);	
 		}
 		return 1;
 	}
@@ -402,7 +428,8 @@ static int packet(const unsigned char *data, int len)
 {
 	if (len <= 0) return 0;
 	//print_data("packet", data, len);
-
+	logMessage("into packet");
+	logMessage((const char *)data);
 	if (data[0] == 1 && len == 34) {
 		return packet_primary_data(data);
 	} else if (data[0] == 6 && len == 14) {
@@ -416,7 +443,8 @@ static int packet_encoded(const unsigned char *data, int len)
 	const unsigned char *p;
 	unsigned char buf[BUFFER_SIZE];
 	int buflen=0, copylen;
-
+	logMessage("into packet_encoded");
+	logMessage((const char *)data);
 	//printf("packet_encoded, len = %d\n", len);
 	p = memchr(data, 0x7D, len);
 	if (p == NULL) {
@@ -459,7 +487,8 @@ static int packet_parse(const unsigned char *data, int len)
 	int copylen;
 	int ret=0;
 
-	//print_data("packet_parse", data, len);
+	logMessage("packet_parse");
+	logMessage((const char *)data);
 	while (len > 0) {
 		p = memchr(data, 0x7E, len);
 		if (p == NULL) {
@@ -674,9 +703,9 @@ fail:
 
 static void newdata(const unsigned char *data, int len)
 {
-	//packet_parse(data, len);
-	//ascii_parse(data, len);
-	//buildBuffer(data, len);
+	packet_parse(data, len);
+	ascii_parse(data, len);
+	buildBuffer(data, len);
 	sendDataCallback(data, len);
 	//fireBufferDisplayCallback(data, len);
 }
@@ -887,7 +916,7 @@ int read_serial_data(void)
         {
             logMessage("line buffer overflow, resetting>>>");
        		line[BUFFER_SIZE-1] = '\0';
-        	logMessage(line);
+        	logMessage((const char *)line);
             logMessage("<<<line buffer overflow, resetting");
             lineOffset = 0;
             continue;
