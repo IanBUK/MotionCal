@@ -188,11 +188,11 @@ private:
 	void UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUnknownMessageReceived(const unsigned char* buffer, int size);
 
-	void SoftIronCalibrationDataReceived(float softIron[]);
-	static void StaticSoftIronCalibrationDataReceived(float softIron[]);
+	void SoftIronCalibrationDataReceived(SoftIronCalibrationData softIron);
+	static void StaticSoftIronCalibrationDataReceived(SoftIronCalibrationData softIron);
 
-	void OffsetCalibrationDataReceived(float offsets[]);
-	static void StaticOffsetCalibrationDataReceived(float offsets[]);
+	void OffsetCalibrationDataReceived(OffsetsCalibrationData offsets);
+	static void StaticOffsetCalibrationDataReceived(OffsetsCalibrationData offsets);
 
 	void ProcessImuDataFromCallback(ImuData imuData);
 

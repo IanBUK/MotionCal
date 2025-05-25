@@ -375,7 +375,7 @@ void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
 void MyFrame::LogImuData(ImuData imuData)
 {
 	char buffer[120];
-	snprintf(buffer, 120, "Raw: a(%f,%f,%f), g(%f,%f,%f), m(%f,%f,%f)", 
+	snprintf(buffer, 120, "ImuData: a(%f,%f,%f), g(%f,%f,%f), m(%f,%f,%f)", 
 		imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
 		imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
 		imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z);
@@ -413,14 +413,26 @@ void MyFrame::StaticUnknownMessageReceived(const unsigned char* buffer, int size
         instance->UnknownMessageReceived(buffer, size);
 }
 
-void MyFrame::StaticSoftIronCalibrationDataReceived(float softIron[]) {
+void MyFrame::StaticSoftIronCalibrationDataReceived(SoftIronCalibrationData softIron) {
     if (instance) 
+    {
         instance->SoftIronCalibrationDataReceived(softIron);
+    }
+    else
+    {
+    	logMessage("couldn't call instance SoftIronCalibrationDataReceived");
+    }     
 }
 
-void MyFrame::StaticOffsetCalibrationDataReceived(float offsets[]) {
+void MyFrame::StaticOffsetCalibrationDataReceived(OffsetsCalibrationData offsets) {
     if (instance) 
+    { 
         instance->OffsetCalibrationDataReceived(offsets);
+    }
+    else
+    {
+    	logMessage("couldn't call instance OffsetCalibrationDataReceived");
+    }        
 }
 
 void MyFrame::UpdateImuData(ImuData imuData)
@@ -472,39 +484,28 @@ void MyFrame::UnknownMessageReceived(const unsigned char *serialBufferMessage, i
 	showMessageInLog(buffer);
 }
 
-void MyFrame::SoftIronCalibrationDataReceived(float softIron[])
+void MyFrame::SoftIronCalibrationDataReceived(SoftIronCalibrationData softIron)
 {
-	showMessageInLog("SoftIron calibration received");
-	int numElements = sizeof(softIron) / sizeof(softIron[0]);
-	if (numElements != 9)
-		showMessageInLog("    - wrong no. of soft-iron items");
-	else
-	{
-		char buffer[255];
-		snprintf(buffer, 255,"SoftIron: %f,%f,%f,%f,%f,%f,%f,%f,%f calMag: %f", 
-		softIron[0],softIron[1],softIron[2],
-		softIron[3],softIron[4],softIron[5],
-		softIron[6],softIron[7],softIron[8],
-		softIron[9]);
-		showMessageInLog(buffer);	
-	}
+	char buffer[255];
+	snprintf(buffer, 255,"SoftIron: %f, %f, %f, %f, %f, %f, %f, %f, %f, %f", 
+	softIron.softIronData[0], softIron.softIronData[1], softIron.softIronData[2],
+	softIron.softIronData[3], softIron.softIronData[4], softIron.softIronData[5],
+	softIron.softIronData[6], softIron.softIronData[7], softIron.softIronData[8],
+	softIron.softIronData[9]);
+	showMessageInLog(buffer);
+	logMessage(buffer);	
 }
 
-void MyFrame::OffsetCalibrationDataReceived(float offsets[])
+void MyFrame::OffsetCalibrationDataReceived(OffsetsCalibrationData offsets)
 {
-	showMessageInLog("Offset calibration received");
-		int numElements = sizeof(offsets) / sizeof(offsets[0]);
-	if (numElements != 10)
-		showMessageInLog("    - wrong no. of offset items");
-	else
-	{
-		char buffer[255];
-		snprintf(buffer, 255,"Offsets: %f,%f,%f,%f,%f,%f,%f,%f,%f", 
-		offsets[0],offsets[1],offsets[2],
-		offsets[3],offsets[4],offsets[5],
-		offsets[6],offsets[7],offsets[8]);
-		showMessageInLog(buffer);
-	}	
+	char buffer[255];
+	snprintf(buffer, 255,"Offsets: %f, %f, %f, %f, %f, %f, %f, %f, %f, calMag: %f", 
+	offsets.offsetData[0], offsets.offsetData[1], offsets.offsetData[2],
+	offsets.offsetData[3], offsets.offsetData[4], offsets.offsetData[5],
+	offsets.offsetData[6], offsets.offsetData[7], offsets.offsetData[8],
+	offsets.calMag);
+	showMessageInLog(buffer);
+	logMessage(buffer);
 }
 
 // Set a callback function for when there's grid data to display.
@@ -518,6 +519,8 @@ void MyFrame::BuildBufferDisplayCallBack()
 	setImuDataCallback(MyFrame::StaticUpdateImuData);
 	setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
 	setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
+	setOffsetsCalibrationCallback(MyFrame::StaticOffsetCalibrationDataReceived);
+	setSoftIronCalibrationCallback(MyFrame::StaticSoftIronCalibrationDataReceived);
 }
 
 void MyFrame::showMessage(const char *message)
@@ -805,8 +808,6 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 {
 	char messageBuffer[256];
-	logMessage("into ProcessImuDataFromCallback");
-
 	static int firstrun=1;
 	float gaps, variance, wobble, fiterror;
 	char buf[32];

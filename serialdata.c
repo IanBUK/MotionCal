@@ -9,8 +9,8 @@ typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, 
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
 typedef void (*unknownMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
-typedef void (*calibrationOffsetsCallback)(float calibrationOffsets[]);
-typedef void (*calibrationSoftIronCallback)(float calibrationSoftIron[]);
+typedef void (*calibrationOffsetsCallback)(OffsetsCalibrationData calibrationOffsets);
+typedef void (*calibrationSoftIronCallback)(SoftIronCalibrationData calibrationSoftIron);
 
 // Define local references to callbacks
 displayBufferCallback _displayBufferCallback;
@@ -76,16 +76,22 @@ void fireUnknownMessageCallback(const unsigned char *data, int len)
 		_unknownMessageCallback(data, len);
 }
 
-void fireOffsetsCalibrationCallback(float offsets[])
+void fireOffsetsCalibrationCallback(OffsetsCalibrationData calibrationOffsets)
 {
 	if (_offsetsCallback != NULL)
-		_offsetsCallback(offsets);
+	{
+		_offsetsCallback(calibrationOffsets);
+	}
+	else
+		logMessage("offsets callback not set");
 }
 
-void fireSoftIronCalibrationCallback(float softIron[])
+void fireSoftIronCalibrationCallback(SoftIronCalibrationData calibrationSoftIron)
 {
 	if (_softIronCallback != NULL)
-		_softIronCallback(softIron);
+		_softIronCallback(calibrationSoftIron);
+	else
+		logMessage("softIronCallback not set");
 }
 
 
@@ -174,106 +180,66 @@ void sendDataCallback(const unsigned char *data, int len)
     }
     else if (memcmp(buffer, "Cal1", 4) == 0)
     {
-    	float offsets[10];
-     	logMessage("cal1");   	
-    	char *token = strtok(buffer, " \r\n"); // "Cal1"
-        token = strtok(NULL, " \r\n");         // CSV part
-        if (!token) {
-            logMessage("Cal1 Malformed Raw data: no CSV payload");
-            return;
-        }
+    	#define MAX_OFFSETS 9
+		int floatCount = 0;
+		// Find the start of the float data after the colon
+		char *dataPtr = strchr(buffer, ':');
+		if (dataPtr != NULL) {
+			OffsetsCalibrationData offsets;
+			dataPtr++;  // Skip the colon
+			char debugMessage[255];
+			
+			// Copy the data part into a local buffer so strtok doesn't modify the original
+			char dataCopy[256];
+			strncpy(dataCopy, dataPtr, sizeof(dataCopy));
+			dataCopy[sizeof(dataCopy) - 1] = '\0';  // Ensure null termination
 
-        char *val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[0]"); return; }
-        offsets[0] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[1]"); return; }
-        offsets[1] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[2]"); return; }
-        offsets[2] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[3]"); return; }
-        offsets[3] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[4]"); return; }
-        offsets[4] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[5]"); return; }
-        offsets[5] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[6]"); return; }
-        offsets[6] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[7]"); return; }
-        offsets[7] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[8]"); return; }
-        offsets[8] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing offset[9]"); return; }
-        offsets[9] = strtof(val, NULL);   	
-    	
-    	fireOffsetsCalibrationCallback(offsets);
+			char *token = strtok(dataCopy, ",");
+			int counter = 0;
+			while (token != NULL && floatCount < MAX_OFFSETS) {
+				offsets.offsetData[floatCount++] = strtof(token, NULL);
+				token = strtok(NULL, ",");
+				counter++;
+			}
+			if (token != NULL)
+			{
+				offsets.calMag = strtof(token, NULL);
+			}
+			fireOffsetsCalibrationCallback(offsets);	
+		} 
+		else 
+		{
+			logMessage("    Error: Invalid Offsets format, colon not found.\n");
+		}   
     }
     else if (memcmp(buffer, "Cal2", 4) == 0)
     {
-    	float softIron[9];	
-    	logMessage("cal2");
-    	char *token = strtok(buffer, " \r\n"); // "Cal1"
-        /*token = strtok(NULL, " \r\n");         // CSV part
-        if (!token) {
-            logMessage("Cal2 Malformed Raw data: no CSV payload");
-            return;
-        }*/
+       	#define MAX_CALDATA 10
+		int floatCount = 0;
+		// Find the start of the float data after the colon
+		char *dataPtr = strchr(buffer, ':');
+		if (dataPtr != NULL) {
+			SoftIronCalibrationData softIron;
+			dataPtr++;  // Skip the colon
+			char debugMessage[255];
+			
+			// Copy the data part into a local buffer so strtok doesn't modify the original
+			char dataCopy[256];
+			strncpy(dataCopy, dataPtr, sizeof(dataCopy));
+			dataCopy[sizeof(dataCopy) - 1] = '\0';  // Ensure null termination
 
-        char *val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[0]"); return; }
-        softIron[0] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[1]"); return; }
-        softIron[1] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[2]"); return; }
-        softIron[2] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[3]"); return; }
-        softIron[3] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[4]"); return; }
-        softIron[4] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[5]"); return; }
-        softIron[5] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[6]"); return; }
-        softIron[6] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[7]"); return; }
-        softIron[7] = strtof(val, NULL);
-    	
-    	val = strtok(token, ",");
-        if (!val) { logMessage("Missing softIron[8]"); return; }
-        softIron[8] = strtof(val, NULL);
-          	  	
-    	fireSoftIronCalibrationCallback(softIron);
-    }
+			char *token = strtok(dataCopy, ",");
+			while (token != NULL && floatCount < MAX_CALDATA) {
+				softIron.softIronData[floatCount++] = strtof(token, NULL);
+				token = strtok(NULL, ",");
+			}
+			fireSoftIronCalibrationCallback(softIron);	
+		} 
+		else 
+		{
+			logMessage("    Error: Invalid SoftIron format, colon not found.\n");
+		}  
+   }
     else
     {
      	fireUnknownMessageCallback(data, len);
