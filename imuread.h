@@ -43,10 +43,19 @@
 #define TIMEOUT_MSEC 14
 
 #define MAGBUFFSIZE 650 // Freescale's lib needs at least 392
+#define BUFFER_SIZE 512
 
 #ifdef __cplusplus
 extern "C"{
 #endif
+
+
+typedef enum {
+    LINE_ENDING_NOTSET,
+    LINE_ENDING_LF,    // "\n"
+    LINE_ENDING_CR,    // "\r"
+    LINE_ENDING_CRLF   // "\r\n"
+} LineEnding;
 
 typedef struct {
 	float x;
@@ -86,6 +95,8 @@ typedef struct {
 	float q2; // y
 	float q3; // z
 } Quaternion_t;
+
+
 extern Quaternion_t current_orientation;
 
 extern int port_is_open(void);
@@ -118,6 +129,23 @@ extern void fireOrientationCallback(YawPitchRoll orientation);
 extern void fireUnknownMessageCallback(const unsigned char *data, int len);
 extern void fireOffsetsCalibrationCallback(OffsetsCalibrationData calibrationOffsets);
 extern void fireSoftIronCalibrationCallback(SoftIronCalibrationData calibrationSoftIron);
+extern void sendDataCallback(const unsigned char *data, int len);
+
+
+// Message parsing, implemented in serialdata.parsing.c
+extern int packet_primary_data(const unsigned char *data);
+extern int packet_magnetic_cal(const unsigned char *data);
+extern int packet(const unsigned char *data, int len);
+extern int packet_encoded(const unsigned char *data, int len);
+extern int packet_parse(const unsigned char *data, int len);
+extern int ascii_parse(const unsigned char *data, int len);
+
+// Logging, implemented in logging.c
+extern void logMessage(const char *message);
+extern void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex);
+extern void logTerminalSettings(struct termios termsettings);
+extern void print_data(const char *name, const unsigned char *data, int len);
+
 
 
 

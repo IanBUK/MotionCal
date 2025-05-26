@@ -60,7 +60,7 @@ MAKEFLAGS = --jobs=12
 
 endif
 
-OBJS = visualize.o serialdata.o serialdata.messaging.o rawdata.o magcal.o matrix.o fusion.o quality.o mahony.o
+OBJS = logging.o visualize.o serialdata.o serialdata.messaging.o serialdata.parsing.o rawdata.o magcal.o matrix.o fusion.o quality.o mahony.o
 IMGS = checkgreen.png checkempty.png checkemptygray.png
 
 all: $(ALL)
@@ -104,7 +104,9 @@ gui.o: gui.cpp gui.h imuread.h Makefile
 portlist.o: portlist.cpp gui.h Makefile
 imuread.o: imuread.c imuread.h Makefile
 visualize.o: visualize.c imuread.h Makefile
+logging.o: logging.c Makefile
 serialdata.messaging.o: serialdata.messaging.c  Makefile
+serialdata.parsing.o: serialdata.parsing.c  Makefile
 serialdata.o: serialdata.c imuread.h Makefile
 rawdata.o: rawdata.c imuread.h Makefile
 magcal.o: magcal.c imuread.h Makefile

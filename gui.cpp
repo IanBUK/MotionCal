@@ -345,7 +345,7 @@ wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
 	const wxPoint rawDataGridLocation = wxPoint(30,200);
 	const wxPoint orientationGridLocation = wxPoint(30,300);
 	
-	wxSizer *dataPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Data");
+	wxSizer *dataPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Received Data");
 	dataPanel->SetMinSize(wxSize(-1, 180)); 
 	
 	BuildRawDataGrid(parent, dataPanel, rawDataGridLocation);
