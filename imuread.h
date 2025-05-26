@@ -103,11 +103,8 @@ extern int port_is_open(void);
 extern int open_port(const char *name, const char *baud, const char *lineEnding);
 extern int open_port_by_name(const char *name);
 extern int read_serial_data(void);
-extern void logMessage(const char *message);
-extern void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex);
 
-
-
+// Messaging Callback firing routings, implemented in serialdata.messaging.c
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
@@ -115,14 +112,12 @@ typedef void (*unknownMessageCallback)(const unsigned char *serialBufferMessage,
 typedef void (*calibrationOffsetsCallback)(OffsetsCalibrationData calibrationOffsets);
 typedef void (*calibrationSoftIronCallback)(SoftIronCalibrationData calibrationSoftIron);
 
-extern void setDisplayBufferCallback(displayBufferCallback displayBufferCallback);
 extern void setImuDataCallback(imuDataCallback imuDataCallback);
 extern void setOrientationDataCallback(orientationDataCallback orientationDataCallback);
 extern void setUnknownMessageCallback(unknownMessageCallback unknownMessageCallback);
 extern void setOffsetsCalibrationCallback(calibrationOffsetsCallback offsetsCallback);
 extern void setSoftIronCalibrationCallback(calibrationSoftIronCallback softIronCallback);
 
-// Messaging Callback firing routings, implemented in serialdata.messaging.c
 extern void fireBufferDisplayCallback(const unsigned char *data, int len);
 extern void fireImuCallback(ImuData data);
 extern void fireOrientationCallback(YawPitchRoll orientation);

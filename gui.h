@@ -49,6 +49,9 @@
 #define ID_MESSAGE_LOG		10020
 #define ID_PAUSE_BUTTON		10030
 
+#define ID_BAUDRATE_MENU	11000
+
+
 #define X_ROW 0
 #define Y_ROW 1
 #define Z_ROW 2
@@ -117,6 +120,7 @@ private:
 	wxButton *m_button_pause;
 	wxStaticBitmap *m_confirm_icon;
 	wxMenu *m_port_menu;
+	wxMenu *m_baudRateMenu;
 	wxComboBox *m_port_list;
 	wxComboBox *_baudList;
 	wxComboBox *_lineEndingList;
@@ -126,7 +130,6 @@ private:
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
 	
-	bool _drawingData;
 	bool _paused = true;
 		
 	void OnSendCal(wxCommandEvent &event);
@@ -136,6 +139,7 @@ private:
 	void OnShowPortList(wxCommandEvent &event);
 	void OnPortList(wxCommandEvent& event);
 	void OnPortMenu(wxCommandEvent &event);
+	void OnBaudRateMenu(wxCommandEvent &event);
 	void OnTimer(wxTimerEvent &event);
 	void OnAbout(wxCommandEvent &event);
 	void OnQuit(wxCommandEvent &event);
@@ -152,8 +156,8 @@ private:
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
 	void showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
 	void showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
-	void showMessage(const char *message);
-	void showMessageInLog(const char *message);
+	void showMessagePopup(const char *message);
+	void showInMessagesPanel(const char *message, bool echoToLogFile);
 	void LogImuData(ImuData imuData);
 	void LogOrientationData(YawPitchRoll orientation);
 				
@@ -178,12 +182,9 @@ private:
 	// Callback handlers from serial data processor
 	void UpdateImuData(ImuData imuData);
 	static void StaticUpdateImuData(ImuData imuData);
-	
+	 
 	void UpdateOrientationData(YawPitchRoll orientation);	
 	static void StaticUpdateOrientationData(YawPitchRoll orientation);
-	
-	void UpdateGrid(const unsigned char *serialBufferMessage, int bytesRead);
-	static void StaticUpdateGrid(const unsigned char* buffer, int size);
 
 	void UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUnknownMessageReceived(const unsigned char* buffer, int size);

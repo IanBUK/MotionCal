@@ -21,11 +21,6 @@ calibrationOffsetsCallback _offsetsCallback;
 calibrationSoftIronCallback _softIronCallback;
 
 // Setters to callbacks
-void setDisplayBufferCallback(displayBufferCallback displayBufferCallback)
-{
-	_displayBufferCallback = displayBufferCallback;
-}
-
 void setImuDataCallback(imuDataCallback imuDataCallback)
 {
 	_imuDataCallback = imuDataCallback;
