@@ -157,6 +157,7 @@ private:
 	void LogImuData(ImuData imuData);
 	void LogOrientationData(YawPitchRoll orientation);
 		
+		
 	// Build UI components
 	void BuildMenu();
 	wxBoxSizer* BuildLeftPanel(wxPanel *panel);

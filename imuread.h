@@ -95,6 +95,8 @@ extern int read_serial_data(void);
 extern void logMessage(const char *message);
 extern void debugPrint(const char *name, const unsigned char *data, int lengthData, bool showHex);
 
+
+
 typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
@@ -108,6 +110,15 @@ extern void setOrientationDataCallback(orientationDataCallback orientationDataCa
 extern void setUnknownMessageCallback(unknownMessageCallback unknownMessageCallback);
 extern void setOffsetsCalibrationCallback(calibrationOffsetsCallback offsetsCallback);
 extern void setSoftIronCalibrationCallback(calibrationSoftIronCallback softIronCallback);
+
+// Messaging Callback firing routings, implemented in serialdata.messaging.c
+extern void fireBufferDisplayCallback(const unsigned char *data, int len);
+extern void fireImuCallback(ImuData data);
+extern void fireOrientationCallback(YawPitchRoll orientation);
+extern void fireUnknownMessageCallback(const unsigned char *data, int len);
+extern void fireOffsetsCalibrationCallback(OffsetsCalibrationData calibrationOffsets);
+extern void fireSoftIronCalibrationCallback(SoftIronCalibrationData calibrationSoftIron);
+
 
 
 extern int write_serial_data(const void *ptr, int len);
