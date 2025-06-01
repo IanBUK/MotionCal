@@ -99,7 +99,10 @@ void display_callback(void)
 		//rotation[6] *= -1.0f;
 		//rotation[7] *= -1.0f;
 		//rotation[8] *= -1.0f;
-
+		glColor3f(1, 0, 0);
+		float redDelta = 1.0F / (float)MAGBUFFSIZE;
+		float redValue = 0.0F;
+		
 		for (i=0; i < MAGBUFFSIZE; i++) {
 			if (magcal.valid[i]) {
 				apply_calibration(magcal.BpFast[0][i], magcal.BpFast[1][i],
@@ -125,6 +128,9 @@ void display_callback(void)
 				}
 				glPopMatrix();
 			}
+			
+			redValue += redDelta;
+			//glColor3f(redValue, 0, 1.0F-redValue);
 		}
 	}
 #if 0

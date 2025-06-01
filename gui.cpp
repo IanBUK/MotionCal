@@ -160,7 +160,6 @@ bool MyFrame::SoftIronCalibrationDataChanged(SoftIronCalibrationData newSoftIron
 	return false;
 }
 
-
 void MyFrame::UpdateOffsetsCalibrationData(OffsetsCalibrationData newOffsetsCalibrationData)
 {
 	_lastOffsetsCalibrationData.calMag = newOffsetsCalibrationData.calMag;
@@ -358,7 +357,6 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 		
 	_paused = false;
 	
-	
 	// Add command column to row
 	row->Add(commandsColumn,0, wxALL, 5);
 
@@ -406,7 +404,6 @@ void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
 	bottomLeftSizer->Add(_messageLog, 0, wxALL|wxEXPAND, 4);		
 }
 
-
 void MyFrame::LogImuData(ImuData imuData)
 {
 	// Leave as a placeholder
@@ -427,12 +424,6 @@ void MyFrame::LogOrientationData(YawPitchRoll orientation)
 
 	ShowInMessagesPanel(buffer, false);
 }
-
-// Callbacks - including statics
-/*void MyFrame::StaticUpdateGrid(const unsigned char* buffer, int size) {
-    if (instance) 
-        instance->UpdateGrid(buffer, size);
-}*/
 
 void MyFrame::StaticUpdateImuData(ImuData imuData) {
     if (instance) 
@@ -740,7 +731,6 @@ void MyFrame::UpdateRawDataGrid(char *token)
 	_rawDataGrid->SetCellValue(Z_ROW,MAG_COL,token);
 }
 
-
 void MyFrame::UpdateOrientationGrid(char *token)
 {
 	token = strtok(NULL, ",");
@@ -995,7 +985,6 @@ void MyFrame::OnShowMenu(wxMenuEvent &event)
 	}
 }
 
-
 void MyFrame::PopulateBaudList()
 {
 	if(_baudList == NULL)
@@ -1050,12 +1039,10 @@ void MyFrame::ResetConnectionParameters()
 	m_button_clear->Enable(true);
 }
 
-
 void MyFrame::SetPausable(bool pausable)
 {
 	m_button_pause->Enable(pausable);
 }
-
 
 void MyFrame::OnPortList(wxCommandEvent& event)
 {
@@ -1113,11 +1100,9 @@ void MyFrame::OnBaudRateMenu(wxCommandEvent &event)
     
     // update baud rate drop down
     _baudList->SetStringSelection(_baudRate);
-
 	
 	int selectedLineEnding = _lineEndingList->GetSelection();
 	_lineEnding = _lineEndingList->GetString(selectedLineEnding);
-
 	
 	// assume portname hasn't changed
 	if (m_port_list->GetSelection() > 0)
@@ -1168,7 +1153,6 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 	}
 	SetMinimumWidthFromContents(m_port_list, 50);
 }
-
 
 void MyFrame::ShowOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode)
 {
