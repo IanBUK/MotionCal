@@ -349,10 +349,17 @@ wxSizer* MyFrame::BuildDataPanel(wxPanel *parent)
 	const wxPoint orientationGridLocation = wxPoint(30,300);
 	
 	wxSizer *dataPanel = new wxStaticBoxSizer(wxVERTICAL, parent, "Received Data");
-	dataPanel->SetMinSize(wxSize(-1, 180)); 
 	
+	dataPanel->SetMinSize(wxSize(-1, 180)); 
+	wxStaticText* rawLabel = new wxStaticText(parent, wxID_ANY, "Raw:");
+	rawLabel->SetMinSize(wxSize(_labelWidth, -1));
+	dataPanel->Add(rawLabel, 0, wxALIGN_LEFT | wxRIGHT, 5);	
 	BuildRawDataGrid(parent, dataPanel, rawDataGridLocation);
-	dataPanel->AddSpacer(8);
+	dataPanel->AddSpacer(20);
+	
+	wxStaticText* orientationLabel = new wxStaticText(parent, wxID_ANY, "Orientation:");
+	orientationLabel->SetMinSize(wxSize(_labelWidth, -1));
+	dataPanel->Add(orientationLabel, 0, wxALIGN_LEFT | wxRIGHT, 5);	
 	BuildOrientationGrid(parent, dataPanel, orientationGridLocation);
 	
 	return dataPanel;
