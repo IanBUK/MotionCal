@@ -11,16 +11,11 @@ MyFrame* MyFrame::instance = nullptr;
 wxBEGIN_EVENT_TABLE(MyCanvas, wxGLCanvas)
 	EVT_SIZE(MyCanvas::OnSize)
 	EVT_PAINT(MyCanvas::OnPaint)
-	//EVT_CHAR(MyCanvas::OnChar)
-	//EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
 wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxWindow *parent, wxWindowID id, int* gl_attrib)
 	: wxGLCanvas(parent, id, gl_attrib)
 {
-	//m_xrot = 0;
-	//m_yrot = 0;
-	//m_numverts = 0;
 	// Explicitly create a new rendering context instance for this canvas.
 	m_glRC = new wxGLContext(this);
 }
@@ -32,7 +27,6 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnSize(wxSizeEvent& event)
 {
-	//printf("OnSize\n");
 	if (!IsShownOnScreen()) return;
 	SetCurrent(*m_glRC);
 	resize_callback(event.GetSize().x, event.GetSize().y);
@@ -40,7 +34,6 @@ void MyCanvas::OnSize(wxSizeEvent& event)
 
 void MyCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-	//printf("OnPaint\n");
 	wxPaintDC dc(this);
 	SetCurrent(*m_glRC);
 	display_callback();
@@ -95,7 +88,7 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 	wxPanel *panel = new wxPanel(this);
 	
 	wxBoxSizer *leftsizer = BuildLeftPanel(panel);	
-	wxBoxSizer *rightsizer = BuildRightPanel(panel);//new wxStaticBoxSizer(wxVERTICAL, panel, "Calibration");
+	wxBoxSizer *rightsizer = BuildRightPanel(panel);
 
 	topsizer->Add(leftsizer, 0,  wxALL | wxEXPAND | wxALIGN_TOP, 5);
 	topsizer->Add(rightsizer, 0, wxALL | wxEXPAND | wxALIGN_TOP, 5);
@@ -108,11 +101,11 @@ MyFrame::MyFrame(wxWindow *parent, wxWindowID id, const wxString &title,
 
 	m_canvas->InitGL();
 	raw_data_reset();
-	//open_port(PORT);
+
 	m_timer = new wxTimer(this, ID_TIMER);
 	m_timer->Start(14, wxTIMER_CONTINUOUS);
 	
-	showInMessagesPanel("MotionCal started.", false);
+	ShowInMessagesPanel("MotionCal started.", false);
 }
 
 wxBoxSizer* MyFrame::BuildLeftPanel(wxPanel *panel)
@@ -145,6 +138,40 @@ wxBoxSizer* MyFrame::BuildLeftPanel(wxPanel *panel)
 	parent->Add(bottomLeftSizer, 1, wxALL | wxEXPAND, 0);
 	
 	return parent;
+}
+
+bool MyFrame::OffsetsCalibrationDataChanged(OffsetsCalibrationData newOffsetsCalibrationData)
+{
+	if (_lastOffsetsCalibrationData.calMag != newOffsetsCalibrationData.calMag)
+		return true;
+	for(int i = 0; i < 9; i++)
+		if (_lastOffsetsCalibrationData.offsetData[i] != newOffsetsCalibrationData.offsetData[i])
+			return true;
+	
+	return false;
+}
+
+bool MyFrame::SoftIronCalibrationDataChanged(SoftIronCalibrationData newSoftIronCalibrationData)
+{
+	for(int i = 0; i < 9; i++)
+		if (_lastSoftIronCalibrationData.softIronData[i] != newSoftIronCalibrationData.softIronData[i])
+			return true;
+			
+	return false;
+}
+
+
+void MyFrame::UpdateOffsetsCalibrationData(OffsetsCalibrationData newOffsetsCalibrationData)
+{
+	_lastOffsetsCalibrationData.calMag = newOffsetsCalibrationData.calMag;
+	for(int i = 0; i < 9; i++)
+		_lastOffsetsCalibrationData.offsetData[i] = newOffsetsCalibrationData.offsetData[i];
+}
+
+void MyFrame::UpdateSoftIronCalibrationData(SoftIronCalibrationData newSoftIronCalibrationData)
+{
+	for(int i = 0; i < 9; i++)
+		_lastSoftIronCalibrationData.softIronData[i] = newSoftIronCalibrationData.softIronData[i];
 }
 
 wxBoxSizer* MyFrame::BuildRightPanel(wxPanel *panel)
@@ -201,8 +228,6 @@ wxBoxSizer* MyFrame::BuildRightPanel(wxPanel *panel)
 	calsizer->AddSpacer(8);
 	text = new wxStaticText(panel, wxID_ANY, "");
 	text->SetLabelMarkup("<small>Calibration should be performed\n<b>after</b> final installation.  Presence\nof magnets and ferrous metals\ncan alter magnetic calibration.\nMechanical stress during\nassembly can alter accelerometer\nand gyroscope calibration.</small>");
-	//text->Wrap(200);
-	//calsizer->Add(text, 0, wxEXPAND | wxALIGN_CENTER_HORIZONTAL, 0);
 	calsizer->Add(text, 0, wxALIGN_CENTER_HORIZONTAL, 0);
 	
 	return rightsizer;
@@ -305,7 +330,7 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 	
 	// Add the status icon
 	wxImage::AddHandler(new wxPNGHandler);
-	const wxPoint bitmapLocation = wxPoint(5,5);//30,100);
+	const wxPoint bitmapLocation = wxPoint(5,5);
 	m_confirm_icon = new wxStaticBitmap(parent, wxID_ANY, MyBitmap("checkemptygray.png"), bitmapLocation);
 	wxSizerItem* icon = row->Add(m_confirm_icon, 0, wxALL , 1);
 	icon->SetMinSize(wxSize(240, -1)); 
@@ -384,13 +409,14 @@ void MyFrame::BuildStatusPanel(wxPanel *parent, wxBoxSizer *bottomLeftSizer)
 
 void MyFrame::LogImuData(ImuData imuData)
 {
-	char buffer[120];
-	snprintf(buffer, 120, "ImuData: a(%f,%f,%f), g(%f,%f,%f), m(%f,%f,%f)", 
-		imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
-		imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
-		imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z);
+	// Leave as a placeholder
+	//char buffer[120];
+	//snprintf(buffer, 120, "ImuData: a(%f,%f,%f), g(%f,%f,%f), m(%f,%f,%f)", 
+	//	imuData.accelerometer.x, imuData.accelerometer.y, imuData.accelerometer.z,
+	//	imuData.gyroscope.x, imuData.gyroscope.y, imuData.gyroscope.z,
+	//	imuData.magnetometer.x, imuData.magnetometer.y, imuData.magnetometer.z);
 
-	showInMessagesPanel(buffer, false);
+	//ShowInMessagesPanel(buffer, false);
 }
 
 void MyFrame::LogOrientationData(YawPitchRoll orientation)
@@ -399,7 +425,7 @@ void MyFrame::LogOrientationData(YawPitchRoll orientation)
 	snprintf(buffer, 120, "Ori: yaw: %f, pitch %f, roll %f", 
 		orientation.yaw, orientation.pitch, orientation.roll);
 
-	showInMessagesPanel(buffer, false);
+	ShowInMessagesPanel(buffer, false);
 }
 
 // Callbacks - including statics
@@ -478,29 +504,40 @@ void MyFrame::UnknownMessageReceived(const unsigned char *serialBufferMessage, i
 {
 	char buffer[255];
 	snprintf(buffer, 255,"Unknown Message: %s", serialBufferMessage);
-	showInMessagesPanel(buffer, true);
+	ShowInMessagesPanel(buffer, true);
 }
 
 void MyFrame::SoftIronCalibrationDataReceived(SoftIronCalibrationData softIron)
 {
-	char buffer[255];
-	snprintf(buffer, 255,"SoftIron: %f, %f, %f, %f, %f, %f, %f, %f, %f, %f", 
-	softIron.softIronData[0], softIron.softIronData[1], softIron.softIronData[2],
-	softIron.softIronData[3], softIron.softIronData[4], softIron.softIronData[5],
-	softIron.softIronData[6], softIron.softIronData[7], softIron.softIronData[8],
-	softIron.softIronData[9]);
-	showInMessagesPanel(buffer, true);
+	if(SoftIronCalibrationDataChanged(softIron))
+	{
+		char buffer[255];
+		snprintf(buffer, 255,"SoftIron: %f, %f, %f, %f, %f, %f, %f, %f, %f, %f", 
+		softIron.softIronData[0], softIron.softIronData[1], softIron.softIronData[2],
+		softIron.softIronData[3], softIron.softIronData[4], softIron.softIronData[5],
+		softIron.softIronData[6], softIron.softIronData[7], softIron.softIronData[8],
+		softIron.softIronData[9]);
+		ShowInMessagesPanel(buffer, true);
+		
+		UpdateSoftIronCalibrationData(softIron);
+	}
 }
  
 void MyFrame::OffsetCalibrationDataReceived(OffsetsCalibrationData offsets)
 {
-	char buffer[255];
-	snprintf(buffer, 255,"Offsets: %f, %f, %f, %f, %f, %f, %f, %f, %f, calMag: %f", 
-	offsets.offsetData[0], offsets.offsetData[1], offsets.offsetData[2],
-	offsets.offsetData[3], offsets.offsetData[4], offsets.offsetData[5],
-	offsets.offsetData[6], offsets.offsetData[7], offsets.offsetData[8],
-	offsets.calMag);
-	showInMessagesPanel(buffer, true);
+	if (OffsetsCalibrationDataChanged(offsets))
+	{
+		char buffer[255];
+		
+		snprintf(buffer, 255,"Offsets: %f, %f, %f, %f, %f, %f, %f, %f, %f, calMag: %f", 
+		offsets.offsetData[0], offsets.offsetData[1], offsets.offsetData[2],
+		offsets.offsetData[3], offsets.offsetData[4], offsets.offsetData[5],
+		offsets.offsetData[6], offsets.offsetData[7], offsets.offsetData[8],
+		offsets.calMag);
+		ShowInMessagesPanel(buffer, true);
+		
+		UpdateOffsetsCalibrationData(offsets);
+	}	
 }
 
 // Set a callback function for when there's grid data to display.
@@ -508,7 +545,7 @@ void MyFrame::OffsetCalibrationDataReceived(OffsetsCalibrationData offsets)
 // reduce the chance of race conditions.
 void MyFrame::BuildBufferDisplayCallBack()
 {
-	MyFrame::instance = this;//&frameInstance;
+	MyFrame::instance = this;
 	setImuDataCallback(MyFrame::StaticUpdateImuData);
 	setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
 	setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
@@ -516,13 +553,13 @@ void MyFrame::BuildBufferDisplayCallBack()
 	setSoftIronCalibrationCallback(MyFrame::StaticSoftIronCalibrationDataReceived);
 }
 
-void MyFrame::showMessagePopup(const char *message)
+void MyFrame::ShowMessagePopup(const char *message)
 {	
 	wxMessageDialog dialog(this,message, " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
     dialog.ShowModal();
 }
 
-void MyFrame::showInMessagesPanel(const char *message, bool echoToLogFile)
+void MyFrame::ShowInMessagesPanel(const char *message, bool echoToLogFile)
 {
 	_messageLog->AppendText(message);
 	_messageLog->AppendText('\n');
@@ -726,7 +763,7 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		read_serial_data();
 	} else {
 		if (!port_name.IsEmpty()) {
-			showInMessagesPanel("port has closed, updating stuff",false);
+			ShowInMessagesPanel("port has closed, updating stuff",false);
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_clear->Enable(false);
 			m_button_sendcal->Enable(false);
@@ -750,7 +787,6 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 		
 	if (firstrun && m_canvas->IsShown()) {
 		firstrun = 0;
-		showInMessagesPanel("    firstRun set to 0", true);
 	}
 	
 	m_canvas->Refresh();
@@ -758,26 +794,34 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	variance = quality_magnitude_variance_error();
 	wobble = quality_wobble_error();
 	fiterror = quality_spherical_fit_error();
+
+	// don't spam the messages panel, only send a new gaps message if the data has changed.
+	if (_lastGaps != gaps || _lastVariance != variance || _lastWobble != wobble || _lastFitError != fiterror)
+	{
+		snprintf(messageBuffer, sizeof(messageBuffer),"Gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
+		ShowInMessagesPanel(messageBuffer, true);
+	}
+	_lastGaps = gaps;
+	_lastVariance = variance;
+	_lastWobble = wobble;
+	_lastFitError = fiterror;
 	
-	snprintf(messageBuffer, sizeof(messageBuffer),"    gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
-	showInMessagesPanel(messageBuffer, true);
+	
+	
 	m_canvas->Refresh();
 		
 	if (gaps < 15.0f && variance < 4.5f && wobble < 4.0f && fiterror < 5.0f) {
-		showInMessagesPanel("    1. gaps < 15.0f && variance < 4.5f && wobble < 4.0f && fiterror < 5.0f", false);
 		if (!m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || !m_button_sendcal->IsEnabled()) {
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
 			m_button_sendcal->Enable(true);
 			m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
-			showInMessagesPanel("    2. !m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || !m_button_sendcal->IsEnabled()", false);
+			ShowInMessagesPanel("Can save calibration data.", false);
 		}
 	} else if (gaps > 20.0f && variance > 5.0f && wobble > 5.0f && fiterror > 6.0f) {
-		showInMessagesPanel("    3. gaps > 20.0f && variance > 5.0f && wobble > 5.0f && fiterror > 6.0f", false);
 		if (m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || m_button_sendcal->IsEnabled()) {
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_sendcal->Enable(false);
 			m_confirm_icon->SetBitmap(MyBitmap("checkemptygray.png"));
-			showInMessagesPanel("    4. m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || m_button_sendcal->IsEnabled()", false);
 		}
 	}
 	float qualitySurfaceGapError = quality_surface_gap_error();
@@ -794,10 +838,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	snprintf(buf, sizeof(buf), "%.1f%%", qualitySphericalFitError);
 	m_err_fit->SetLabelText(buf);
 	
-	snprintf(messageBuffer, 256, "Gaps: %.1f%%, magVar: %.1f%%, wobble: %.1f%%. spher.: %.1f%%",
-		qualitySurfaceGapError, qualityMagnitudeVarianceError, qualityWobbleError, qualitySphericalFitError);
-	showInMessagesPanel(messageBuffer, false);	
-	
+
 	for (i=0; i < 3; i++) {
 		snprintf(buf, sizeof(buf), "%.2f", magcal.V[i]);
 		m_mag_offset[i]->SetLabelText(buf);
@@ -811,11 +852,11 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	snprintf(buf, sizeof(buf), "%.2f", magcal.B);
 	m_mag_field->SetLabelText(buf);
 	for (i=0; i < 3; i++) {
-		snprintf(buf, sizeof(buf), "%.3f", 0.0f); // TODO...
+		snprintf(buf, sizeof(buf), "%.3f", 0.0f);
 		m_accel[i]->SetLabelText(buf);
 	}
 	for (i=0; i < 3; i++) {
-		snprintf(buf, sizeof(buf), "%.3f", 0.0f); // TODO...
+		snprintf(buf, sizeof(buf), "%.3f", 0.0f);
 		m_gyro[i]->SetLabelText(buf);
 	}
 }
@@ -831,12 +872,12 @@ void MyFrame::OnPause(wxCommandEvent &event)
 	if (_paused)
 	{
 		m_button_pause->SetLabel("Capture");
-		showInMessagesPanel("Capturing paused", false);
+		ShowInMessagesPanel("Capturing paused", false);
 	}
 	else
 	{
 		m_button_pause->SetLabel("Pause");
-		showInMessagesPanel("Capturing enabled", false);
+		ShowInMessagesPanel("Capturing enabled", false);
 	}
 }
 
@@ -845,14 +886,14 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 	char messageBuffer[255];
 	
 	snprintf(messageBuffer, 255, "Magnetic Calibration:   (%.1f%% fit error)\n", magcal.FitError);
-	showInMessagesPanel(messageBuffer, true);
+	ShowInMessagesPanel(messageBuffer, true);
 		
 	snprintf(messageBuffer, 255, "   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[0], magcal.invW[0][0], magcal.invW[0][1], magcal.invW[0][2]);
-	showInMessagesPanel(messageBuffer, true);	
+	ShowInMessagesPanel(messageBuffer, true);	
 	snprintf(messageBuffer, 255, "   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2]);
-	showInMessagesPanel(messageBuffer, true);	
+	ShowInMessagesPanel(messageBuffer, true);	
 	snprintf(messageBuffer, 255, "   %7.2f   %6.3f %6.3f %6.3f\n", magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2]);
-	showInMessagesPanel(messageBuffer, true);	
+	ShowInMessagesPanel(messageBuffer, true);	
 	
 	m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));	
 	int bytesWritten = send_calibration();
@@ -865,8 +906,8 @@ void MyFrame::OnSendCal(wxCommandEvent &event)
 		magcal.V[1], magcal.invW[1][0], magcal.invW[1][1], magcal.invW[1][2],
 		magcal.V[2], magcal.invW[2][0], magcal.invW[2][1], magcal.invW[2][2],
 		bytesWritten);
-	showInMessagesPanel(messageBuffer, true);			
-	showMessagePopup(messageBuffer);	
+	ShowInMessagesPanel(messageBuffer, true);			
+	ShowMessagePopup(messageBuffer);	
 }
 
 void calibration_confirmed(void)
@@ -999,11 +1040,11 @@ void MyFrame::ResetConnectionParameters()
 	int openPortResult = open_port((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
 	if (openPortResult <= 0)
 	{
-		showOpenPortError((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding, openPortResult);
+		ShowOpenPortError((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding, openPortResult);
 	}
 	else
 	{
-		showOpenPortOK((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
+		ShowOpenPortOK((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
 	}
 	SetPausable(openPortResult > 0);
 	m_button_clear->Enable(true);
@@ -1051,11 +1092,11 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
 	int openPortResult = open_port((const char *)name, (const char *)_baudRate, (const char *)_lineEnding);
 	if (openPortResult <= 0)
 	{
-		showOpenPortError((const char *)name, (const char *)_baudRate, (const char*) _lineEnding, openPortResult);
+		ShowOpenPortError((const char *)name, (const char *)_baudRate, (const char*) _lineEnding, openPortResult);
 	}
 	else
 	{
-		showOpenPortOK((const char *)name, (const char *)_baudRate, (const char*) _lineEnding);
+		ShowOpenPortOK((const char *)name, (const char *)_baudRate, (const char*) _lineEnding);
 	}
 	SetPausable(openPortResult > 0);
 	m_button_clear->Enable(true);
@@ -1064,7 +1105,6 @@ void MyFrame::OnPortMenu(wxCommandEvent &event)
 void MyFrame::OnBaudRateMenu(wxCommandEvent &event)
 {
     int id = event.GetId();
-    int baudRateMenuIndex = id - ID_BAUDRATE_MENU;
     // get selected baud rate
     wxString baudRateName = m_baudRateMenu->FindItem(id)->GetItemLabelText();
     
@@ -1087,20 +1127,17 @@ void MyFrame::OnBaudRateMenu(wxCommandEvent &event)
 		int openPortResult = open_port((const char *)port_name, (const char *)_baudRate, (const char *)_lineEnding);
 		if (openPortResult <= 0)
 		{
-			showOpenPortError((const char *)port_name, (const char *)_baudRate, (const char*) _lineEnding, openPortResult);
+			ShowOpenPortError((const char *)port_name, (const char *)_baudRate, (const char*) _lineEnding, openPortResult);
 		}
 		else
 		{
-			showOpenPortOK((const char *)port_name, (const char *)_baudRate, (const char*) _lineEnding);
+			ShowOpenPortOK((const char *)port_name, (const char *)_baudRate, (const char*) _lineEnding);
 		}
 		
 		SetPausable(openPortResult > 0);
 	}
 	m_button_clear->Enable(true);
 }
-
-
-
 
 void MyFrame::PopulateLineEndingList()
 {
@@ -1133,7 +1170,7 @@ void MyFrame::OnShowPortList(wxCommandEvent& event)
 }
 
 
-void MyFrame::showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode)
+void MyFrame::ShowOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode)
 {
 	const int messageBufferSize = 128;
 	char errorMessage[messageBufferSize];
@@ -1144,17 +1181,17 @@ void MyFrame::showOpenPortError(const char *name, const char *baudRate, const ch
 	
 	char buffer[messageBufferSize];
 	snprintf(buffer, messageBufferSize, "port %s failed to open at %s bps: %s,line ending: %s", name, baudRate, lineEnding, errorMessage);
-	showInMessagesPanel(buffer, true);
+	ShowInMessagesPanel(buffer, true);
 	
 	wxMessageDialog dialog(this,buffer, " MotionCal", wxOK|wxICON_INFORMATION|wxCENTER);
     dialog.ShowModal();
 }
 
-void MyFrame::showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding)
+void MyFrame::ShowOpenPortOK(const char *name, const char *baudRate, const char *lineEnding)
 {
    	char commandMessage[640];
     snprintf(commandMessage, 640, "Port opened: '%s', %s bps, %s line ending", name, baudRate, lineEnding);
-    showInMessagesPanel(commandMessage, true);  
+    ShowInMessagesPanel(commandMessage, true);  
 }
 
 void MyFrame::OnAbout(wxCommandEvent &event)

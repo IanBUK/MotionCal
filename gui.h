@@ -130,8 +130,6 @@ private:
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
 	
-	bool _paused = true;
-		
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
 	void OnPause(wxCommandEvent &event);
@@ -154,10 +152,10 @@ private:
 	void PopulateLineEndingList();
 	
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
-	void showOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
-	void showOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
-	void showMessagePopup(const char *message);
-	void showInMessagesPanel(const char *message, bool echoToLogFile);
+	void ShowOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
+	void ShowOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
+	void ShowMessagePopup(const char *message);
+	void ShowInMessagesPanel(const char *message, bool echoToLogFile);
 	void LogImuData(ImuData imuData);
 	void LogOrientationData(YawPitchRoll orientation);
 				
@@ -178,6 +176,22 @@ private:
 	wxBoxSizer* BuildMagnetomerPanel(wxPanel *panel, wxSizer *parent);
 	void SetPausable(bool pausable);
 	
+	// Capturing state
+	bool _paused = true;
+	
+	// Data and functions for storing 'last...' values, used primarily to reduce spamming
+	// of the messaging panel
+	float _lastGaps = 0.0F;
+	float _lastVariance = 0.0F;
+	float _lastWobble = 0.0F;
+	float _lastFitError = 0.0F;
+	
+	SoftIronCalibrationData _lastSoftIronCalibrationData;
+	OffsetsCalibrationData _lastOffsetsCalibrationData;
+	bool OffsetsCalibrationDataChanged(OffsetsCalibrationData newOffsetsCalibrationData);
+	bool SoftIronCalibrationDataChanged(SoftIronCalibrationData newSoftIronCalibrationData);	
+	void UpdateOffsetsCalibrationData(OffsetsCalibrationData newOffsetsCalibrationData);
+	void UpdateSoftIronCalibrationData(SoftIronCalibrationData newSoftIronCalibrationData);
 
 	// Callback handlers from serial data processor
 	void UpdateImuData(ImuData imuData);
