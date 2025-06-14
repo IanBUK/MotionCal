@@ -238,9 +238,6 @@ int read_serial_data(void)
 
         if (lineComplete) {
             line[lineOffset - 1] = '\0'; // strip line ending
-            /*logMessage("lineComplete>>>");
-            logMessage(line);
-            logMessage("<<<lineComplete");*/
             newdata(line, lineOffset);
             lineOffset = 0;
             return lineOffset;  // Successfully read a line
@@ -447,7 +444,7 @@ int read_serial_data(void)
 	OVERLAPPED ov;
 	unsigned char buf[BUFFER_SIZE];
 	int r;
-	logMessage("read_serial_data: line 753");
+	logMessage("read_serial_data");
 
 	if (port_handle == INVALID_HANDLE_VALUE) return -1;
 	while (1) {

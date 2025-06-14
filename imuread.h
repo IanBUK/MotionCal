@@ -97,6 +97,7 @@ typedef struct {
 } Quaternion_t;
 
 extern bool CanSave;
+extern YawPitchRoll SensorOrientation;
 
 extern Quaternion_t current_orientation;
 

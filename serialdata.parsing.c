@@ -102,8 +102,6 @@ int packet(const unsigned char *data, int len)
 {
 	if (len <= 0) return 0;
 	print_data("packet:", data, len);
-	//logMessage("into packet");
-	//logMessage((const char *)data);
 	if (data[0] == 1 && len == 34) {
 		logMessage("call packet_primary_data");
 		return packet_primary_data(data);
@@ -164,8 +162,6 @@ int packet_parse(const unsigned char *data, int len)
 	int copylen;
 	int ret=0;
 
-	logMessage("packet_parse");
-	//logMessage((const char *)data);
 	while (len > 0) {
 		p = memchr(data, 0x7E, len);
 		if (p == NULL) {
@@ -278,15 +274,12 @@ int ascii_parse(const unsigned char *data, int len)
 			}
 		} else if (ascii_state == ASCII_STATE_RAW) {
 			if (*p == '-') {
-				//logMessage("ascii_parse negative");
 				if (ascii_count > 0) goto fail;
 				ascii_neg = 1;
 			} else if (isdigit(*p)) {
-				//logMessage("ascii_parse digit");
 				ascii_num = ascii_num * 10 + *p - '0';
 				ascii_count++;
 			} else if (*p == ',') {
-				//logMessage("ascii_parse comma");
 				if (ascii_neg) ascii_num = -ascii_num;
 				if (ascii_num < -32768 || ascii_num > 32767) goto fail;
 				if (ascii_raw_data_count >= 8) goto fail;
@@ -295,7 +288,6 @@ int ascii_parse(const unsigned char *data, int len)
 				ascii_neg = 0;
 				ascii_count = 0;
 			} else if (*p == 13) {
-				//logMessage("ascii_parse newline");
 				if (ascii_neg) ascii_num = -ascii_num;
 				if (ascii_num < -32768 || ascii_num > 32767) goto fail;
 				if (ascii_raw_data_count != 8) goto fail;

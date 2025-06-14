@@ -148,8 +148,8 @@ void sendDataCallback(const unsigned char *data, int len)
     }
     else if (memcmp(buffer, "Ori", 3) == 0)
     {
-        char *token = strtok(buffer, " "); // "Ori"
-        token = strtok(NULL, " ");         // CSV part
+        char *token = strtok(buffer, " \r\n"); // "Ori"
+        token = strtok(NULL, " \r\n");         // CSV part
 
         if (!token) {
             logMessage("Malformed Ori data: no CSV payload");
@@ -169,7 +169,7 @@ void sendDataCallback(const unsigned char *data, int len)
         val = strtok(NULL, ",");
         if (!val) { logMessage("Missing ori.z"); return; }
         orientation.roll = strtof(val, NULL);
-
+	
         fireOrientationCallback(orientation);
     }
     else if (memcmp(buffer, "Cal1", 4) == 0)

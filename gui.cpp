@@ -422,7 +422,7 @@ void MyFrame::LogOrientationData(YawPitchRoll orientation)
 	snprintf(buffer, 120, "Ori: yaw: %f, pitch %f, roll %f", 
 		orientation.yaw, orientation.pitch, orientation.roll);
 
-	ShowInMessagesPanel(buffer, false);
+	ShowInMessagesPanel(buffer, true);
 }
 
 void MyFrame::StaticUpdateImuData(ImuData imuData) {
@@ -489,6 +489,7 @@ void MyFrame::UpdateOrientationData(YawPitchRoll orientation)
 	snprintf(buffer,20,"%f", orientation.roll);	
 	_orientationGrid->SetCellValue(READING_ROW, ROLL_COL,buffer);
 	LogOrientationData(orientation);
+	SensorOrientation = orientation;
 }
 
 void MyFrame::UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead)

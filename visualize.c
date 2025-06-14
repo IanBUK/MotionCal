@@ -2,6 +2,8 @@
 #include <stdbool.h>
 
 bool CanSave = false;
+YawPitchRoll SensorOrientation;
+
 
 MagCalibration_t magcal;
 
@@ -61,6 +63,8 @@ void display_callback(void)
 {
 	int i;
 	float xscale, yscale, zscale;
+	float sensorXScale, sensorYScale, sensorZScale;
+	float sensorXCentre,sensorYCentre, sensorZCentre;
 	float xoff, yoff, zoff;
 	float rotation[9];
 	Point_t point, draw;
@@ -81,7 +85,14 @@ void display_callback(void)
 	xoff = 0.0;
 	yoff = 0.0;
 	zoff = -7.0;
-
+	sensorXScale = 1;
+	sensorYScale = 1;
+	sensorZScale = 1;
+	sensorXCentre = 0.0;
+	sensorYCentre = 0.0;
+	sensorZCentre = -7.0;
+	
+	
 	//if (hard_iron.valid) {
 	if (1) {
 		memcpy(&orientation, &current_orientation, sizeof(orientation));
@@ -102,15 +113,17 @@ void display_callback(void)
 		//rotation[6] *= -1.0f;
 		//rotation[7] *= -1.0f;
 		//rotation[8] *= -1.0f;
+		
+		// Draw spheres
 		if (CanSave)
 			glColor3f(0, 1, 0);
 		else
 			glColor3f(1, 0, 0);
-		float redDelta = 1.0F / (float)MAGBUFFSIZE;
-		float redValue = 0.0F;
+		bool drawSensor = false;
 		
 		for (i=0; i < MAGBUFFSIZE; i++) {
 			if (magcal.valid[i]) {
+				drawSensor = true;
 				apply_calibration(magcal.BpFast[0][i], magcal.BpFast[1][i],
 					magcal.BpFast[2][i], &point);
 				//point.x *= -1.0f;
@@ -134,10 +147,35 @@ void display_callback(void)
 				}
 				glPopMatrix();
 			}
-			
-			redValue += redDelta;
-			//glColor3f(redValue, 0, 1.0F-redValue);
 		}
+		
+		if (drawSensor)
+		{
+			// Draw sensor
+			glPushMatrix();		
+			glTranslatef(sensorXCentre, sensorYCentre, sensorZCentre);
+			glRotatef(SensorOrientation.yaw,       1.0f, 0.0f, 0.0f);
+			glRotatef(SensorOrientation.pitch,     0.0f, 1.0f, 0.0f);
+			glRotatef(SensorOrientation.roll,      0.0f, 0.0f, 1.0f);
+			glScalef(sensorXScale, sensorYScale, sensorZScale);
+			
+			glColor3f(1, 1, 0);
+			glBegin(GL_TRIANGLES);
+			glVertex3f(0.0f, 1.0f, 0.0f);
+			glVertex3f(0.5f, -1.0f, 0.0f);
+			glVertex3f(-0.5f, -1.0f, 0.0f);
+			glEnd();
+			
+			glColor3f(0, 0, 1);	
+			glBegin(GL_TRIANGLES);
+			glVertex3f(0.0f, 1.0f, 0.0f);
+			glVertex3f(-0.5f, -1.0f, 0.0f);
+			glVertex3f(0.5f, -1.0f, 0.0f);
+			glEnd();
+					
+			glPopMatrix();
+		}
+				
 	}
 #if 0
 	printf(" quality: %5.1f  %5.1f  %5.1f  %5.1f\n",
