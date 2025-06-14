@@ -58,8 +58,8 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 	EVT_BUTTON(ID_PAUSE_BUTTON, MyFrame::OnPause)	
 	EVT_BUTTON(ID_SENDCAL_BUTTON, MyFrame::OnSendCal)
 	EVT_TIMER(ID_TIMER, MyFrame::OnTimer)
-	EVT_MENU_RANGE(9000, 9999,  MyFrame::OnPortMenu)
-	EVT_MENU_RANGE(ID_BAUDRATE_MENU, ID_BAUDRATE_MENU +10, MyFrame::OnBaudRateMenu)
+	EVT_MENU_RANGE(9000, 9999, MyFrame::OnPortMenu)
+	EVT_MENU_RANGE(ID_BAUDRATE_MENU, ID_BAUDRATE_MENU + 10, MyFrame::OnBaudRateMenu)
 	EVT_MENU_OPEN(MyFrame::OnShowMenu)
 	EVT_COMBOBOX(ID_PORTLIST, MyFrame::OnPortList)
 	EVT_COMBOBOX_DROPDOWN(ID_PORTLIST, MyFrame::OnShowPortList)
@@ -795,8 +795,6 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	_lastVariance = variance;
 	_lastWobble = wobble;
 	_lastFitError = fiterror;
-	
-	
 	
 	m_canvas->Refresh();
 		

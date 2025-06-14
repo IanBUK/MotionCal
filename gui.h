@@ -39,6 +39,7 @@
 #endif
 #include "stdio.h"
 
+// UI control IDs
 #define ID_TIMER			10000
 #define ID_SENDCAL_MENU		10001
 #define ID_CLEAR_BUTTON		10002
@@ -48,10 +49,9 @@
 #define ID_LINEENDINGLIST	10010
 #define ID_MESSAGE_LOG		10020
 #define ID_PAUSE_BUTTON		10030
-
 #define ID_BAUDRATE_MENU	11000
 
-
+// Grid constants for columns and rows
 #define X_ROW 0
 #define Y_ROW 1
 #define Z_ROW 2
@@ -130,6 +130,7 @@ private:
 	wxGrid *_rawDataGrid;
 	wxGrid *_orientationGrid;
 	
+	// Event handlers
 	void OnSendCal(wxCommandEvent &event);
 	void OnClear(wxCommandEvent &event);
 	void OnPause(wxCommandEvent &event);
@@ -141,16 +142,13 @@ private:
 	void OnTimer(wxTimerEvent &event);
 	void OnAbout(wxCommandEvent &event);
 	void OnQuit(wxCommandEvent &event);
-	void DebugPrint(const char *name, const unsigned char *data, int len);
-	
 	void OnShowBaudList(wxCommandEvent& event);
 	void OnBaudList(wxCommandEvent& event);
-	void PopulateBaudList();
-	
 	void OnShowLineEndingList(wxCommandEvent& event);
-	void OnLineEndingList(wxCommandEvent& event);
-	void PopulateLineEndingList();
-	
+	void OnLineEndingList(wxCommandEvent& event);	
+		
+	void DebugPrint(const char *name, const unsigned char *data, int len);
+
 	void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
 	void ShowOpenPortError(const char *name, const char *baudRate, const char *lineEnding, int errorCode);
 	void ShowOpenPortOK(const char *name, const char *baudRate, const char *lineEnding);
@@ -160,6 +158,8 @@ private:
 	void LogOrientationData(YawPitchRoll orientation);
 				
 	// Build UI components
+	void PopulateBaudList();
+	void PopulateLineEndingList();
 	void BuildMenu();
 	wxBoxSizer* BuildLeftPanel(wxPanel *panel);
 	wxBoxSizer* BuildRightPanel(wxPanel *panel);
@@ -188,11 +188,21 @@ private:
 	
 	SoftIronCalibrationData _lastSoftIronCalibrationData;
 	OffsetsCalibrationData _lastOffsetsCalibrationData;
+	
+	// Callback handlers for calibration data
 	bool OffsetsCalibrationDataChanged(OffsetsCalibrationData newOffsetsCalibrationData);
 	bool SoftIronCalibrationDataChanged(SoftIronCalibrationData newSoftIronCalibrationData);	
+	
 	void UpdateOffsetsCalibrationData(OffsetsCalibrationData newOffsetsCalibrationData);
 	void UpdateSoftIronCalibrationData(SoftIronCalibrationData newSoftIronCalibrationData);
 
+	void SoftIronCalibrationDataReceived(SoftIronCalibrationData softIron);
+	static void StaticSoftIronCalibrationDataReceived(SoftIronCalibrationData softIron);
+
+	void OffsetCalibrationDataReceived(OffsetsCalibrationData offsets);
+	static void StaticOffsetCalibrationDataReceived(OffsetsCalibrationData offsets);
+	
+	
 	// Callback handlers from serial data processor
 	void UpdateImuData(ImuData imuData);
 	static void StaticUpdateImuData(ImuData imuData);
@@ -203,17 +213,11 @@ private:
 	void UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUnknownMessageReceived(const unsigned char* buffer, int size);
 
-	void SoftIronCalibrationDataReceived(SoftIronCalibrationData softIron);
-	static void StaticSoftIronCalibrationDataReceived(SoftIronCalibrationData softIron);
-
-	void OffsetCalibrationDataReceived(OffsetsCalibrationData offsets);
-	static void StaticOffsetCalibrationDataReceived(OffsetsCalibrationData offsets);
 
 	void ProcessImuDataFromCallback(ImuData imuData);
 
 
 	// Update UI	
-
     static MyFrame* instance; // Pointer to the current instance
 	
 	void UpdateRawDataGrid(char *token);
@@ -222,8 +226,7 @@ private:
 	wxArrayString GetUniquePortList();
 	
 	const int _labelWidth = 80;
-	
-	
+
 	DECLARE_EVENT_TABLE()
 };
 
