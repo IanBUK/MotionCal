@@ -20,15 +20,14 @@ I've added:
 
 # Internal changes
 ## `logging.c`
-
-###`logMessage` appends a line to the log written to `log.txt` in the application folder
-###`debugPrint` can be used for listing out the content of a `const unsigned char *` to `log.txt`. 
-###`logTerminalSettings` logs some members of an `termios` instance. 
+### `logMessage` appends a line to the log written to `log.txt` in the application folder
+### `debugPrint` can be used for listing out the content of a `const unsigned char *` to `log.txt`. 
+### `logTerminalSettings` logs some members of an `termios` instance. 
 
 ## `serialdata.c`
 I've split `serialdata.c` into `serialdata.c`, `serialdata.messaging.c` and `serialdata.parsing.c` - as I added new callback routes I found the class was getting too large for my brain.
 
-I've updated the reading of new lines from the serial port - it kept failing as is. This might be to macOS changes - I've no reason to think the code itself was wrong.
+I've updated the reading of new lines from the serial port - it kept failing as is. This might be due to macOS changes - I've no reason to think the code itself was wrong.
 
 ## `imuread.h`
 New `typedef structs` added to support:
@@ -37,7 +36,6 @@ New `typedef structs` added to support:
 3) `ImuData`, allowing the accelerometer, gyroscope and magnetometer data to be passed in a logical structure
 4) `SoftIronCalibrationData` - the data sent from the device in a `Cal2` message
 5) `OffsetsCalibrationData` - the data sent from the device in a `Cal1` message
-
 
 ## `gui.cpp` & `gui.h`
 I've split the UI building code out into separate function. When adding the panels, the existing function grew to a few hundred lines.
