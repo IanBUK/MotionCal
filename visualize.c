@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 #include "imuread.h"
 #include <stdbool.h>
 
@@ -126,9 +129,6 @@ void display_callback(void)
 				drawSensor = true;
 				apply_calibration(magcal.BpFast[0][i], magcal.BpFast[1][i],
 					magcal.BpFast[2][i], &point);
-				//point.x *= -1.0f;
-				//point.y *= -1.0f;
-				//point.z *= -1.0f;
 				quality_update(&point);
 				rotate(&point, &draw, rotation);
 				glPushMatrix();
@@ -247,5 +247,5 @@ void visualize_init(void)
 	gluDeleteQuadric(sphere);
 }
 
-
+#pragma clang diagnostic pop
 
