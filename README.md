@@ -20,9 +20,14 @@ I've added:
 
 # Internal changes
 ## `logging.c`
-### `logMessage` appends a line to the log written to `log.txt` in the application folder
-### `debugPrint` can be used for listing out the content of a `const unsigned char *` to `log.txt`. 
-### `logTerminalSettings` logs some members of an `termios` instance. 
+### `logMessage` 
+Appends a line to the log written to `log.txt` in the application folder
+
+### `debugPrint` 
+Can be used for listing out the content of a `const unsigned char *` to `log.txt`. 
+
+### `logTerminalSettings` 
+Logs some members of an `termios` instance. 
 
 ## `serialdata.c`
 I've split `serialdata.c` into `serialdata.c`, `serialdata.messaging.c` and `serialdata.parsing.c` - as I added new callback routes I found the class was getting too large for my brain.
