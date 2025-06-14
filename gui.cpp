@@ -804,12 +804,14 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 			m_button_sendcal->Enable(true);
 			m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
 			ShowInMessagesPanel("Can save calibration data.", false);
+			CanSave = true;
 		}
 	} else if (gaps > 20.0f && variance > 5.0f && wobble > 5.0f && fiterror > 6.0f) {
 		if (m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || m_button_sendcal->IsEnabled()) {
 			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
 			m_button_sendcal->Enable(false);
 			m_confirm_icon->SetBitmap(MyBitmap("checkemptygray.png"));
+			CanSave = false;
 		}
 	}
 	float qualitySurfaceGapError = quality_surface_gap_error();

@@ -158,6 +158,7 @@ void cal1_data(const float *data)
 			if (cal_confirm_needed == 0) {
 				calibration_confirmed();
 			}
+		}
 	}
 }
 

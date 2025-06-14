@@ -1,4 +1,7 @@
 #include "imuread.h"
+#include <stdbool.h>
+
+bool CanSave = false;
 
 MagCalibration_t magcal;
 
@@ -99,7 +102,10 @@ void display_callback(void)
 		//rotation[6] *= -1.0f;
 		//rotation[7] *= -1.0f;
 		//rotation[8] *= -1.0f;
-		glColor3f(1, 0, 0);
+		if (CanSave)
+			glColor3f(0, 1, 0);
+		else
+			glColor3f(1, 0, 0);
 		float redDelta = 1.0F / (float)MAGBUFFSIZE;
 		float redValue = 0.0F;
 		

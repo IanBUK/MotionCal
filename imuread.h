@@ -96,6 +96,7 @@ typedef struct {
 	float q3; // z
 } Quaternion_t;
 
+extern bool CanSave;
 
 extern Quaternion_t current_orientation;
 
