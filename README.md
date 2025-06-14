@@ -14,9 +14,9 @@ I've added:
 2) Option to specify the line ending.
 3) Pause button.
 4) 'Received Data' panel, which shows:
-    a. The floats from the 'Raw:' messages.
-    b. 'Orientation' data received from an 'Ori:' message, which has three floats containing yaw, roll, pitch.
-5) Messages panel, used to churn out messages. 'Gaps' data is shown when it has changed from the last data update.
+   * The floats from the 'Raw:' messages.
+   * 'Orientation' data received from an 'Ori:' message, which has three floats containing yaw, roll, pitch.
+6) Messages panel, used to churn out messages. 'Gaps' data is shown when it has changed from the last data update.
 
 # Internal changes
 ## `logging.c`
@@ -34,11 +34,13 @@ I've split the UI building code out into separate function. When adding the pane
 
 When new Raw, Cal1, Cal2 or Ori messages are read from the console, they're now sent back to `gui.cpp` using callbacks. e.g:
 
-```void fireImuCallback(ImuData data)
+```
+void fireImuCallback(ImuData data)
 {
     if (_imuDataCallback != NULL)
         _imuDataCallback(data);
-}```
+}
+```
 
 The callbacks are set up in `gui.cpp` as:
 ```
@@ -53,32 +55,40 @@ void MyFrame::BuildBufferDisplayCallBack()
     setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
     setOffsetsCalibrationCallback(MyFrame::StaticOffsetCalibrationDataReceived);
     setSoftIronCalibrationCallback(MyFrame::StaticSoftIronCalibrationDataReceived);
-}```
+}
+```
 
 To wire this up, there's a method in `serialdata.messaging.c`: 
-```void setImuDataCallback(imuDataCallback imuDataCallback)
+```
+void setImuDataCallback(imuDataCallback imuDataCallback)
 {
     _imuDataCallback = imuDataCallback;
-}```
+}
+```
 
 This is used in `serialdata..c` by calling:
-```void fireImuCallback(ImuData data)
+```
+void fireImuCallback(ImuData data)
 {
     if (_imuDataCallback != NULL)
         _imuDataCallback(data);
 }
 ```
+
 This is called when we've determined that we've received a Raw message.
 
 
 The static method in `gui.cpp` is:
-```void MyFrame::StaticUpdateImuData(ImuData imuData) {
+```
+void MyFrame::StaticUpdateImuData(ImuData imuData) {
     if (instance) 
         instance->UpdateImuData(imuData);
-}```
+}
+```
 
 And the actual callback function is:
-```void MyFrame::UpdateImuData(ImuData imuData)
+```
+void MyFrame::UpdateImuData(ImuData imuData)
 {
     char buffer[20];
 
@@ -105,7 +115,9 @@ And the actual callback function is:
     
     ProcessImuDataFromCallback(imuData);
     LogImuData(imuData);
-}```
+}
+
+```
 
 
 # How to build
