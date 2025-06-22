@@ -5,29 +5,6 @@
 
 LineEnding _lineEndingMode = LINE_ENDING_NOTSET;
 
-int _bufferOffset = 0;
-
-unsigned char* buildBuffer(const unsigned char *data, int len)
-{
-    int firstLine = 1;
-	unsigned char serialBuffer[BUFFER_SIZE];
-	for(int i = 0; i< len; i++)
-	{
-		if (firstLine == 1)
-			serialBuffer[i] = data[i];
-		if (data[i] == '\n' || data[i] =='\r')
-		{
-			serialBuffer[i] = '\0';
-			firstLine = 0;
-			// hit a newline
-			//_serialBuffer[_bufferOffset] ='\0';
-			//strcpy((char *)serialBuffer, (char *)_serialBuffer);
-			//_bufferOffset = 0;
-		}		
-	}
-	return serialBuffer;
-}
-
 static void newdata(const unsigned char *data, int len)
 {
 	packet_parse(data, len);
