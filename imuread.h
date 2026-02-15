@@ -13,9 +13,9 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdbool.h>
+#include <termios.h>
 
 #if defined(LINUX)
-  #include <termios.h>
   #include <unistd.h>
   #include <GL/gl.h>  // sudo apt install mesa-common-dev
   #include <GL/glu.h> // sudo apt install libglu1-mesa-dev freeglut3-dev
@@ -25,7 +25,6 @@
   #include <GL/glu.h>
   #define random() rand()
 #elif defined(MACOSX)
-  #include <termios.h>
   #include <unistd.h>
   #include <OpenGL/gl.h>
   #include <OpenGL/glu.h>
@@ -111,12 +110,14 @@ typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, 
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
 typedef void (*unknownMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*calibrationResponseMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*calibrationOffsetsCallback)(OffsetsCalibrationData calibrationOffsets);
 typedef void (*calibrationSoftIronCallback)(SoftIronCalibrationData calibrationSoftIron);
 
 extern void setImuDataCallback(imuDataCallback imuDataCallback);
 extern void setOrientationDataCallback(orientationDataCallback orientationDataCallback);
 extern void setUnknownMessageCallback(unknownMessageCallback unknownMessageCallback);
+extern void setCalibrationResponseMessage(calibrationResponseMessageCallback calibrationResponseMessageCallback);
 extern void setOffsetsCalibrationCallback(calibrationOffsetsCallback offsetsCallback);
 extern void setSoftIronCalibrationCallback(calibrationSoftIronCallback softIronCallback);
 
@@ -124,6 +125,7 @@ extern void fireBufferDisplayCallback(const unsigned char *data, int len);
 extern void fireImuCallback(ImuData data);
 extern void fireOrientationCallback(YawPitchRoll orientation);
 extern void fireUnknownMessageCallback(const unsigned char *data, int len);
+extern void fireCalibrationResponseMessageCallback(const unsigned char *data, int len);
 extern void fireOffsetsCalibrationCallback(OffsetsCalibrationData calibrationOffsets);
 extern void fireSoftIronCalibrationCallback(SoftIronCalibrationData calibrationSoftIron);
 extern void sendDataCallback(const unsigned char *data, int len);

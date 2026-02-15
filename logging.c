@@ -1,6 +1,22 @@
 #include "imuread.h"
 #include <stdio.h>
 #include <unistd.h>
+#if defined(LINUX)
+  #include <termios.h>
+  #include <unistd.h>
+  #include <GL/gl.h>  // sudo apt install mesa-common-dev
+  #include <GL/glu.h> // sudo apt install libglu1-mesa-dev freeglut3-dev
+#elif defined(WINDOWS)
+  #include <windows.h>
+  #include <GL/gl.h>
+  #include <GL/glu.h>
+  #define random() rand()
+#elif defined(MACOSX)
+  #include <termios.h>
+  #include <unistd.h>
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glu.h>
+#endif
 
 void logMessage(const char *message) 
 {
