@@ -351,7 +351,7 @@ wxSizer* MyFrame::BuildActionsPanel(wxPanel *parent)
 	
 	// Add the 'Send Calibration' command
 	m_button_sendcal = new wxButton(parent, ID_SENDCAL_BUTTON, "Send Calibration");
-	m_button_sendcal->Enable(false);
+	SetSendCalButtonEnabled(false);
 	commandsColumn->Add(m_button_sendcal, 0, wxALL, 1);
 	m_button_sendcal->SetMinSize(wxSize(120, -1)); 
 		
@@ -440,6 +440,12 @@ void MyFrame::StaticUnknownMessageReceived(const unsigned char* buffer, int size
         instance->UnknownMessageReceived(buffer, size);
 }
 
+
+void MyFrame::StaticCalibrationResponseMessageReceived(const unsigned char* buffer, int size) {
+    if (instance) 
+        instance->CalibrationResponseMessageReceived(buffer, size);
+}
+
 void MyFrame::StaticSoftIronCalibrationDataReceived(SoftIronCalibrationData softIron) {
     if (instance) 
         instance->SoftIronCalibrationDataReceived(softIron);
@@ -499,6 +505,14 @@ void MyFrame::UnknownMessageReceived(const unsigned char *serialBufferMessage, i
 	ShowInMessagesPanel(buffer, true);
 }
 
+void MyFrame::CalibrationResponseMessageReceived(const unsigned char *serialBufferMessage, int bytesRead)
+{
+	char buffer[255];
+	snprintf(buffer, 255,"Calibration Response: %s", serialBufferMessage);
+	ShowInMessagesPanel(buffer, true);
+	ShowInMessagesPanel(buffer, false);
+}
+
 void MyFrame::SoftIronCalibrationDataReceived(SoftIronCalibrationData softIron)
 {
 	if(SoftIronCalibrationDataChanged(softIron))
@@ -541,6 +555,7 @@ void MyFrame::BuildBufferDisplayCallBack()
 	setImuDataCallback(MyFrame::StaticUpdateImuData);
 	setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
 	setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
+	setCalibrationResponseMessage(MyFrame::StaticCalibrationResponseMessageReceived);
 	setOffsetsCalibrationCallback(MyFrame::StaticOffsetCalibrationDataReceived);
 	setSoftIronCalibrationCallback(MyFrame::StaticSoftIronCalibrationDataReceived);
 }
@@ -565,6 +580,12 @@ void MyFrame::ShowInMessagesPanel(const char *message, bool echoToLogFile)
 		
 	_messageLog->SetInsertionPointEnd();
 	_messageLog->ShowPosition(_messageLog->GetLastPosition()); 
+	if (strcmp(message,"Calibration verified in memory.") == 0 ||
+		strcmp(message,"Calibration write failed or data is empty.") == 0)
+	{
+		ShowMessagePopup(message);
+	}
+
 }
 
 void MyFrame::BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)
@@ -665,7 +686,7 @@ void MyFrame::BuildMenu()
 	menu = new wxMenu;
 	menu->Append(ID_SENDCAL_MENU, wxT("Send Calibration"));
 	m_sendcal_menu = menu;
-	m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
+	SetSendCalButtonEnabled(false);
 	menu->Append(wxID_EXIT, wxT("Quit"));
 	menuBar->Append(menu, wxT("&File"));
 
@@ -755,9 +776,9 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 	} else {
 		if (!port_name.IsEmpty()) {
 			ShowInMessagesPanel("port has closed, updating stuff",false);
-			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
+			SetSendCalButtonEnabled(false);
 			m_button_clear->Enable(false);
-			m_button_sendcal->Enable(false);
+			SetSendCalButtonEnabled(false);
 			m_confirm_icon->SetBitmap(MyBitmap("checkemptygray.png"));
 			port_name = "";
 		}
@@ -766,6 +787,19 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 		m_confirm_icon->SetBitmap(MyBitmap("checkgreen.png"));
 		show_calibration_confirmed = false;
 	}
+}
+
+void MyFrame::SetSendCalButtonEnabled(bool enabled)
+{
+	//if (m_sendcal_menu != NULL)
+	//	m_sendcal_menu->Enable(ID_SENDCAL_MENU, enabled);
+	//if (m_button_sendcal != NULL)
+	//	m_button_sendcal->Enable(enabled);
+
+	if (m_sendcal_menu != NULL)
+		m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
+	if (m_button_sendcal != NULL)
+		m_button_sendcal->Enable(true);
 }
 
 void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
@@ -801,16 +835,14 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 		
 	if (gaps < 15.0f && variance < 4.5f && wobble < 4.0f && fiterror < 5.0f) {
 		if (!m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || !m_button_sendcal->IsEnabled()) {
-			m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
-			m_button_sendcal->Enable(true);
+			SetSendCalButtonEnabled(true);
 			m_confirm_icon->SetBitmap(MyBitmap("checkempty.png"));
 			ShowInMessagesPanel("Can save calibration data.", false);
 			CanSave = true;
 		}
 	} else if (gaps > 20.0f && variance > 5.0f && wobble > 5.0f && fiterror > 6.0f) {
 		if (m_sendcal_menu->IsEnabled(ID_SENDCAL_MENU) || m_button_sendcal->IsEnabled()) {
-			m_sendcal_menu->Enable(ID_SENDCAL_MENU, false);
-			m_button_sendcal->Enable(false);
+			SetSendCalButtonEnabled(false);
 			m_confirm_icon->SetBitmap(MyBitmap("checkemptygray.png"));
 			CanSave = false;
 		}

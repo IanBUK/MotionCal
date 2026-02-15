@@ -9,6 +9,7 @@ typedef void (*displayBufferCallback)(const unsigned char *serialBufferMessage, 
 typedef void (*imuDataCallback)(ImuData rawData);
 typedef void (*orientationDataCallback)(YawPitchRoll orientation);
 typedef void (*unknownMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
+typedef void (*calibrationResponseMessageCallback)(const unsigned char *serialBufferMessage, int bytesRead);
 typedef void (*calibrationOffsetsCallback)(OffsetsCalibrationData calibrationOffsets);
 typedef void (*calibrationSoftIronCallback)(SoftIronCalibrationData calibrationSoftIron);
 
@@ -19,6 +20,7 @@ orientationDataCallback _orientationDataCallback;
 unknownMessageCallback _unknownMessageCallback;
 calibrationOffsetsCallback _offsetsCallback;
 calibrationSoftIronCallback _softIronCallback;
+calibrationResponseMessageCallback _calibrationResponseMessage;
 
 // Setters to callbacks
 void setImuDataCallback(imuDataCallback imuDataCallback)
@@ -34,6 +36,11 @@ void setOrientationDataCallback(orientationDataCallback orientationDataCallback)
 void setUnknownMessageCallback(unknownMessageCallback unknownMessageCallback)
 {
 	_unknownMessageCallback = unknownMessageCallback;
+}
+
+void setCalibrationResponseMessage(calibrationResponseMessageCallback calibrationResponseMessageCallback)
+{
+	_calibrationResponseMessage = calibrationResponseMessageCallback;
 }
 
 void setOffsetsCalibrationCallback(calibrationOffsetsCallback offsetsCallback)
@@ -70,6 +77,13 @@ void fireUnknownMessageCallback(const unsigned char *data, int len)
 	if (_unknownMessageCallback != NULL)
 		_unknownMessageCallback(data, len);
 }
+
+void fireCalibrationResponseMessageCallback(const unsigned char *data, int len)
+{
+	if (_calibrationResponseMessage != NULL)
+		_calibrationResponseMessage(data, len);
+}
+
 
 void fireOffsetsCalibrationCallback(OffsetsCalibrationData calibrationOffsets)
 {
@@ -230,10 +244,14 @@ void sendDataCallback(const unsigned char *data, int len)
 			logMessage("    Error: Invalid SoftIron format, colon not found.\n");
 		}  
    }
-    else
-    {
+   else if (memcmp(buffer, "CalR:", 4) == 0)
+   {
+		fireCalibrationResponseMessageCallback(data, len);
+   }
+   else
+   {
      	fireUnknownMessageCallback(data, len);
-    }
+   }
 }
 
 

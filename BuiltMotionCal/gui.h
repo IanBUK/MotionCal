@@ -1,7 +1,7 @@
 #ifndef gui__h_
 #define gui__h_
 #include "imuread.h"
-
+  
 #include <wx/wx.h>
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
@@ -146,6 +146,7 @@ private:
 	void OnBaudList(wxCommandEvent& event);
 	void OnShowLineEndingList(wxCommandEvent& event);
 	void OnLineEndingList(wxCommandEvent& event);	
+	void SetSendCalButtonEnabled(bool enabled);
 		
 	void DebugPrint(const char *name, const unsigned char *data, int len);
 
@@ -213,7 +214,9 @@ private:
 	void UnknownMessageReceived(const unsigned char *serialBufferMessage, int bytesRead);
 	static void StaticUnknownMessageReceived(const unsigned char* buffer, int size);
 
-
+	void CalibrationResponseMessageReceived(const unsigned char *serialBufferMessage, int bytesRead);
+	static void StaticCalibrationResponseMessageReceived(const unsigned char* buffer, int size);
+	
 	void ProcessImuDataFromCallback(ImuData imuData);
 
 

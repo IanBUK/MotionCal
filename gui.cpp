@@ -565,6 +565,11 @@ void MyFrame::ShowInMessagesPanel(const char *message, bool echoToLogFile)
 		
 	_messageLog->SetInsertionPointEnd();
 	_messageLog->ShowPosition(_messageLog->GetLastPosition()); 
+	if (strcmp(message,"Calibration verified in memory.\n") == 0 ||
+		strcmp(message,"Calibration write failed or data is empty.\n") == 0)
+	{
+		ShowMessagePopup(message);
+	}
 }
 
 void MyFrame::BuildTopLeftPanel(wxBoxSizer *parentPanel, wxPanel *panel)

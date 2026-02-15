@@ -48,7 +48,7 @@ When running on macOS, and fixing a bug so ports would appear, they appeared twi
 
 ## Callbacks
 
-When new Raw, Cal1, Cal2 or Ori messages are read from the console, they're now sent back to `gui.cpp` using callbacks. e.g:
+When new Raw, Cal1, Cal2, CalR or Ori messages are read from the console, they're now sent back to `gui.cpp` using callbacks. e.g:
 
 ```
 void fireImuCallback(ImuData data)
@@ -66,11 +66,12 @@ The callbacks are set up in `gui.cpp` as:
 void MyFrame::BuildBufferDisplayCallBack()
 {
     MyFrame::instance = this;
-    setImuDataCallback(MyFrame::StaticUpdateImuData);
-    setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
-    setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
-    setOffsetsCalibrationCallback(MyFrame::StaticOffsetCalibrationDataReceived);
-    setSoftIronCalibrationCallback(MyFrame::StaticSoftIronCalibrationDataReceived);
+	setImuDataCallback(MyFrame::StaticUpdateImuData);
+	setOrientationDataCallback(MyFrame::StaticUpdateOrientationData);
+	setUnknownMessageCallback(MyFrame::StaticUnknownMessageReceived);
+	setCalibrationResponseMessage(MyFrame::StaticCalibrationResponseMessageReceived);
+	setOffsetsCalibrationCallback(MyFrame::StaticOffsetCalibrationDataReceived);
+	setSoftIronCalibrationCallback(MyFrame::StaticSoftIronCalibrationDataReceived);
 }
 ```
 
