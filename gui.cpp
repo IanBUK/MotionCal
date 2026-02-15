@@ -791,15 +791,15 @@ void MyFrame::OnTimer(wxTimerEvent &event)
 
 void MyFrame::SetSendCalButtonEnabled(bool enabled)
 {
-	//if (m_sendcal_menu != NULL)
-	//	m_sendcal_menu->Enable(ID_SENDCAL_MENU, enabled);
-	//if (m_button_sendcal != NULL)
-	//	m_button_sendcal->Enable(enabled);
-
 	if (m_sendcal_menu != NULL)
-		m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
+		m_sendcal_menu->Enable(ID_SENDCAL_MENU, enabled);
 	if (m_button_sendcal != NULL)
-		m_button_sendcal->Enable(true);
+		m_button_sendcal->Enable(enabled);
+
+	//if (m_sendcal_menu != NULL)
+	//	m_sendcal_menu->Enable(ID_SENDCAL_MENU, true);
+	//if (m_button_sendcal != NULL)
+	//	m_button_sendcal->Enable(true);
 }
 
 void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
