@@ -119,12 +119,13 @@ void sendDataCallback(const unsigned char *data, int len)
 
         if (!token) {
             logMessage("Malformed Raw data: no CSV payload");
+			fireUnknownMessageCallback("Malformed Raw data: no CSV payload", 34);
             return;
         }
 
         ImuData imuData;
         char *val = strtok(token, ",");
-        if (!val) { logMessage("Missing accel.x"); return; }
+        if (!val) { logMessage("Missing accel.x"); fireUnknownMessageCallback("Missing accel.x", 15); return; }
         imuData.accelerometer.x = strtof(val, NULL);
 
         val = strtok(NULL, ",");
@@ -132,31 +133,31 @@ void sendDataCallback(const unsigned char *data, int len)
         imuData.accelerometer.y = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing accel.z"); return; }
+        if (!val) { logMessage("Missing accel.z"); fireUnknownMessageCallback("Missing accel.z", 15); return; }
         imuData.accelerometer.z = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing gyro.x"); return; }
+        if (!val) { logMessage("Missing gyro.x"); fireUnknownMessageCallback("Missing gyro.x", 14); return; }
         imuData.gyroscope.x = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing gyro.y"); return; }
+        if (!val) { logMessage("Missing gyro.y"); fireUnknownMessageCallback("Missing gyro.y", 14); return; }
         imuData.gyroscope.y = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing gyro.z"); return; }
+        if (!val) { logMessage("Missing gyro.z"); fireUnknownMessageCallback("Missing gyro.z", 14); return; }
         imuData.gyroscope.z = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing mag.x"); return; }
+        if (!val) { logMessage("Missing mag.x"); fireUnknownMessageCallback("Missing mag.x", 13); return; }
         imuData.magnetometer.x = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing mag.y"); return; }
+        if (!val) { logMessage("Missing mag.y"); fireUnknownMessageCallback("Missing mag.y", 13); return; }
         imuData.magnetometer.y = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing mag.z"); return; }
+        if (!val) { logMessage("Missing mag.z"); fireUnknownMessageCallback("Missing mag.z", 13); return; }
         imuData.magnetometer.z = strtof(val, NULL);
         fireImuCallback(imuData);
     }
@@ -173,16 +174,16 @@ void sendDataCallback(const unsigned char *data, int len)
         YawPitchRoll orientation;
 
         char *val = strtok(token, ",");
-        if (!val) { logMessage("Missing ori.x"); return; }
-        orientation.yaw = strtof(val, NULL);
+        if (!val) { logMessage("Missing ori.roll"); return; }
+        orientation.roll = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing ori.y"); return; }
+        if (!val) { logMessage("Missing ori.pitch"); return; }
         orientation.pitch = strtof(val, NULL);
 
         val = strtok(NULL, ",");
-        if (!val) { logMessage("Missing ori.z"); return; }
-        orientation.roll = strtof(val, NULL);
+        if (!val) { logMessage("Missing ori.yaw"); return; }
+        orientation.yaw = strtof(val, NULL);
 	
         fireOrientationCallback(orientation);
     }
@@ -247,6 +248,10 @@ void sendDataCallback(const unsigned char *data, int len)
    else if (memcmp(buffer, "CalR:", 4) == 0)
    {
 		fireCalibrationResponseMessageCallback(data, len);
+   }
+	else if (memcmp(buffer, "Uni:", 4) == 0)
+   {
+		//fireCalibrationResponseMessageCallback(data, len);
    }
    else
    {

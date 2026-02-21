@@ -305,7 +305,7 @@ wxSizer* MyFrame::BuildConnectionPanel(wxPanel *parent)
 	baudRow->Add(_baudList, 1, wxEXPAND);
 	connectionPanel->Add(baudRow,0,wxEXPAND | wxALL, 5);
 	PopulateBaudList();
-	
+	 
 	wxBoxSizer* lineEndingsRow = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* lineEndingsRowLabel = new wxStaticText(parent, wxID_ANY, "Line Endings");
 	lineEndingsRowLabel->SetMinSize(wxSize(_labelWidth, -1));
@@ -422,7 +422,7 @@ void MyFrame::LogOrientationData(YawPitchRoll orientation)
 	snprintf(buffer, 120, "Ori: yaw: %f, pitch %f, roll %f", 
 		orientation.yaw, orientation.pitch, orientation.roll);
 
-	ShowInMessagesPanel(buffer, true);
+	//ShowInMessagesPanel(buffer, true);
 }
 
 void MyFrame::StaticUpdateImuData(ImuData imuData) {
@@ -824,7 +824,7 @@ void MyFrame::ProcessImuDataFromCallback(ImuData imuData)
 	if (_lastGaps != gaps || _lastVariance != variance || _lastWobble != wobble || _lastFitError != fiterror)
 	{
 		snprintf(messageBuffer, sizeof(messageBuffer),"Gaps %.2f var. %.2f, wobble %.2f fitError %.2f",gaps, variance, wobble, fiterror);
-		ShowInMessagesPanel(messageBuffer, true);
+		//ShowInMessagesPanel(messageBuffer, true);
 	}
 	_lastGaps = gaps;
 	_lastVariance = variance;

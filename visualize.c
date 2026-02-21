@@ -154,23 +154,23 @@ void display_callback(void)
 			// Draw sensor
 			glPushMatrix();		
 			glTranslatef(sensorXCentre, sensorYCentre, sensorZCentre);
-			glRotatef(SensorOrientation.yaw,       1.0f, 0.0f, 0.0f);
-			glRotatef(SensorOrientation.pitch,     0.0f, 1.0f, 0.0f);
+			glRotatef(SensorOrientation.yaw,       0.0f, 1.0f, 0.0f);
+			glRotatef(SensorOrientation.pitch,     1.0f, 0.0f, 0.0f);
 			glRotatef(SensorOrientation.roll,      0.0f, 0.0f, 1.0f);
 			glScalef(sensorXScale, sensorYScale, sensorZScale);
 			
 			glColor3f(1, 1, 0);
 			glBegin(GL_TRIANGLES);
-			glVertex3f(0.0f, 1.0f, 0.0f);
-			glVertex3f(0.5f, -1.0f, 0.0f);
-			glVertex3f(-0.5f, -1.0f, 0.0f);
+			glVertex3f(0.0f, 1.0f, 0.01f);
+			glVertex3f(0.5f, -1.0f, 0.01f);
+			glVertex3f(-0.5f, -1.0f, 0.01f);
 			glEnd();
 			
 			glColor3f(0, 0, 1);	
 			glBegin(GL_TRIANGLES);
-			glVertex3f(0.0f, 1.0f, 0.0f);
-			glVertex3f(-0.5f, -1.0f, 0.0f);
-			glVertex3f(0.5f, -1.0f, 0.0f);
+			glVertex3f(0.0f, 1.0f, -0.01f);
+			glVertex3f(-0.5f, -1.0f, -0.01f);
+			glVertex3f(0.5f, -1.0f, -0.01f);
 			glEnd();
 					
 			glPopMatrix();

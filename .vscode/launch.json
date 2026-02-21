@@ -5,7 +5,7 @@
             "name": "Debug MotionCal",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/MotionCal",
+            "program": "{workspaceFolder}/MotionCal.app/Contents/MacOS/MotionCal",
             "args": [],
             "cwd": "${workspaceFolder}"
         }
