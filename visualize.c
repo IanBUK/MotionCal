@@ -62,6 +62,122 @@ int invert_x=0;
 int invert_y=0;
 int invert_z=0;
 
+void drawBox(float x, float y, float z, float w, float h, float d, float r, float g, float b) {
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    glBegin(GL_QUADS);
+    glColor3f(r, g, b);
+    
+    float hw = w/2.0f; float hh = h/2.0f; float hd = d/2.0f;
+
+    // Front Face (Z+)
+    glVertex3f(-hw, -hh,  hd); glVertex3f( hw, -hh,  hd); 
+    glVertex3f( hw,  hh,  hd); glVertex3f(-hw,  hh,  hd);
+
+    // Back Face (Z-)
+    glVertex3f( hw, -hh, -hd); glVertex3f(-hw, -hh, -hd); 
+    glVertex3f(-hw,  hh, -hd); glVertex3f( hw,  hh, -hd);
+
+    // Top Face (Y+)
+    glVertex3f(-hw,  hh,  hd); glVertex3f( hw,  hh,  hd); 
+    glVertex3f( hw,  hh, -hd); glVertex3f(-hw,  hh, -hd);
+
+    // Bottom Face (Y-)
+    glVertex3f(-hw, -hh, -hd); glVertex3f( hw, -hh, -hd); 
+    glVertex3f( hw, -hh,  hd); glVertex3f(-hw, -hh,  hd);
+
+    // Left Face (X-)
+    glVertex3f(-hw, -hh, -hd); glVertex3f(-hw, -hh,  hd); 
+    glVertex3f(-hw,  hh,  hd); glVertex3f(-hw,  hh, -hd);
+
+    // Right Face (X+)
+    glVertex3f( hw, -hh,  hd); glVertex3f( hw, -hh, -hd); 
+    glVertex3f( hw,  hh, -hd); glVertex3f( hw,  hh,  hd);
+
+    glEnd();
+    glPopMatrix();
+}
+
+// Helper to draw a centered cuboid
+void drawBox2(float x, float y, float z, float w, float h, float d, float r, float g, float b) {
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    glBegin(GL_QUADS);
+    glColor3f(r, g, b);
+    
+    float hw = w/2.0f; float hh = h/2.0f; float hd = d/2.0f;
+
+    // Top Face
+    glVertex3f(-hw,  hh,  hd); glVertex3f( hw,  hh,  hd); 
+    glVertex3f( hw,  hh, -hd); glVertex3f(-hw,  hh, -hd);
+    // Bottom Face
+    glVertex3f(-hw, -hh,  hd); glVertex3f( hw, -hh,  hd); 
+    glVertex3f( hw, -hh, -hd); glVertex3f(-hw, -hh, -hd);
+    // Front Face
+    glVertex3f(-hw, -hh,  hd); glVertex3f( hw, -hh,  hd); 
+    glVertex3f( hw,  hh,  hd); glVertex3f(-hw,  hh,  hd);
+    // Back Face
+    glVertex3f(-hw, -hh, -hd); glVertex3f( hw, -hh, -hd); 
+    glVertex3f( hw,  hh, -hd); glVertex3f(-hw,  hh, -hd);
+    // Left Face
+    glVertex3f(-hw, -hh, -hd); glVertex3f(-hw, -hh,  hd); 
+    glVertex3f(-hw,  hh,  hd); glVertex3f(-hw,  hh, -hd);
+    // Right Face
+    glVertex3f( hw, -hh, -hd); glVertex3f( hw, -hh,  hd); 
+    glVertex3f( hw,  hh,  hd); glVertex3f( hw,  hh, -hd);
+    glEnd();
+    glPopMatrix();
+}
+
+
+void drawESP32AndSensor(float sensorXCentre, float sensorYCentre, float sensorZCentre, float sensorXScale, float sensorYScale, float sensorZScale) 
+{
+    glPushMatrix();
+    // 1. Move to the center of the viewport
+    glTranslatef(sensorXCentre, sensorYCentre, sensorZCentre);
+
+	// 2. WORLD ALIGNMENT (The "Desk" correction)
+    // If your sensor looks "side on" when flat, we likely need to 
+    // tilt the world 90 degrees to make the OpenGL 'Y' match the Sensor 'Z'.
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+
+	// 3. SENSOR ORIENTATION (Apply your AHRS data)
+    // Note: Re-ordered to standard Yaw-Pitch-Roll to prevent the "flip"
+    glRotatef(SensorOrientation.yaw,   0.0f, 0.0f, 1.0f); // Yaw around Z (Up)
+    glRotatef(SensorOrientation.pitch, 1.0f, 0.0f, 0.0f); // Pitch around X
+    glRotatef(SensorOrientation.roll,  0.0f, 1.0f, 0.0f); // Roll around Y
+
+    glScalef(sensorXScale, sensorYScale, sensorZScale);
+
+    // --- DRAW FIREBEETLE 2 ESP32-E (Top Board) ---
+    // Dimensions scaled: 6.0 units long, 2.5 units wide
+    drawBox(0.0f, 0.0f, 0.0f, 6.0f, 0.2f, 2.5f, 0.0f, 0.2f, 0.6f); // Dark Blue PCB
+    
+    // Draw the ESP32-WROOM Module (Silver box on top)
+    drawBox(1.5f, 0.15f, 0.0f, 1.8f, 0.1f, 1.6f, 0.7f, 0.7f, 0.7f); 
+    
+    // Draw the USB-C Port (Front edge)
+    drawBox(-2.8f, 0.1f, 0.0f, 0.4f, 0.3f, 0.8f, 0.3f, 0.3f, 0.3f);
+
+    // --- DRAW MPU9250 (Bottom Board) ---
+    // We translate DOWN on the Y axis to sit underneath
+    // Since it's upside down, we don't need extra rotation 
+    // because it inherits the "flat" orientation of the parent.
+    glPushMatrix();
+    glTranslatef(0.0f, -0.6f, 0.0f); // Adjust -0.6 for your physical standoff height
+    
+    // MPU9250 PCB (Typically Purple or Black)
+    // Smaller footprint than the FireBeetle (approx 1.5 x 1.5 units)
+    drawBox(0.0f, 0.0f, 0.0f, 1.5f, 0.15f, 1.5f, 0.3f, 0.0f, 0.3f); 
+    
+    // The actual MPU chip (Sitting on the bottom face)
+    drawBox(0.0f, -0.1f, 0.0f, 0.4f, 0.1f, 0.4f, 0.1f, 0.1f, 0.1f);
+    glPopMatrix();
+
+    glPopMatrix();
+}
+
+
 void display_callback(void)
 {
 	int i;
@@ -152,7 +268,7 @@ void display_callback(void)
 		if (drawSensor)
 		{
 			// Draw sensor
-			glPushMatrix();		
+			/*glPushMatrix();		
 			glTranslatef(sensorXCentre, sensorYCentre, sensorZCentre);
 			glRotatef(SensorOrientation.yaw,       0.0f, 1.0f, 0.0f);
 			glRotatef(SensorOrientation.pitch,     1.0f, 0.0f, 0.0f);
@@ -173,9 +289,10 @@ void display_callback(void)
 			glVertex3f(0.5f, -1.0f, -0.01f);
 			glEnd();
 					
-			glPopMatrix();
-		}
-				
+			glPopMatrix();*/
+
+			drawESP32AndSensor(sensorXCentre, sensorYCentre, sensorZCentre, sensorXScale, sensorYScale, sensorZScale);
+		}				
 	}
 #if 0
 	printf(" quality: %5.1f  %5.1f  %5.1f  %5.1f\n",
