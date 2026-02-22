@@ -139,13 +139,13 @@ void drawESP32AndSensor(float sensorXCentre, float sensorYCentre, float sensorZC
 	// 2. WORLD ALIGNMENT (The "Desk" correction)
     // If your sensor looks "side on" when flat, we likely need to 
     // tilt the world 90 degrees to make the OpenGL 'Y' match the Sensor 'Z'.
-    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
 
 	// 3. SENSOR ORIENTATION (Apply your AHRS data)
     // Note: Re-ordered to standard Yaw-Pitch-Roll to prevent the "flip"
-    glRotatef(SensorOrientation.yaw,   0.0f, 0.0f, 1.0f); // Yaw around Z (Up)
-    glRotatef(SensorOrientation.pitch, 1.0f, 0.0f, 0.0f); // Pitch around X
-    glRotatef(SensorOrientation.roll,  0.0f, 1.0f, 0.0f); // Roll around Y
+	glRotatef(SensorOrientation.yaw,   0.0f, 0.0f, 1.0f); 
+	glRotatef(SensorOrientation.pitch, 0.0f, 1.0f, 0.0f); 
+	glRotatef(SensorOrientation.roll,  1.0f, 0.0f, 0.0f);
 
     glScalef(sensorXScale, sensorYScale, sensorZScale);
 

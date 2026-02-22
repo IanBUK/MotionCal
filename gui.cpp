@@ -1034,7 +1034,7 @@ void MyFrame::PopulateBaudList()
 	_baudList->Append("57600");	
 	_baudList->Append("115200");	
 	_baudList->Append("230400");	
-	_baudList->SetSelection(5);
+	_baudList->SetSelection(8);
 }
 
 void MyFrame::OnShowBaudList(wxCommandEvent& event)
